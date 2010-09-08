@@ -1,0 +1,531 @@
+Content-type: text/html
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of ALDABAD</TITLE>
+</HEAD><BODY>
+<H1>ALDABAD</H1>
+Section: Aldaba Reference Guide (8)<BR>Updated: 09/08/2010<BR><A HREF="#index">Index</A>
+<A HREF="/cgi-bin/man/man2html">Return to Main Contents</A><HR>
+
+
+
+
+
+
+
+
+
+
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+aldabad - Single Packet Authorization and Port Knocking server
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<DL COMPACT>
+<DT>
+<B>aldabad</B> [<I>Options</I>]
+</DL>
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+
+<P>
+
+<DD>Aldaba is an open-source Port Knocking and Single Packet Authorization system. This document describes the latest version of Aldaba Server, part of the Aldaba Suite, available from
+m[blue]<B><A HREF="http://www.aldabaknocking.com">http://www.aldabaknocking.com</A></B>m[]
+<A NAME="lbAE">&nbsp;</A>
+<H2>OPTIONS SUMMARY</H2>
+
+<P>
+
+The following option summary is the output of Aldaba Server when run with no arguments. It's a quick cheatsheet that lists the most common options.
+
+
+<P>
+<DL COMPACT><DT><DD>
+
+
+
+<PRE>
+  Aldaba Knocking Server 0.2.0 - (C) Luis MartinGarcia, 2010.
+  <A HREF="http://www.aldabaknocking.com">http://www.aldabaknocking.com</A> || <A HREF="mailto:aldabaknocking@gmail.com">aldabaknocking@gmail.com</A>
+
+  Usage: aldabad &lt;-P passphrase&gt; [Options]
+
+  Parameters:
+     -P, --passphrase &lt;pass&gt;  : Passphrase used to generate the crypto keys.
+  Options:
+     --pk, --spa              : Technique [&quot;PK&quot;, &quot;SPA&quot;(default)].
+     -t, --target-ports &lt;seq&gt; : Sequence of dest ports [comma separated list].
+     -f, --field &lt;field&gt;      : Covert channel protocol header field.
+     -c  --cipher     &lt;algo&gt;  : Encryption algorithm [&quot;Twofish&quot;, &quot;AES&quot;, ...]
+     -i, --interface  &lt;name&gt;  : Network interface to listen on.
+     -v, --verbosity  &lt;level&gt; : Level of verbosity [0-9 (Default)].
+     -l, --logging    &lt;level&gt; : Logging level [0-9].
+     -4, --ipv4               : Use IP version 4 addresses
+     -6, --ipv6               : Use IP version 6 addresses
+     -h, --help               : Display usage information.
+     -V, --version            : Display current version.
+     --ssh-cookie             : Enable Aldaba OpenSSH cookie extension
+     --promiscuous            : Put network interface intro promiscuous mode
+
+   
+  Examples:
+     aldabad -P &quot;Squeamish Ossifrage&quot;
+     aldabad -t 3,14,159,2653 -v9 -i eth1
+     aldabad -6 --cipher twofish --promisc
+  For more information please refer to manual page <A HREF="/cgi-bin/man/man2html?8+aldabad">aldabad</A>(8).
+
+</PRE>
+
+</DL>
+
+
+
+
+
+
+<A NAME="lbAF">&nbsp;</A>
+<H2>MODES OF OPERATION</H2>
+
+<P>
+
+<P>
+
+<B>--spa</B> (Single Packet Authorization Mode)
+<DL COMPACT><DT><DD>
+This option tells Aldaba Server to run in SPA mode. Single Packet Authorization is the technique that allows users request access to a given port number on the server, using a single authentication message. That message, called the SPA authentication message, is transmitted to the server in a single UDP datagram. This technique provides strong authentication and is the default operation mode in Aldaba.
+</DL>
+
+<P>
+
+<B>--pk</B> (Port Knocking Mode)
+<DL COMPACT><DT><DD>
+This option tells Aldaba Server to run in PK mode. Like SPA, Port Knocking lets users request access to a given port. However, the authentication message is transmitted stealthily, dividing it, and encoding each part in the headers of a TCP SYN packet. Port Knocking authentications are more difficult to detect from an attacker's point of view. However, the security provided by this technique is often weaker than in SPA.
+</DL>
+
+<A NAME="lbAG">&nbsp;</A>
+<H2>SINGLE PACKET AUTHORIZATION</H2>
+
+<P>
+
+<P>
+
+<B>-t </B><B></B><I>port</I>, <B>--target-port </B><B></B><I>port</I> (Set target port number)
+<DL COMPACT><DT><DD>
+This option specifies the destination port number that incoming SPA messages are expected to be directed to. If no port is supplied, Aldaba will pick one automatically, based on the supplied passphrase.
+</DL>
+
+<A NAME="lbAH">&nbsp;</A>
+<H2>PORT KNOCKING</H2>
+
+<P>
+
+<P>
+
+<B>-t </B><B></B><I>ports</I>, <B>--target-ports </B><B></B><I>ports</I> (Set knock sequence)
+<DL COMPACT><DT><DD>
+List of expected knocks. These should be the same ports used by Aldaba Client. The list should be comma separated and have no spaces in it (eg: -t 1337,2600,8086,6800). Also, ports must be unique. The number of ports needed depends on the type of authentication and the header field that is used to create the covert channel. If you don't supply the correct number of ports Aldaba will tell you how many is expecting.
+<P>
+Note that this parameter is completely optional and may safely be omitted. When not supplied, the sequence of ports is generated automatically, deriving it from the supplied passphrase. A give passphrase will always produce the same port sequence, in both client and server.
+</DL>
+
+<P>
+
+<B>-f </B><B></B><I>id</I>, <B>--field </B><B></B><I>id</I> (Set covert channel header field)
+<DL COMPACT><DT><DD>
+This option specifies the protocol header field used by the client to encode the PK authentication message. Currently the following fields are available:
+<P>
+
+ip-tos
+<DL COMPACT><DT><DD>
+IPv4 Type of Service. (8 bits).
+</DL>
+
+<P>
+
+ip-id
+<DL COMPACT><DT><DD>
+IPv4 Identification. (16 bits).
+</DL>
+
+<P>
+
+tcp-ack
+<DL COMPACT><DT><DD>
+TCP Acknowledgement Number (32 bits)
+</DL>
+
+<P>
+
+tcp-seq (Default)
+<DL COMPACT><DT><DD>
+TCP Sequence Number (32 bits)
+</DL>
+
+<P>
+
+tcp-sport
+<DL COMPACT><DT><DD>
+TCP Source Port (16 bits)
+</DL>
+
+<P>
+
+tcp-win
+<DL COMPACT><DT><DD>
+TCP Window Size (16 bits)
+</DL>
+
+<P>
+
+tcp-urp
+<DL COMPACT><DT><DD>
+TCP Urgent Pointer (16 bits)
+</DL>
+
+<P>
+</DL>
+
+<P>
+
+<B>-A </B><B></B><I>type</I>, <B>--auth </B><B></B><I>type</I> (Set authentication strength)
+<DL COMPACT><DT><DD>
+This option specifies the strength and security of the authentication. Currently there are two different possibilities:
+<P>
+
+light (Default)
+<DL COMPACT><DT><DD>
+Light authentication provides basic, but fast and effective client authentication. It requires very few packets to be sent to the server, minimizing the risk of packet loss and providing a good response time. However, although the the security of this authentication may be enough for some cases, it can be broken by skilled attackers. Systems that require high levels of security should use the strong authentication discussed below.
+</DL>
+
+<P>
+
+strong
+<DL COMPACT><DT><DD>
+Strong authentication provides a much more secure and robust client authentication. It requires the transmission of a higher number of packets, which increases the risk of packet loss, but provides effective protection against replay attacks, and significantly reduces the risk of poisoning attacks. Systems that require high levels of security should use this type of authentication.
+</DL>
+
+<P>
+</DL>
+
+<A NAME="lbAI">&nbsp;</A>
+<H2>CRYPTOGRAPHY OPTIONS</H2>
+
+<P>
+
+<B>-P </B><B></B><I>string</I>, <B>--passphase </B><B></B><I>string</I> (Set passphrase)
+<DL COMPACT><DT><DD>
+Passphrase to be used to generate the necessary cryptographic keys (one for message authentication and one for message encryption). It must be at least 8 characters long and have a maximum of 256 characters. If it contains spaces, it should be enclosed in double quotes (e.g: -k &quot;Use this to encrypt it all&quot;). Special characters should be escaped using a backslash. Passphrases longer than 256 characters are valid but will be truncated. Cryptographic keys are derived from this passphrase using the PBKDF2 algorithm.
+</DL>
+
+<P>
+
+<B>-c</B>, <B>--cipher</B> (Set encryption algorithm)
+<DL COMPACT><DT><DD>
+Algorithm to be used to encrypt authentication data. Currently the following algorithms are supported:
+<P>
+
+Blowfish
+<DL COMPACT><DT><DD>
+Symmetric ; 64-bit block size ; Very Fast.
+</DL>
+
+<P>
+
+Rijndael
+<DL COMPACT><DT><DD>
+Symmetric ; 128-bit block size ; Fast ; AES Standard. (DEFAULT)
+</DL>
+
+<P>
+
+Serpent
+<DL COMPACT><DT><DD>
+Symmetric ; 128-bit block size ; Medium ; AES Contest finalist (2nd position)
+</DL>
+
+<P>
+
+Twofish
+<DL COMPACT><DT><DD>
+Symmetric 128-bit block size ; Fast ; AES Contest finalist (3rd position)
+</DL>
+
+<P>
+All algorithms use 256-bit keys. Note that Port Knocking mode with Light authentication MUST it Blowfish because it requires a block size of 64 bits.
+</DL>
+
+<A NAME="lbAJ">&nbsp;</A>
+<H2>NETWORKING OPTIONS</H2>
+
+<P>
+
+<B>-i </B><B></B><I>name</I>, <B>--interface </B><B></B><I>name</I> (Set network interface)
+<DL COMPACT><DT><DD>
+This option sets the network interface that should be used to capture incoming packets. Any network interface supported by libpcap can be used. If no interface is specified Aldaba Server will try to use the most suitable one.
+</DL>
+
+<P>
+
+<B>--promiscuous </B> (Set promiscuous mode)
+<DL COMPACT><DT><DD>
+Puts the network card into promiscuous mode. By default the network interface is left in non-promiscuous mode, unless it was already in promiscuous mode.
+</DL>
+
+<A NAME="lbAK">&nbsp;</A>
+<H2>OUTPUT OPTIONS</H2>
+
+<P>
+
+<B>-v</B><B>[</B><I>level</I>], <B>--verbose </B><B>[</B><I>level</I>] (Increase or set verbosity level)
+<DL COMPACT><DT><DD>
+Increases the verbosity level, causing Aldaba to print more information during its execution. There are 9 levels of verbosity (0 to 8). Every instance of
+<B>-v</B>
+increments the verbosity level by one (from its default value, level 4). Every instance of option
+<B>-q</B>
+decrements the verbosity level by one. Alternatively you can specify the level directly, as in
+<B>-v3</B>
+or
+<B>-v-1</B>. These are the available levels:
+<P>
+
+Level 0
+<DL COMPACT><DT><DD>
+No output at all.
+</DL>
+
+<P>
+
+Level 1
+<DL COMPACT><DT><DD>
+Parsing Error messages.
+</DL>
+
+<P>
+
+Level 2
+<DL COMPACT><DT><DD>
+Fatal error messages. (Default).
+</DL>
+
+<P>
+
+Level 3
+<DL COMPACT><DT><DD>
+Warnings.
+</DL>
+
+<P>
+
+Level 4
+<DL COMPACT><DT><DD>
+Information about knocking attempts .
+</DL>
+
+<P>
+
+Level 5
+<DL COMPACT><DT><DD>
+Information about current configuration .
+</DL>
+
+<P>
+
+Level 6
+<DL COMPACT><DT><DD>
+Important debug information.
+</DL>
+
+<P>
+
+Level 7
+<DL COMPACT><DT><DD>
+Any debug information.
+</DL>
+
+<P>
+
+Level 8
+<DL COMPACT><DT><DD>
+Reserved for future use.
+</DL>
+
+<P>
+
+Level 9
+<DL COMPACT><DT><DD>
+Reserved for future use.
+</DL>
+
+<P>
+</DL>
+
+<P>
+
+<B>-q</B><B>[</B><I>level</I>], <B>--reduce-verbosity </B><B>[</B><I>level</I>] (Decrease verbosity level)
+<DL COMPACT><DT><DD>
+Decreases the verbosity level, causing Aldaba to print less information during its execution.
+</DL>
+
+<P>
+
+<B>-l</B><B>[</B><I>level</I>], <B>--logging </B><B>[</B><I>level</I>] (Set logging level)
+<DL COMPACT><DT><DD>
+Controls the level of logging. Logs are sent via syslog. Entries use the prefix &quot;aldabad&quot; and the current PID of the process. There are 10 different levels (0 to 9). Higher levels include all lower levels.
+<P>
+
+Level 0
+<DL COMPACT><DT><DD>
+No logging at all.
+</DL>
+
+<P>
+
+Level 1
+<DL COMPACT><DT><DD>
+Failed authentication attempts.
+</DL>
+
+<P>
+
+Level 2
+<DL COMPACT><DT><DD>
+Successful authentication attempts.
+</DL>
+
+<P>
+
+Level 3
+<DL COMPACT><DT><DD>
+Fatal error messages. (Default).
+</DL>
+
+<P>
+
+Level 4
+<DL COMPACT><DT><DD>
+Warnings.
+</DL>
+
+<P>
+
+Level 5
+<DL COMPACT><DT><DD>
+Information about current configuration .
+</DL>
+
+<P>
+
+Level 6
+<DL COMPACT><DT><DD>
+Important debug information.
+</DL>
+
+<P>
+
+Level 7
+<DL COMPACT><DT><DD>
+Any debug information.
+</DL>
+
+<P>
+
+Level 8
+<DL COMPACT><DT><DD>
+Reserved for future use.
+</DL>
+
+<P>
+
+Level 9
+<DL COMPACT><DT><DD>
+Reserved for future use.
+</DL>
+
+<P>
+</DL>
+
+<P>
+
+<B>--debug </B> (Debug)
+<DL COMPACT><DT><DD>
+Automatically sets maximum verbosity level and disables daemon mode.
+</DL>
+
+<P>
+
+<B>--quiet </B> (Quiet)
+<DL COMPACT><DT><DD>
+Automatically sets verbose and logging levels to 0. No output or logs will be generated.
+</DL>
+
+<A NAME="lbAL">&nbsp;</A>
+<H2>MISCELLANEOUS OPTIONS</H2>
+
+<P>
+
+<B>-I </B>, <B>--interactive </B> (Interactive mode)
+<DL COMPACT><DT><DD>
+Forces Aldaba Server to run interactively instead of in daemon mode. By default it runs as a system daemon.
+</DL>
+
+<P>
+
+<B>-V</B>, <B>--version</B> (Display Version)
+<DL COMPACT><DT><DD>
+Displays current version and quits.
+</DL>
+
+<P>
+
+<B>-h</B>, <B>--help</B> (Display Help)
+<DL COMPACT><DT><DD>
+Displays help information and quits.
+</DL>
+
+<A NAME="lbAM">&nbsp;</A>
+<H2>BUGS</H2>
+
+<P>
+
+Please, report any bugs you find through the Aldaba development mailing list or directly to <A HREF="mailto:aldabaknocking@gmail.com">aldabaknocking@gmail.com</A>. Please try to include as much information as possible. In general it's a good idea to include the output of the command &quot;uname -a&quot;, the version of Aldaba you are using and a brief description of the topology of the network you are using Aldaba from (subnets, routers, firewalls, etc). See
+m[blue]<B><A HREF="http://http://www.aldabaknocking.com/development">http://http://www.aldabaknocking.com/development</A></B>m[]
+for more details.
+<A NAME="lbAN">&nbsp;</A>
+<H2>AUTHORS</H2>
+
+<P>
+
+Luis MartinGarcia
+<A HREF="mailto:luis.mgarc@gmail.com">luis.mgarc@gmail.com</A>
+(m[blue]<B><A HREF="http://www.aldabaknocking.com">http://www.aldabaknocking.com</A></B>m[])
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">OPTIONS SUMMARY</A><DD>
+<DT><A HREF="#lbAF">MODES OF OPERATION</A><DD>
+<DT><A HREF="#lbAG">SINGLE PACKET AUTHORIZATION</A><DD>
+<DT><A HREF="#lbAH">PORT KNOCKING</A><DD>
+<DT><A HREF="#lbAI">CRYPTOGRAPHY OPTIONS</A><DD>
+<DT><A HREF="#lbAJ">NETWORKING OPTIONS</A><DD>
+<DT><A HREF="#lbAK">OUTPUT OPTIONS</A><DD>
+<DT><A HREF="#lbAL">MISCELLANEOUS OPTIONS</A><DD>
+<DT><A HREF="#lbAM">BUGS</A><DD>
+<DT><A HREF="#lbAN">AUTHORS</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 10:38:43 GMT, September 08, 2010
+</BODY>
+</HTML>
