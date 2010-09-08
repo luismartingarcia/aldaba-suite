@@ -1,0 +1,242 @@
+ALDABA(8)                                            Aldaba Reference Guide                                            ALDABA(8)
+
+
+
+NAME
+       aldaba - Single Packet Authorization and Port Knocking client
+
+SYNOPSIS
+       aldaba [Options] {targets}
+
+DESCRIPTION
+       Aldaba is an open-source Port Knocking and Single Packet Authorization system. This document describes the latest version
+       of Aldaba Client, part of the Aldaba Suite, available from http://www.aldabaknocking.com
+
+OPTIONS SUMMARY
+       The following option summary is the output of Aldaba Client when run with no arguments. It´s a quick cheatsheet that
+       lists the most common options.
+
+             Aldaba Knocking Client 0.2.0 - (C) Luis MartinGarcia, 2010.
+             http://www.aldabaknocking.com || aldabaknocking@gmail.com
+
+             Usage: aldaba <-P passphrase> <target_host> [Options]]
+
+             Parameters:
+                <target_host>            : Name or address of the target server
+                -P, --passphrase <pass>  : Passphrase used to generate the crypto keys.
+             Options:
+                --pk, --spa              : Technique ["PK", "SPA"(default)].
+                -p, --port <port>        : Port to open/close on the remote host [integer].
+                -S, --knock-ip   <addr>  : IP to authorize on the remote host [IP or host].
+                -f, --field <field>      : Covert channel protocol header field.
+                -a, --action     <actn>  : Action taken by Aldaba server ["Open", "Close"].
+                -t, --target-ports <seq> : Sequence of dest ports [comma separated list].
+                -c  --cipher     <alg>   : Encryption algorithm ["Twofish", "AES", ...]
+                -i, --interface  <name>  : Network interface to obtain IP address from.
+                -s, --source-ip  <addr>  : Source IP address [IP or hostname].
+                -d, --decoys     <addr>  : List of decoys [comma separated list of IPs].
+                -n  --noise      <levl>  : Number of extra packets to be sent [integer].
+                -v, --verbosity  <levl>  : Level of verbosity [0-9].
+                -4, --ipv4               : Use IP version 4 addresses
+                -6, --ipv6               : Use IP version 6 addresses
+                --ssh-cookie             : Enable Aldaba OpenSSH cookie extension
+                -h, --help               : Display usage information.
+                -V, --version            : Display current version.
+
+
+             Examples:
+                aldaba -P "Squeamish Ossifrage" server.org
+                aldaba -p 23 -a close -t 3,14,159,2653 -v 9 -i eth1 205.206.231.13
+                aldaba -6 fe80::235:c3ac:f1a6:4f1bc --noise 100 --cipher twofish
+             For more information please refer to manual page aldaba(8).
+
+MODES OF OPERATION
+       --spa (Single Packet Authorization Mode)
+           This option tells Aldaba Client to run in SPA mode. Single Packet Authorization is the technique that allows users
+           request access to a given port number on the server, using a single authentication message. That message, called the
+           SPA authentication message, is transmitted to the server in a single UDP datagram. This technique provides strong
+           authentication and is the default operation mode in Aldaba.
+
+       --pk (Port Knocking Mode)
+           This option tells Aldaba Client to run in PK mode. Like SPA, Port Knocking lets users request access to a given port.
+           However, the authentication message is transmitted stealthily, dividing it, and encoding each part in the headers of
+           a TCP SYN packet. Port Knocking authentications are more difficult to detect from an attacker´s point of view.
+           However, the security provided by this technique is often weaker than in SPA.
+
+SINGLE PACKET AUTHORIZATION
+       -K address, --spa-ip address (Set authorized address)
+           This option sets the authorized address. This is, the address that will be allowed access to the remote port upon
+           successful authentication. The address can be specified as a standard IP address or as a hostname. Note that when no
+           SPA address is specified, the Aldaba client will try to determine one. By default it picks the assigned IP address of
+           one of the network interfaces present in the local system. If you are behind a NAT device, you´ll need to set up the
+           NAT´s public IP address in order to access the knock port. Check option --resolve for information on how to determine
+           that address automatically.
+
+       -S address, --bind-ip address (Set local address)
+           This option lets you specify an IP address to bind to for outgoing messages. Note that the supplied IP must be the
+           address of one of the system´s network interfaces.
+
+       -p port, --spa-port port (Set authorized port)
+           Port number to open/close/forward in the remote system. Note that SPA mode let´s you specify up to two ports. If you
+           want to set more that one port, just pass this option twice, one for each. Supplied port number must be a positive
+           integer in the range [1-65635].
+
+       -t port, --target-port port (Set target port number)
+           This option specifies the destination port numbers for the UDP datagram that transports the SPA authentication
+           message. Note that the same port number must be set in both client and server. If no port is supplied, Aldaba will
+           pick one automatically, based on the supplied passphrase.
+
+       -a id, --action id (Set desired action)
+           This option specifies the desired action to be executed by the server upon successful authentication. It must be one
+           of "open", "close" or "forward". Note that port forwarding requires two ports to be specified.
+
+PORT KNOCKING
+       -K address, --knock-ip address (Set authorized address)
+           This option sets the authorized address. This is, the address that will be allowed access to the remote port upon
+           successful authentication. The address can be specified as a standard IP address or as a hostname. Note that when no
+           knock address is specified, Aldaba client will try to determine one. By default it picks the assigned IP address of
+           one of the network interfaces present in the local system. If you are behind a NAT device, you´ll need to set up the
+           NAT´s public IP address in order to access the knock port. Check option --resolve for information on how to determine
+           that address automatically.
+
+       -S address, --source-ip address (Set source address)
+           This option lets you specify the IP address that is used as the source address for every IP datagram that is sent. It
+           can be specified as a standard IP address or as a hostname.
+
+       -p port, --knock-port port (Set authorized port)
+           Port number to open/close in the remote system. This is the port that will be opened or closed on the target host. It
+           must be a positive integer in the range [1-65635].
+
+       -t ports, --target-ports ports (Set knock sequence)
+           List of ports to knock on. These should be the same ports Aldaba Server is listening to. The list should be comma
+           separated and have no spaces in it (eg: -t 1337,2600,8086,6800). Also, ports must be unique. The number of ports
+           needed depends on the type of authentication and the header field that is used to create the covert channel. If you
+           don´t supply the correct number of ports Aldaba will tell you how many is expecting.
+
+           Note that this parameter is completely optional and may safely be omitted. When not supplied, the sequence of ports
+           is generated automatically, deriving it from the supplied passphrase. A give passphrase will always produce the same
+           port sequence, in both client and server.
+
+       -a id, --action id (Set desired action)
+           This option specifies the action to be taken by the server upon successful authentication. id must be one of "open"
+           or "close", to open the knock port or close it, respectively.
+
+       -f id, --field id (Set covert channel header field)
+           This option specifies the protocol header field to use to establish the covert channel. Currently the following
+           fields are available:
+
+           ip-tos
+               IPv4 Type of Service. (8 bits).
+
+           ip-id
+               IPv4 Identification. (16 bits).
+
+           tcp-ack
+               TCP Acknowledgement Number (32 bits)
+
+           tcp-seq (Default)
+               TCP Sequence Number (32 bits)
+
+           tcp-sport
+               TCP Source Port (16 bits)
+
+           tcp-win
+               TCP Window Size (16 bits)
+
+           tcp-urp
+               TCP Urgent Pointer (16 bits)
+
+
+       -A type, --auth type (Set authentication strength)
+           This option specifies the strength and security of the authentication. Currently there are two different
+           possibilities:
+
+           light (Default)
+               Light authentication provides basic, but fast and effective client authentication. It requires very few packets
+               to be sent to the server, minimizing the risk of packet loss and providing a good response time. However,
+               although the the security of this authentication may be enough for some cases, it can be broken by skilled
+               attackers. Systems that require high levels of security should use the strong authentication discussed below.
+
+           strong
+               Strong authentication provides a much more secure and robust client authentication. It requires the transmission
+               of a higher number of packets, which increases the risk of packet loss, but provides effective protection against
+               replay attacks, and significantly reduces the risk of poisoning attacks. Systems that require high levels of
+               security should use this type of authentication.
+
+
+CRYPTOGRAPHY OPTIONS
+       -P string, --passphase string (Set passphrase)
+           Passphrase to be used to generate the necessary cryptographic keys (one for message authentication and one for
+           message encryption). It must be at least 8 characters long and have a maximum of 256 characters. If it contains
+           spaces, it should be enclosed in double quotes (e.g: -k "Use this to encrypt it all"). Special characters should be
+           escaped using a backslash. Passphrases longer than 256 characters are valid but will be truncated. Cryptographic keys
+           are derived from this passphrase using the PBKDF2 algorithm.
+
+       -c, --cipher (Set encryption algorithm)
+           Algorithm to be used to encrypt authentication data. Currently the following algorithms are supported:
+
+           Blowfish
+               Symmetric ; 64-bit block size ; Very Fast.
+
+           Rijndael
+               Symmetric ; 128-bit block size ; Fast ; AES Standard. (DEFAULT)
+
+           Serpent
+               Symmetric ; 128-bit block size ; Medium ; AES Contest finalist (2nd position)
+
+           Twofish
+               Symmetric 128-bit block size ; Fast ; AES Contest finalist (3rd position)
+
+           All algorithms use 256-bit keys. Note that Port Knocking mode with Light authentication MUST it Blowfish because it
+           requires a block size of 64 bits.
+
+CONCEALMENT OPTIONS
+       -n number, --noise number (Send noise packets)
+           This option lets you include noise packets along with the real authentication packets, adding a bit of obscurity to
+           the process, what should make it more difficult for an attacker to the determine the knock sequence. This option can
+           be used for both, PK and SPA.
+
+       -d addr_list, --decoys addr_list (Use decoys)
+           This options lets you use decoy hosts to obscure the authentication. addr_list must be a comma-separated list of IP
+           addresses or hostnames. Note that this option can only be used in Port Knocking mode.
+
+NETWORKING OPTIONS
+       --resolve  (Resolve external IP address)
+           This option asks Aldaba to resolve the internet-side IP address using the address resolution service at
+           http://whatismyip.aldabaknocking.com. This can be useful in NATed networks where the authentication message must
+           include the internet-side IP address,not the local area network IP address. This is equivalent to using --knock-ip
+           external_ip. WARNING: Note that the address resolution operation is performed through a simple HTTP GET query to the
+           remote service. All information is sent in the clear, and there is no guarantee of the integrity or authenticity of
+           the results. Therefore, using this option may let an attacker perform a man-in-the-middle attack, which could result
+           in the attacker´s IP address being included in the authentication data. Systems that require high levels of security
+           must not use this option.
+
+OUTPUT OPTIONS
+       -v[level], --verbose [level] (Increase or set verbosity level)
+           Increases the verbosity level, causing Aldaba to print more information during its execution. There are 9 levels of
+           verbosity (0 to 8). Every instance of -v increments the verbosity level by one (from its default value, level 4).
+           Every instance of option -q decrements the verbosity level by one. Alternatively you can specify the level directly,
+           as in -v3 or -v-1. These are the available levels:
+
+       -q[level], --reduce-verbosity [level] (Decrease verbosity level)
+           Decreases the verbosity level, causing Aldaba to print less information during its execution.
+
+MISCELLANEOUS OPTIONS
+       -V, --version (Display Version)
+           Displays current version and quits.
+
+       -h, --help (Display Help)
+           Displays help information and quits.
+
+BUGS
+       Please, report any bugs you find through the Aldaba development mailing list or directly to aldabaknocking@gmail.com.
+       Please try to include as much information as possible. In general it´s a good idea to include the output of the command
+       "uname -a", the version of Aldaba you are using and a brief description of the topology of the network you are using
+       Aldaba from (subnets, routers, firewalls, etc). See http://http://www.aldabaknocking.com/development for more details.
+
+AUTHORS
+       Luis MartinGarcia luis.mgarc@gmail.com (http://www.aldabaknocking.com)
+
+
+
+Aldaba                                                     09/08/2010                                                  ALDABA(8)
