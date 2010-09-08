@@ -1,0 +1,83 @@
+/***********************************************************************
+ *                                                                     *
+ *                 _        _____               ____                   *
+ *         /\     | |      |  __ \      /\     |  _ \      /\          *
+ *        /  \    | |      | |  | |    /  \    | |_) |    /  \         *
+ *       / /\ \   | |      | |  | |   / /\ \   |  _ <    / /\ \        *
+ *      / ____ \  | |___   | |__| /  / ____ \  | |_) /  / ____ \       *
+ *     /_/    \_\ | ____|  |_____/  /_/    \_\ |____/  /_/    \_\      *
+ *                                                                     *
+ *                                                                     *
+ *                   --[INSTALLATION INSTRUCTIONS]--                   *
+ *                                                                     *
+ ***********************************************************************/
+
+    -------------
+     To Install:
+    -------------
+
+    1 - Extract contents of the gzipped tarball using the following
+        command (change filename if appropiate):
+            gunzip -c aldaba-suite-0.2.0.tar.gz | tar xvf -
+
+    2 - Go to the directory where the file was extracted.
+
+    3 - Run "./configure"
+
+    4 - Run "make"
+
+    5 - As root, run "make install"
+
+    5 - If everything went well Aldaba should be ready to use.
+
+
+    ---------------
+     To Uninstall:
+    ---------------
+
+    1 - Go to the directory where the source code was extracted.
+
+    2 - Become root and type "make uninstall"
+
+
+    +---------------------+
+    |  After Installation |
+    +---------------------+
+
+    OPEN/CLOSE SCRIPTS
+
+    Different systems have different firewall configurations so instead of
+    manipulating firewall rules directly, Aldaba Server lets the user specify
+    what should be done after correct authentications are received (open ports,
+    start services, shutdown, delete files, run programs...)
+
+    After installing Aldaba Server you should configure these scripts:
+
+    /usr/local/etc/aldabad/scripts/aldaba_open.sh
+    /usr/local/etc/aldabad/scripts/aldaba_close.sh
+    /usr/local/etc/aldabad/scripts/aldaba_forward.sh
+    /usr/local/etc/aldabad/scripts/aldaba_init.sh
+    /usr/local/etc/aldabad/scripts/aldabada_cleanup.sh
+
+    Those scripts are executed as a result of correct authentications.
+    Please, check the content of each of those scripts for details.
+
+    For more information check Aldaba Server man page (man aldabad).
+
+
++------------------------+
+| 3. CODE DOCUMENTATION  |
++------------------------+
+
+Aldaba's soruce code is commented using Doxygen markup tags. To generate the 
+documentation install doxygen in your system and run "doxygen Doxyfile" from
+directory aldaba-suite. Documentation will be generated in HTML format and will
+be placed in directory "../aldaba-doc/doxygen-doc"
+
+
+
+
+
+
+
+

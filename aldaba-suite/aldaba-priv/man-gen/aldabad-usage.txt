@@ -1,0 +1,29 @@
+  Aldaba Knocking Server 0.2.0 - (C) Luis MartinGarcia, 2010.
+  http://www.aldabaknocking.com || aldabaknocking@gmail.com
+
+  Usage: aldabad <-P passphrase> [Options]
+
+  Parameters:
+     -P, --passphrase <pass>  : Passphrase used to generate the crypto keys.
+  Options:
+     --pk, --spa              : Technique ["PK", "SPA"(default)].
+     -t, --target-ports <seq> : Sequence of dest ports [comma separated list].
+     -f, --field <field>      : Covert channel protocol header field.
+     -c  --cipher     <algo>  : Encryption algorithm ["Twofish", "AES", ...]
+     -i, --interface  <name>  : Network interface to listen on.
+     -v, --verbosity  <level> : Level of verbosity [0-9 (Default)].
+     -l, --logging    <level> : Logging level [0-9].
+     -4, --ipv4               : Use IP version 4 addresses
+     -6, --ipv6               : Use IP version 6 addresses
+     -h, --help               : Display usage information.
+     -V, --version            : Display current version.
+     --ssh-cookie             : Enable Aldaba OpenSSH cookie extension
+     --promiscuous            : Put network interface intro promiscuous mode
+
+   
+  Examples:
+     aldabad -P "Squeamish Ossifrage"
+     aldabad -t 3,14,159,2653 -v9 -i eth1
+     aldabad -6 --cipher twofish --promisc
+  For more information please refer to manual page aldabad(8).
+

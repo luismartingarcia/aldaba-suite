@@ -1,0 +1,243 @@
+#  ***************************************************************************
+#  *                                                                         *
+#  *                   _        _____               ____                     *
+#  *           /\     | |      |  __ \      /\     |  _ \      /\            *
+#  *          /  \    | |      | |  | |    /  \    | |_) |    /  \           *
+#  *         / /\ \   | |      | |  | |   / /\ \   |  _ <    / /\ \          *
+#  *        / ____ \  | |___   | |__| /  / ____ \  | |_) /  / ____ \         *
+#  *       /_/    \_\ | ____|  |_____/  /_/    \_\ |____/  /_/    \_\        *
+#  *                                                                         *
+#  *    == {Port Knocking/Single Packet Authorization} Security Suite ==     *
+#  *                                                                         *
+#  ***************************************************************************
+#  *                                                                         *
+#  * This file is part of Aldaba Knocking Suite.                             *
+#  *                                                                         *
+#  * Copyright (c) 2010, Luis MartinGarcia. (aldabaknocking@gmail.com)       *
+#  *                                                                         *
+#  * Aldaba is free software; you can redistribute it and/or modify it under *
+#  * the terms of the GNU General Public License as published by the Free    *
+#  * Software Foundation; Version 2 of the License, with the exceptions,     *
+#  * conditions and clarifications described in the file named LICENSE.txt,  *
+#  * distributed with Aldaba or available from:                              *
+#  * <http://www.aldabaknocking.com/LICENSE.txt>                             *
+#  *                                                                         *
+#  * Aldaba is distributed in the hope that it will be useful, but WITHOUT   *
+#  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or   *
+#  * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License   *
+#  * v2.0 for more details.                                                  *
+#  *                                                                         *
+#  * You should have received a copy of the GNU General Public License along *
+#  * with Aldaba; if not, write to the Free Software Foundation, Inc.,       *
+#  * 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA                *
+#  *                                                                         *
+#  * Please check file LICENSE.txt for the complete version of the license,  *
+#  * as this disclaimer does not contain the full information. Also, note    *
+#  * that although Aldaba is licensed under the GNU GPL v2.0 license, it may *
+#  * be possible to obtain copies of it under different, less restrictive,   *
+#  * alternative licenses. Requests will be studied on a case by case basis. *
+#  * If you wish to obtain Aldaba under a different license, please use the  *
+#  * email address shown above.                                              *
+#  *                                                                         *
+#  ***************************************************************************/
+#  This Makefile.in file was originally copied from the Nmap Security Scanner
+#  project <http://nmap.org/>, and then modified for Aldaba's needs by Luis
+#  MartinGarcia.
+
+# Extract the version string from aldaba.h.
+export ALDABA_VERSION := $(shell grep '^\#[ \t]*define[ \t]\+CURRENT_VERSION' aldaba.h | sed -e 's/.*"\(.*\)".*/\1/' -e 'q')
+ALDABA_NAME= Aldaba
+ALDABA_URL= http://www.aldabaknocking.com
+ALDABA_PLATFORM=@host@
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+bindir = @bindir@
+sbindir = @sbindir@
+mandir = @mandir@
+srcdir = @srcdir@
+scriptsdir = @sysconfdir@/aldabad/scripts
+export RELEASE_DATE := $(shell date +"%b %d, %Y")
+export NDIR=$(shell pwd)
+
+CC = @CC@
+CXX = @CXX@
+CCOPT = 
+#DBGFLAGS = -Wfatal-errors -Werror -Wall -Wextra -pedantic-errors
+DBGFLAGS = -Wall
+STRIP = @STRIP@
+
+DEFS = @DEFS@ -DALDABA_NAME=\"$(ALDABA_NAME)\" -DALDABA_URL=\"$(ALDABA_URL)\" -DALDABA_PLATFORM=\"$(ALDABA_PLATFORM)\" -DSCRIPTSDIR=\"$(scriptsdir)\"
+# With GCC, add extra security checks to source code.
+# http://gcc.gnu.org/ml/gcc-patches/2004-09/msg02055.html
+# Level 1 only makes changes that don't affect "conforming" programs,
+# while level 2 enforces additional restrictions.
+DEFS += -D_FORTIFY_SOURCE=2
+# For mtrace debugging -- see MTRACE define in main.cc for instructions
+# Should only be enabled during debugging and not in any real release.
+# DEFS += -DMTRACE=1
+CXXFLAGS = @CXXFLAGS@ $(DBGFLAGS) $(CCOPT) $(DEFS)
+CPPFLAGS = @CPPFLAGS@ 
+export CFLAGS = $(CXXFLAGS)
+# CFLAGS = $(DEFS) $(INCLS)
+STATIC =
+LDFLAGS = @LDFLAGS@ $(DBGFLAGS) $(STATIC)
+LIBS = -lpthread -lpcap
+INSTALL = @INSTALL@
+export RPMTDIR=$(HOME)/rpm
+
+# DESTDIR is used by some package maintainers to install Aldaba under
+# its usual directory structure into a different tree. See the 
+# CHANGELOG for more info.
+DESTDIR =
+
+TARGET_CLIENT = aldaba
+TARGET_SERVER = aldabad
+TARGET_COOKIE_SERVER = cookied
+
+export SRCS = ArgParserClient.cc ArgParserServer.cc ArgParser.cc blowfish.cc   \
+              client.cc Server.cc crypto_tools.cc md5.cc rijndael.cc           \
+              serpent.cc sha256.cc tools.cc twofish.cc IPAddress.cc            \
+              ClientOps.cc ServerOps.cc GeneralOps.cc output.cc PKClient.cc    \
+              SPAClient.cc EthernetHeader.cc ICMPv4Header.cc IPv4Header.cc     \
+              IPv6Header.cc NetworkLayerElement.cc PacketElement.cc RawData.cc \
+              TCPHeader.cc TransportLayerElement.cc UDPHeader.cc               \
+              PKDataLight4.cc PKDataLight6.cc PKDataStrong4.cc                 \
+              PKDataStrong6.cc Random.cc SPAHeader.cc hmac_sha256.cc           \
+              PKServer.cc SPAServer.cc post_auth.cc PKAuthAttempt.cc           \
+              HTTPHeader.cc AddressResolver.cc AuthRecord.cc                   \
+              ssh_cookie_client.cc  ssh_cookie_server.cc
+
+export HDRS = aldaba.h ArgParserClient.h ArgParserServer.g ArgParser.h         \
+              blowfish.h client.h Server.h crypto_tools.h md5.h rijndael.h     \
+              serpent.h sha256.h tools.h twofish.h IPAddress.h ClientOps.h     \
+              ServerOps.h GeneralOps.h output.h PKClient.h SPAClient.h         \
+              DataLinkLayerElement.h EthernetHeader.h ICMPv4Header.h           \
+              IPv4Header.h IPv6Header.h NetworkLayerElement.h PacketElement.h  \
+              RawData.h TCPHeader.h TransportLayerElement.h UDPHeader.h        \
+              PKDataLight4.h PKDataLight6.h PKDataStrong4.h PKDataStrong6.h    \
+              Random.h SPAHeader.h hmac_sha256.h PKServer.h SPAServer.h        \
+              post_auth.h PKAuthAttempt.h HTTPHeader.h AddressResolver.h       \
+              AuthRecord.h 
+
+OBJS_CLIENT = ArgParserClient.o ArgParser.o blowfish.o client.o crypto_tools.o \
+              md5.o rijndael.o serpent.o sha256.o tools.o twofish.o            \
+              IPAddress.o ClientOps.o GeneralOps.o output.o PKClient.o         \
+              SPAClient.o EthernetHeader.o ICMPv4Header.o IPv4Header.o         \
+              IPv6Header.o NetworkLayerElement.o PacketElement.o RawData.o     \
+              TCPHeader.o TransportLayerElement.o UDPHeader.o PKDataLight4.o   \
+              PKDataLight6.o PKDataStrong4.o PKDataStrong6.o Random.o          \
+              SPAHeader.o hmac_sha256.o HTTPHeader.o AddressResolver.o         \
+              ssh_cookie_client.o
+
+OBJS_SERVER = ArgParserServer.o ArgParser.o blowfish.o Server.o crypto_tools.o \
+              md5.o rijndael.o serpent.o sha256.o tools.o twofish.o            \
+              IPAddress.o ServerOps.o GeneralOps.o output.o EthernetHeader.o   \
+              ICMPv4Header.o IPv4Header.o IPv6Header.o NetworkLayerElement.o   \
+              PacketElement.o RawData.o TCPHeader.o TransportLayerElement.o    \
+              UDPHeader.o PKDataLight4.o PKDataLight6.o PKDataStrong4.o        \
+              PKDataStrong6.o Random.o SPAHeader.o hmac_sha256.o PKServer.o    \
+              SPAServer.o post_auth.o PKAuthAttempt.o AuthRecord.o             \
+              ssh_cookie_client.o
+
+OBJS_COOKIE_SERVER = ssh_cookie_server.o
+
+export ALDABASCRIPTS = scripts/aldaba_open.sh scripts/aldaba_close.sh          \
+                       scripts/aldaba_forward.sh scripts/aldaba_init.sh        \
+                       scripts/aldaba_shutdown.sh
+export DOCS2DIST = 
+
+export MISC2DIST = config.guess config.sub configure configure.ac Makefile.in  \
+                   aldaba_config.h.in TODO AUTHORS CHANGELOG COPYING
+
+# %.o : %.cc -- nope this is a GNU extension
+.cc.o:
+	$(CXX) -c $(CPPFLAGS) $(CXXFLAGS) $< -o $@
+
+all:
+	$(MAKE) $(TARGET_CLIENT) $(TARGET_COOKIE_SERVER) $(TARGET_SERVER)
+
+$(TARGET_CLIENT): $(OBJS_CLIENT)
+	@echo Compiling Aldaba Client
+	rm -f $@
+	$(CXX) $(LDFLAGS) -o $@ $(OBJS_CLIENT) $(LIBS)
+	@echo Aldaba Client compiled successfully.
+
+$(TARGET_SERVER): $(OBJS_SERVER)
+	@echo Compiling Aldaba Server
+	rm -f $@
+	$(CXX) $(LDFLAGS) -o $@ $(OBJS_SERVER) $(LIBS)
+	@echo Aldaba Server compiled successfully.
+
+$(TARGET_COOKIE_SERVER): $(OBJS_COOKIE_SERVER)
+	$(CXX) $(LDFLAGS) -o $@ $(OBJS_COOKIE_SERVER) $(LIBS)
+
+
+
+# Make a statically compiled binary for portability between distributions
+static:
+	$(MAKE) STATIC=-static
+
+debug:
+	$(MAKE) DBGFLAGS="-O0 -g -pg -ftest-coverage -fprofile-arcs"
+
+
+# Generate the Aldaba distribution tarball
+generate-tarball:
+	cd aldaba-priv && ./create_tarballs.sh
+
+# Update the web site. WARNING: "make generate-tarball" must have been called first.
+web:	
+	cd aldaba-priv && ./update_web.sh
+
+clean: aldaba_clean
+
+aldaba_clean:
+	rm -f dependencies.mk makefile.dep
+	rm -f $(OBJS_CLIENT) $(OBJS_SERVER) $(OBJS_COOKIE_SERVER) $(TARGET_CLIENT) $(TARGET_SERVER) $(TARGET_COOKIE_SERVER) config.cache
+
+
+debugclean:
+	rm -f *.gcov *.gcda *.gcno gmon.out
+
+distclean: aldaba_clean aldaba_distclean
+
+aldaba_distclean:
+	rm -f Makefile Makefile.bak makefile.dep aldaba_config.h config.cache config.log config.status
+	rm -rf autom4te.cache
+
+install-aldaba: $(TARGET_CLIENT) $(TARGET_SERVER)
+	$(INSTALL) -d $(DESTDIR)$(bindir) $(DESTDIR)$(mandir)/man1 $(DESTDIR)$(scriptsdir)
+	$(INSTALL) -c -m 755 aldaba $(DESTDIR)$(bindir)/aldaba
+	$(INSTALL) -c -m 755 aldabad $(DESTDIR)$(bindir)/aldabad
+	$(INSTALL) -c -m 644 docs/$(TARGET_CLIENT).8 $(DESTDIR)$(mandir)/man8/
+	$(INSTALL) -c -m 644 docs/$(TARGET_SERVER).8 $(DESTDIR)$(mandir)/man8/
+	$(INSTALL) -c -m 755 scripts/aldaba_init.sh $(DESTDIR)$(scriptsdir)/
+	$(INSTALL) -c -m 755 scripts/aldaba_cleanup.sh $(DESTDIR)$(scriptsdir)/
+	$(INSTALL) -c -m 755 scripts/aldaba_open.sh $(DESTDIR)$(scriptsdir)/
+	$(INSTALL) -c -m 755 scripts/aldaba_close.sh $(DESTDIR)$(scriptsdir)/
+	$(INSTALL) -c -m 755 scripts/aldaba_forward.sh $(DESTDIR)$(scriptsdir)/
+
+install: install-aldaba
+	@echo "Aldaba was installed successfully."
+
+uninstall: uninstall-aldaba 
+	@echo "Aldaba was uninstalled successfully."
+
+uninstall-aldaba:
+	rm -f $(DESTDIR)$(bindir)/$(TARGET_CLIENT)
+	rm -f $(DESTDIR)$(bindir)/$(TARGET_SERVER)
+	rm -f $(DESTDIR)$(mandir)/man1/$(TARGET_CLIENT).1
+	rm -rf $(DESTDIR)$(scriptsdir)
+
+${srcdir}/configure: configure.ac 
+	cd ${srcdir} && autoconf
+
+Makefile: Makefile.in config.status
+	./config.status
+
+config.status: configure
+	./config.status --recheck
+
+makefile.dep:
+	$(CXX) -MM $(CPPFLAGS) $(SRCS) > $@
+include makefile.dep

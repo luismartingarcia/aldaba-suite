@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+          "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd"
+[
+<!ENTITY aldaba-refguide SYSTEM "aldaba-man.xml">
+<!ENTITY aldaba-usage SYSTEM "aldaba-usage.xml">
+]>
+<article id="aldabaman">
+<artheader>
+<title>Aldaba Client Reference Guide (Man Page)</title>
+</artheader>
+&aldaba-refguide;
+</article>

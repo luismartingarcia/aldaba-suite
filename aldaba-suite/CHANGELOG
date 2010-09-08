@@ -1,0 +1,230 @@
+/***********************************************************************
+ *                                                                     *
+ *                 _        _____               ____                   *
+ *         /\     | |      |  __ \      /\     |  _ \      /\          *
+ *        /  \    | |      | |  | |    /  \    | |_) |    /  \         *
+ *       / /\ \   | |      | |  | |   / /\ \   |  _ <    / /\ \        *
+ *      / ____ \  | |___   | |__| /  / ____ \  | |_) /  / ____ \       *
+ *     /_/    \_\ | ____|  |_____/  /_/    \_\ |____/  /_/    \_\      *
+ *                                                                     *
+ *                                                                     *
+ *                       --[ALDABA CHANGELOG]--                        *
+ *                                                                     *
+ ************************************************************************/
+
+Version 0.1.7 May 5, 2008.
+
+  - Client and Server have been merged into a single source package. This should
+    improve maintainability. No more copy & paste from one side to the other.
+  - There has been a little adjustment in server's version number. This version
+    should have been server's 0.1.5 but as from now on, client and server will  
+    have the same version number, I've decided to "upgrade" the server to 0.1.7.
+  - Added additional instalation modes to Makefile
+  - Installation now makes a backup of configuration files and scripts before
+    overwritting.
+  - Little improvements in data wiping functions.
+  - Updated Aldaba tutorial.
+  - Fixed some errors in man pages.
+
+
+
+
+
+
++------------------------------------------------------------------------------+
+|                                                                              |
+| Since version 0.1.7, Aldaba Client and Aldaba Server are distributed in a    |
+| single source package. The following changelogs correspond to old versions,  |
+| prior to the merge.                                                          |
+|                                                                              |
++------------------------------------------------------------------------------+
+
++-------------------------+
+| ALDABA SERVER CHANGELOG |
++-------------------------+
+
+Version 0.1.4 Apr 29, 2008.
+
+  - Fixed bug in file parser. Reported and fixed by Joshua Caster.
+  - Added code to wipe sensitive data (encryption keys, etc) before exiting 
+    the application or when the SIGINT signal is delivered.
+  - Added code to test the correctness of crypto functions. Now, when the 
+    program starts, ciphers and hash functions are tested against known 
+    correct values. 
+
+Version 0.1.3 Dec 24, 2007.
+
+  - New checksum format. From now on, SPA packets will use SHA256 checksums as
+    MD5 is not secure anymore. 
+  - SPA "command" field has been reduced from 200 bytes to 184 due to the use of
+    SHA256 checksums that take 16 bytes more than MD5.
+  - Added support for new encryption algorithms. Now, the following ciphers can
+    be used to encrypt/decrypt SPA packets:
+        - Rijndael (AES contest winner)
+        - Twofish  (AES contest third position)
+        - Serpent  (AES contest second position)
+        - Blowfish
+    Note that IP-Id technique needs to use blowfish because it needs ciphers
+    with a block size of 64bits or less.
+  - Fixed typo in --help output
+
+
+Version 0.1.2 Nov 19, 2007.
+
+  - Added basic support for other data-link types than Ethernet. Currently
+    supported data-link types are: 802.3, 802.11, PPPoE, Loopback and FDDI.
+  - Fixed a possible buffer overflow while printing Ethernet headers.
+  - Added support for new version of Aldaba SPA Protocol. Currently this
+    protocol does the same as the previous one but it will support a lot of 
+    interesting features in future releases. These include support for one time
+    passwords, challenge/response authentication, timestamp based authentication
+    remote command execution etc.
+  - Source files were completely reorganized.
+  - Minor bugfixes.
+  
+
+Version 0.1.1 Oct 11, 2007.
+
+  - Some functions were moved to different source files. (Mainly because it 
+    did not make much sense to be where they used to.
+  - Output of --help changed. Now, instead of a big manpage a simple usage 
+    message is displayed.
+  - Added support for configuration files. A config file parser was written
+    using a template created by tool GNU gengetopt.
+  - Minor changes in the argument parsing process were made.
+  - The "UDP technique" was renamed to "SPA technique". Many functions and 
+    variable names were changed.
+  - Added option "start" that forces configuration to be read from file
+    /etc/aldabad/aldaba.conf
+  - Changed argparser: Now case is ignored when parsing long arg names.
+  - Minor change in the way encryption keys were being displayed in high
+    verbosity modes. Now only first and last 2 bytes are displayed, enough to
+    check for errors.
+
+Version 0.1. Sep 30, 2007.
+
+ - The way blowfish encryption keys were being used has changed. Now the
+   encryption key is the MD5 hash of the user-supplied passphrase (salted with
+   a 4-byte value). 
+ - Added --debug switch. It sets maximum verbosity and disables daemon mode.
+ - Added --quiet switch. It sets verbosity and logging levels to zero.
+ - Argparser rewritten. Added support for longer arg names like --interface.
+
+
+Version 0.1.beta2. Sep 21, 2007.
+
+ - Fixed a bug in the parsing of the -t parameter. The number of supplied ports
+   was not being checked. Now exactly 4 ports must be supplied for the IP-Id 
+   technique and up to ten ports for the UDP technique.
+ - Now when the parameter -t is supplied with only one port, the UDP technique
+   is assumed automatically.
+ - Changed Makefile. Now scripts are installed in mode 751 so regular users do
+   not have permissions to read their contents.
+ - Fixed a bug in the manpage and the --help output. Info about parameter -t
+   was missing.
+ - Fixed a bug in the execution of the open/close scripts. Added symbol "&" to 
+   the system() call so scripts are executed in the background. Otherwise scripts
+   could hung the server if they do not return immediatly.
+
+
+Version 0.1.beta1. Sep 4, 2007.
+
+ - Initial release.
+
+
++-------------------------+
+| ALDABA CLIENT CHANGELOG |
++-------------------------+
+
+Version 0.1.6 Apr 7, 2008.
+
+  - Added code to wipe sensitive data (encryption keys, etc) before exiting 
+    the application or when the SIGINT signal is delivered.
+  - Added code to test the correctness of crypto functions. Now, when the 
+    program starts, ciphers and hash functions are tested against known correct
+    values. 
+
+
+Version 0.1.5 Dec 24, 2007.
+
+  - New checksum format. From now on, SPA packets will use SHA256 checksums as
+    MD5 is not secure anymore. 
+  - SPA "command" field has been reduced from 200 bytes to 184 due to the use of
+    SHA256 checksums that take 16 bytes more than MD5.
+  - Added support for new encryption algorithms. Now, the following ciphers can
+    be used to encrypt/decrypt SPA packets:
+        - Rijndael (AES contest winner)
+        - Twofish  (AES contest third position)
+        - Serpent  (AES contest second position)
+        - Blowfish
+    Note that IP-Id technique needs to use blowfish because it needs ciphers
+    with a block size of 64bits or less.
+
+
+Version 0.1.4 Nov 19, 2007.
+
+  - Added option --dont-send. This option prevents Aldaba-client from actually
+    sending any packet. It simulates it does but no information is sent to
+    the network. Note that this option only disables Knock and SPA packets. 
+    DNS lookups and HTTP requests for option --resolve-IP will still be sent.
+  - Added support for new version of Aldaba SPA Protocol. Currently this
+    protocol does the same as the previous one but it will support a lot of 
+    interesting features in future releases. These include support for one time
+    passwords, challenge/response authentication, timestamp based authentication
+    remote command execution etc.
+  - Source files were completely reorganized.
+  - Minor bugfixes.
+
+Version 0.1.3 Oct 31, 2007.
+
+
+  - Fixed a bug in the parser for args --knock-IP and --source-IP. 
+  - Added support for noise packets. This is, extra packets sent to prevent
+    attackers with sniffing capabilities to guess the Knock sequence. A positive
+    integer may be specified using the --noise param.
+  - Changed the format IP-Id packets are displayed to stdout. Now they are 
+    printed as rows of a table. Additional information is shown. 
+  - Changed the way TCP/IP packets are crafted. Now there is a separate function
+    to do it, including computing checksum.
+  - Random number generator implemented. It is based on current pid, current
+    uid, current time and 4 random bytes read from /dev/random. This should be 
+    enough for a port knocking client.
+  - Added support for decoys (additional IPs to send fake knocks from). This
+    adds some obscurity to the knocking process. This feature can be combined
+    with noise for extra effect.
+  - Added support for an external IP resolver. Now, the internet-side IP address
+    may be resolved using the service http://whatismyip.aldabaknocking.com.
+    This is useful in NATed networks where the knocking information should not
+    contain a local area network address but an external IP.
+
+
+Version 0.1.2 Oct 11, 2007.
+
+  - Some functions were moved to different source files. (Mainly because it 
+    did not make much sense to be where they used to.
+  - Output of --help changed. Now, instead of a big manpage a simple usage 
+    message is displayed.
+  - Added support for config files. Because of this, the argparser was rewritten 
+    to use separate functions to process each type of argument.
+    Config files can be specified using the --config="" parameter.
+  - Minor change in the way encryption keys were being displayed in high
+    verbosity modes. Now only first and last 2 bytes are displayed, enough to
+    check for errors.
+
+Version 0.1.1 Sep 30, 2007.
+
+ - Fixed a bug in the computation of IP, TCP and UDP checksums.	
+ - Now when the parameter -t is supplied with only one port, the UDP technique
+   is assumed automatically.
+ - Fixed a bug in the parsing of the -i parameter. Before, the user was being
+   completely ignored and the interface "eth0" was being used in all cases.
+ - Fixed a bug in the manpage and the --help output. Info about parameter -t
+   was missing.
+ - "Argparser rewritten. Added support for longer arg names like --source-IP.
+ - The way blowfish encryption keys were being used has changed. Now the
+   encryption key is the MD5 hash of the user-supplied passphrase (salted with
+   a 4-byte value). 
+
+Version 0.1 
+
+ - Initial release.
