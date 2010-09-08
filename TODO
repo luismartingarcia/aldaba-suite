@@ -1,0 +1,54 @@
+/***********************************************************************
+ *                                                                     *
+ *                 _        _____               ____                   *
+ *         /\     | |      |  __ \      /\     |  _ \      /\          *
+ *        /  \    | |      | |  | |    /  \    | |_) |    /  \         *
+ *       / /\ \   | |      | |  | |   / /\ \   |  _ <    / /\ \        *
+ *      / ____ \  | |___   | |__| /  / ____ \  | |_) /  / ____ \       *
+ *     /_/    \_\ | ____|  |_____/  /_/    \_\ |____/  /_/    \_\      *
+ *                                                                     *
+ *                                                                     *
+ *                       --[ALDABA TO-DO LIST]--                       *
+ *                                                                     *
+ ***********************************************************************/
+ 
+ This file contains Aldaba's to-do list. Items are listed in order of 
+ priority (high priority items are listed first). Feel free to work on
+ any of the items on the list. However, if you'd like to work on 
+ something that is not trivial to implement you may want to send a 
+ message to the aldaba-devel list before you start so other developers 
+ can see what you are planning to do. Make sure you explain exactly what
+ you are trying to fix/implement and how you are planning to do it. 
+ It's always better to discuss bugfixes and new feature additions in
+ advance because they may actually have bigger implications than you 
+ think and you may not get your patch accepted.
+
+ Please keep in mind that contributed code must:
+  * Be written in C++.
+  * Include comments so anyone can understand immediately what it does.
+  * Work on Linux, Mac OS and MS Windows. It's OK if you have not tested
+    the code in all those platforms, but at least keep portability in mind when
+    you write it and include a list of systems you've tested it on along with
+    your patch.
+
+  Questions, comments and patches should be sent to the Aldaba development
+  mailing list (aldaba-devel). 
+
+
+/*****************************************************************************
+ * Things that have NOT been done yet                                        *
+ *****************************************************************************/
+
+* URGENT: Improve random number seeding.
+* write wireshark dissector for PK and SPA protos.
+* Make sure things like -p3/udp -v9 -p4 --forward are not allowed by the client.
+  Currently the server discards SPA packets where the two knock port don't have
+  the same protocol, but it's output looks like it hanged.
+        |_Valid SPA authentication received [
+    (returns OP_FAILURE before printing the whole sentence)
+
+/*****************************************************************************
+ * Things that have been solved already                                      *
+ *****************************************************************************/
+
+[DONE] 

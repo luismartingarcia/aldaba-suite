@@ -1,0 +1,27 @@
+ =======================================================================
+           _     _       _              _____                          
+     /\   | |   | |     | |            / ____|                         
+    /  \  | | __| | __ _| |__   __ _  | (___   ___ _ ____   _____ _ __ 
+   / /\ \ | |/ _` |/ _` |  _ \ / _` |  \___ \ / _ \ `__\ \ / / _ \ `__|
+  / ____ \| | (_| | (_| | |_) | (_| |  ____) |  __/ |   \ V /  __/ |   
+ /_/    \_\_|\____|\__._|____/ \__._| |_____/ \___|_|    \_/ \___|_|   
+
+ =======================================================================
+[+]
+ |_Aldaba Server 0.2.0 started at 2010-08-26 17:27 CEST.
+ |_Server Configuration:
+ |  |_Mode=           SPA-IPv4
+ |  |_Accepted Ports= 7177
+ |  |_Cipher=         AES-CBC
+ |  |_Cipher Key=     9394a97254a38d4280734f6de692867e588f3687c37dc5d4e31c0d36a3a10e5
+ |  |_HMAC Key=       e9d1e8a9b10b829343d4c978255623835df688c8a6184d453d7aea454c2789d
+ |  |_Cap Interface=  wlan0
+ |_Listening on device "wlan0", link-type EN10MB (Ethernet), capture size 512 bytes.
+ |_Valid SPA authentication received [Open 22 to 10.1.2.15]
+This script should open port number 22/any to address 10.1.2.15
+ |_Valid SPA authentication received [Open 22 to 10.1.2.15]
+This script should open port number 22/any to address 10.1.2.15
+ |_Valid SPA authentication received [Open 22 to 10.1.2.15]
+This script should open port number 22/any to address 10.1.2.15
+ |_Replay attack detected! Old SPA authentication received
+
