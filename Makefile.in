@@ -206,7 +206,7 @@ aldaba_distclean:
 	rm -rf autom4te.cache
 
 install-aldaba: $(TARGET_CLIENT) $(TARGET_SERVER)
-	$(INSTALL) -d $(DESTDIR)$(bindir) $(DESTDIR)$(mandir)/man1 $(DESTDIR)$(scriptsdir)
+	$(INSTALL) -d $(DESTDIR)$(bindir) $(DESTDIR)$(mandir)/man8 $(DESTDIR)$(scriptsdir)
 	$(INSTALL) -c -m 755 aldaba $(DESTDIR)$(bindir)/aldaba
 	$(INSTALL) -c -m 755 aldabad $(DESTDIR)$(bindir)/aldabad
 	$(INSTALL) -c -m 644 docs/$(TARGET_CLIENT).8 $(DESTDIR)$(mandir)/man8/
