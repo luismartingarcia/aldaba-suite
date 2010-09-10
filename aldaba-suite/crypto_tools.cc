@@ -1193,7 +1193,8 @@ int derive_port_sequence(const char *passphrase, tcp_port_t *dest, size_t total)
   u8 hash[SHA256_HASH_LEN];
   u8 pg_salt[16]={0xf3,0x2b,0x20,0x7d,0xec,0x9e,0x08,0xb9,0x0b,0x8f,0x68,0xaf,0x61,0xc5,0xaa,0x4c};
   u8 pl_salt[16]={0x85,0x1b,0xf8,0x31,0x3f,0x9d,0x8f,0x07,0x59,0x4c,0xbd,0xc1,0x6c,0x09,0x3a,0x51};
-  u8 aux_buff[SHA256_HASH_LEN*2 + sizeof(pl_salt) + sizeof(size_t)];
+  u8 aux_buff[SHA256_HASH_LEN*2 + sizeof(pl_salt) + sizeof(u32)];
+  u32 i=0;
 
   if(passphrase==NULL || dest==NULL || total>65535)
       fatal(OUT_2, "%s(%p, %p, %lu): Invalid parameter supplied.", __func__, passphrase, (void *)dest, (unsigned long)total);
@@ -1201,12 +1202,12 @@ int derive_port_sequence(const char *passphrase, tcp_port_t *dest, size_t total)
   pbkdf2_sha256((u8*)passphrase, strlen(passphrase), pg_salt, 16, SHA256_HASH_LEN, aux_key, RFC2898_ITERATIONS);
   memset(hash, 0, SHA256_HASH_LEN);
 
-  for(size_t i=0; i<total; i++){
+  for(i=0; i<(u32)total; i++){
     do{
         memcpy(aux_buff, hash, SHA256_HASH_LEN);
         memcpy(aux_buff+SHA256_HASH_LEN, aux_key, SHA256_HASH_LEN);
         memcpy(aux_buff+(SHA256_HASH_LEN*2), pl_salt, sizeof(pl_salt));
-        memcpy(aux_buff+(SHA256_HASH_LEN*2)+sizeof(pl_salt), &i, sizeof(size_t));
+        memcpy(aux_buff+(SHA256_HASH_LEN*2)+sizeof(pl_salt), &i, sizeof(u32));
         SHA256::sha256sum(aux_buff, sizeof(aux_buff), hash);
         dest[i]=*((tcp_port_t *)hash);
     }while(i!=0 && (dest[i]==0 || isinlist_u16(dest, i, dest[i])) );
