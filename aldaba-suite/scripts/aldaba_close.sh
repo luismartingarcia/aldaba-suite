@@ -27,5 +27,5 @@ exit 0;
 #   IPT="/sbin/iptables"
 
 #   Drop inbound packets
-#   $IPT -A INPUT -p tcp -j DROP --dport $1  --src $2 -m state --state NEW
+#   $IPT -A INPUT -p tcp -j DROP --dport $1  --src $3 -m state --state NEW
 #   exit 0
