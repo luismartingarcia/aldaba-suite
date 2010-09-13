@@ -211,11 +211,11 @@ install-aldaba: $(TARGET_CLIENT) $(TARGET_SERVER)
 	$(INSTALL) -c -m 755 aldabad $(DESTDIR)$(bindir)/aldabad
 	$(INSTALL) -c -m 644 docs/$(TARGET_CLIENT).8 $(DESTDIR)$(mandir)/man8/
 	$(INSTALL) -c -m 644 docs/$(TARGET_SERVER).8 $(DESTDIR)$(mandir)/man8/
-	$(INSTALL) -c -m 755 scripts/aldaba_init.sh $(DESTDIR)$(scriptsdir)/
-	$(INSTALL) -c -m 755 scripts/aldaba_cleanup.sh $(DESTDIR)$(scriptsdir)/
-	$(INSTALL) -c -m 755 scripts/aldaba_open.sh $(DESTDIR)$(scriptsdir)/
-	$(INSTALL) -c -m 755 scripts/aldaba_close.sh $(DESTDIR)$(scriptsdir)/
-	$(INSTALL) -c -m 755 scripts/aldaba_forward.sh $(DESTDIR)$(scriptsdir)/
+	cp -n scripts/aldaba_init.sh $(DESTDIR)$(scriptsdir)/
+	cp -n scripts/aldaba_cleanup.sh $(DESTDIR)$(scriptsdir)/
+	cp -n scripts/aldaba_open.sh $(DESTDIR)$(scriptsdir)/
+	cp -n scripts/aldaba_close.sh $(DESTDIR)$(scriptsdir)/
+	cp -n scripts/aldaba_forward.sh $(DESTDIR)$(scriptsdir)/
 
 install: install-aldaba
 	@echo "Aldaba was installed successfully."
