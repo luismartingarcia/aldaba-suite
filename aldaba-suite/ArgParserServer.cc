@@ -94,7 +94,7 @@ int ArgParserServer::parse_arguments(int argc, char *argv[], ServerOps *opt) {
   {"ports",             required_argument,      0,      't'},
   {"verbosity",         optional_argument,      0,      'v'},
   {"version",           no_argument,            0,      'V'},
-  {"interactive",       required_argument,      0,      'I'},
+  {"interactive",       no_argument,            0,      'I'},
   {"promiscuous",       no_argument,            0,        0},
   {"promisc",           no_argument,            0,        0},
   {"portknocking",      no_argument,            0,        0},
