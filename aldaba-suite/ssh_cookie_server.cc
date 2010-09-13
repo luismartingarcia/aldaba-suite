@@ -281,7 +281,7 @@ int main(int argc, char *argv[]){
   int client_sd=-1;
   unsigned int served_clients=0;
   struct sockaddr_storage ss;
-  socklen_t sslen;
+  socklen_t sslen=(socklen_t)sizeof(struct sockaddr_storage);
 
   /* Set IPv6 if requested */
   if(argc>1 && !strcmp("-6", argv[1]) )
