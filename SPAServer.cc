@@ -273,8 +273,10 @@ int SPAServer::spa_packet_handler(u8 *args, const struct pcap_pkthdr* pkthdr, co
       this->ssh_auth_insert_new(spa.getTimestamp(), spa.getNonce(), SPA_NONCE_LEN);
   }
 
-  if( o.SSHCookie() )
+  if( o.SSHCookie() ){
+      indent(OUT_6, 1, "Passing SSH authentication token to the cookie server.\n");
       server_insert_cookie(spa.getNonce());
+  }
   /* If we get here it means that the received SPA packet is valid and
    * that we should take the appropriate action */
   return this->post_auth(&spa);
