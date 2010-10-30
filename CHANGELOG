@@ -12,6 +12,17 @@
  *                                                                     *
  ************************************************************************/
 
+Version 0.2.0BETA1 Oct 30, 2010.
+
+  - Aldaba has been completly rewritten in C++.
+  - Full support for IPv6
+  - Flexible covert channel field specification.
+  - Improved crypto key generation.
+  - Improved SPA protocol.
+  - Added full protection against replay attacks.
+  - Improved documentation.
+  - Improved installation process.
+
 Version 0.1.7 May 5, 2008.
 
   - Client and Server have been merged into a single source package. This should
@@ -25,11 +36,6 @@ Version 0.1.7 May 5, 2008.
   - Little improvements in data wiping functions.
   - Updated Aldaba tutorial.
   - Fixed some errors in man pages.
-
-
-
-
-
 
 +------------------------------------------------------------------------------+
 |                                                                              |
