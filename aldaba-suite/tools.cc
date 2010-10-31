@@ -51,7 +51,6 @@
 #include "twofish.h"
 #include "rijndael.h"
 #include "serpent.h"
-#include "crypto_tools.h"
 #include "IPAddress.h"
 #include <string.h>
 #include <assert.h>
@@ -414,46 +413,46 @@ int print_TCP_IP_header(int vblevel, char *packet){
  return OP_SUCCESS;
 } /* End of print_TCP_IP_header() */
 
-
-/** Wipes out the supplied buffer overwritting it an unespecified number of
-  * times. It is first overwritten with nice random data obtained from device
-  * urandom and then it is overwritten several times with crappy random data
-  * produced by random().                                                     */
-int wipe_buffer(unsigned char *buffer, int len){
-
- int retcode=OP_SUCCESS;      /* Return value */
- int times = 0;               /* Number of times buffer will be overwritten */
- int i=0, j=0;
- unsigned char entropy[128]; /* Buffer to store some decent random numbers */
-
- if (buffer == NULL || len <= 0)
-    return OP_FAILURE;
-
- /* Fill our little entropy buffer with some nice random data */
- if ( get_urandom_bytes( entropy, 128 ) != 0 )
-        retcode=LOW_RANDOMNESS;
-
- /* Seed crappy randomizer */
- srandom( (*((unsigned int *)entropy) ^ ((unsigned int)time(NULL))) + getpid() );
-
- /* Overwrite user supplied buffer with nice random data */
- if ( get_urandom_bytes( buffer, len ) != 0 )
-        retcode=LOW_RANDOMNESS;
-
- /* So far we have overwritten the buffer with nice random data, now we fill  */
- /* it with regular crappy random data.                                       */
-
- /* Overwrite an unespecified number of times (at least 50). All this should  */
- /* make data recovery a bit complicated.                                     */
- times = 50 + entropy[ sizeof(int) + 1 ];
-
- for ( j=0; j<times; j++){
-    for ( i=0; i<len; i++){
-        buffer[i] = ((unsigned char)random()%256) ^ (entropy[ i % 128 ]) ;
-    }
- }
- return retcode;
-} /* End of wipe_buffer() */
+//
+///** Wipes out the supplied buffer overwritting it an unespecified number of
+//  * times. It is first overwritten with nice random data obtained from device
+//  * urandom and then it is overwritten several times with crappy random data
+//  * produced by random().                                                     */
+//int wipe_buffer(unsigned char *buffer, int len){
+//
+// int retcode=OP_SUCCESS;      /* Return value */
+// int times = 0;               /* Number of times buffer will be overwritten */
+// int i=0, j=0;
+// unsigned char entropy[128]; /* Buffer to store some decent random numbers */
+//
+// if (buffer == NULL || len <= 0)
+//    return OP_FAILURE;
+//
+// /* Fill our little entropy buffer with some nice random data */
+// if ( get_urandom_bytes( entropy, 128 ) != 0 )
+//        retcode=LOW_RANDOMNESS;
+//
+// /* Seed crappy randomizer */
+// srandom( (*((unsigned int *)entropy) ^ ((unsigned int)time(NULL))) + getpid() );
+//
+// /* Overwrite user supplied buffer with nice random data */
+// if ( get_urandom_bytes( buffer, len ) != 0 )
+//        retcode=LOW_RANDOMNESS;
+//
+// /* So far we have overwritten the buffer with nice random data, now we fill  */
+// /* it with regular crappy random data.                                       */
+//
+// /* Overwrite an unespecified number of times (at least 50). All this should  */
+// /* make data recovery a bit complicated.                                     */
+// times = 50 + entropy[ sizeof(int) + 1 ];
+//
+// for ( j=0; j<times; j++){
+//    for ( i=0; i<len; i++){
+//        buffer[i] = ((unsigned char)random()%256) ^ (entropy[ i % 128 ]) ;
+//    }
+// }
+// return retcode;
+//} /* End of wipe_buffer() */
 
 /** @todo: Finish this! */
 /** This function is called either by atexit() on normal program termination or
