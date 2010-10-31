@@ -41,10 +41,7 @@
  * email address shown above.                                              *
  *                                                                         *
  ***************************************************************************/
-
-#include "aldaba.h"
-
-#include "crypto_tools.h"
+#include "Crypto.h"
 #include "md5.h"
 #include "output.h"
 #include "sha256.h"
@@ -54,12 +51,13 @@
 #include "rijndael.h"
 #include "serpent.h"
 #include "tools.h"
+#include "crypto_pbkdf2.h"
 
 
 /** Tests the correctness of every crypto function used in Aldaba Knocking
   * Suite. It returns OP_SUCCESS if everything works as expected and OP_FAILURE
   * in case of error.                                                         */
-int test_crypto(void){
+int Crypto::test(void){
  if ( test_twofish() != OP_SUCCESS )
     return OP_FAILURE;
  if ( test_serpent() != OP_SUCCESS )
@@ -82,7 +80,7 @@ int test_crypto(void){
 
 /** Tests Serpent cipher against a known test vector. It returns OP_SUCCESS if
   * everything works as expected and OP_FAILURE in case of error.             */
-int test_serpent(void){
+int Crypto::test_serpent(void){
  /* Serpent test vector. Set 8, vector#0.
     KEY=000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F
     PT=3DA46FFA6F4D6F30CD258333E5A61369
@@ -122,7 +120,7 @@ int test_serpent(void){
 
 /** Tests Twofish cipher against a known test vector. It returns OP_SUCCESS if
   * everything works as expected and OP_FAILURE in case of error.             */
-int test_twofish(void){
+int Crypto::test_twofish(void){
  /* Twofish test vector I=7 / 256-bit
     KEY=3059D6D61753B958D92F4781C8640E586CB4561C40BF0A9705931CB6D408E7FA
     PT=E69465770505D7F80EF68CA38AB3A3D6
@@ -165,7 +163,7 @@ int test_twofish(void){
 
 /** Tests Rijndael/AES cipher against a known test vector. It returns OP_SUCCESS
   * if everything works as expected and OP_FAILURE in case of error.          */
-int test_rijndael(void){
+int Crypto::test_rijndael(void){
  /* Rijndael test vector I=7 / 256-bit -- File: ecb_tbl.txt
     KEY=F0F1F2F3F5F6F7F8FAFBFCFDFE01000204050607090A0B0C0E0F101113141516
     PT=B8358E41B9DFF65FD461D55A99266247
@@ -206,7 +204,7 @@ int test_rijndael(void){
 
 /** Tests Blowfish cipher against a known test vector. It returns OP_SUCCESS if
   * everything works as expected and OP_FAILURE in case of error.             */
-int test_blowfish(void){
+int Crypto::test_blowfish(void){
  /* Blowfish test vector
     KEY=0000000000000000000000000000000000000000000000000000000000000000
     PT=0000000000000000
@@ -244,7 +242,7 @@ int test_blowfish(void){
 /** Tests SHA256 hashing algorithm against a known test vector. It returns
   * OP_SUCCESS if everything works as expected and OP_FAILURE in case of
   * error.                                                                    */
-int test_sha256(void){
+int Crypto::test_sha256(void){
  /* SHA256 test vector
     PT="Aldaba Knocking Suite"
     HASH=4f17dbddc022ba043327fca882e10261476f762d03cd759616ca17cdbf626618
@@ -272,7 +270,7 @@ int test_sha256(void){
 /** Tests MD5 hashing algorithm against a known test vector.
   * @return OP_SUCCESS if everything works as expected.
   * @return OP_FAILURE in case of error.                                      */
-int test_md5(void){
+int Crypto::test_md5(void){
  /* MD5 test vector
     PT="Aldaba Knocking Suite"
     HASH=fb6cbeec382335fd6b0ab9d327225d2c
@@ -295,7 +293,7 @@ int test_md5(void){
 
 /** Tests HMAC_SHA256 algorithm against known test vectors. It returns
   * OP_SUCCESS if everything works as expected and OP_FAILURE in case of error. */
-int test_hmacsha256(void){
+int Crypto::test_hmacsha256(void){
  /* Test vector 1
     Key =  0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b
     Data = 4869205468657265
@@ -360,7 +358,7 @@ int test_hmacsha256(void){
 
 /** Tests PBKDF2-SHA256 algorithm against a known test vector. It returns
   * OP_SUCCESS if everything works as expected and OP_FAILURE in case of error. */
-int test_pbkdf2_sha256(void){
+int Crypto::test_pbkdf2_sha256(void){
  /* Test vector
     Password="password"
     Salt=78578e5a5d63cb06
@@ -373,55 +371,13 @@ int test_pbkdf2_sha256(void){
   u8 expected_key[24]={0x97,0xb5,0xa9,0x1d,0x35,0xaf,0x54,0x23,
                        0x24,0x88,0x13,0x15,0xc4,0xf8,0x49,0xe3,
                        0x27,0xc4,0x70,0x7d,0x1b,0xc9,0xd3,0x22};
-  pbkdf2_sha256((u8 *)password, strlen(password), salt, 8, 24, computed_key, 2048);
+  PBKDF2::pbkdf2_sha256((u8 *)password, strlen(password), salt, 8, 24, computed_key, 2048);
   if(memcmp(computed_key, expected_key, 24)!=0)
     return OP_FAILURE;
 
   return OP_SUCCESS;
 } /* End of test_pbkdf2_sha256() */
-
-
-/** Opens system's PRNG (device /dev/urandom) and fills the supplied buffer with
-  * supposedly nice random data.
-  * @return OP_SUCCESS on success.
-  * @return less than 0 in case of error.                                     */
-int get_urandom_bytes(u8 *dst, int bytes){
- int dev_urandom_fd=0;
- int i=0;
-
- if(dst == NULL || bytes <=0 )
-    return OP_FAILURE;
-
-  /* Open urandom device read-only */
-  dev_urandom_fd=open("/dev/urandom", O_RDONLY );
-
-  if (dev_urandom_fd != -1 ){ /* If /dev/random exists read "len" bytes */
-
-        if ( (i=read(dev_urandom_fd, dst, bytes)) < 0 ){ /* Error */
-            close(dev_urandom_fd);  /* printf("Error opening /dev/random\n"); */
-            return OP_FAILURE;
-        }
-        else if (i == 0){ /* EOF */
-            close(dev_urandom_fd);  /* printf("EOF read from /dev/random\n"); */
-            return -2;
-        }
-        else if (i == bytes){ /* Enough data was read   */
-            close(dev_urandom_fd);  /* printf("All bytes read from /dev/random\n"); */
-            return OP_SUCCESS;
-        }
-        else if (i < bytes){ /* Not enough data was read */
-            close(dev_urandom_fd);  /* printf("Not enough bytes read from /dev/random\n"); */
-            return -3;
-        }
-        else{
-           /* This should never happen */
-            printf("#32k8DSF8V: Something is really broken. Please report a bug.\n");
-            return -4;
-        }
-  }
-return OP_SUCCESS;
-} /* End of get_urandom_bytes() */
-
+        
 
 /** Encrypts the first "len" bytes of buffer "plaintext" in CBC Mode using the
   * supplied key. The result is stored in buffer "ciphertext".
@@ -436,7 +392,7 @@ return OP_SUCCESS;
   * @warning Parameter key MUST be at least 32bytes long.
   * @warning Length of plaintext must be a multiple of the cipher block size
   *          (8 bytes for Blowfish, 16 bytes for the rest).                   */
-int encrypt_buffer_cbc(u8 *ciphertext, u8 *plaintext, u8 *initial_IV, u8 *key, int len, int algorithm){
+int Crypto::encrypt_buffer_cbc(u8 *ciphertext, u8 *plaintext, u8 *initial_IV, u8 *key, int len, int algorithm){
   unsigned char nullblock[16]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
   unsigned char buffer[16]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
   u8 *prevciphertext=NULL;
@@ -513,7 +469,7 @@ int encrypt_buffer_cbc(u8 *ciphertext, u8 *plaintext, u8 *initial_IV, u8 *key, i
   * @warning Parameter key MUST be at least 32bytes long.
   * @warning Length of ciphertext must be a multiple of the cipher block size.
   *          (8 bytes for Blowfish, 16 bytes for the rest).                   */
-int decrypt_buffer_cbc(u8 *ciphertext, u8 *plaintext, u8 *initial_IV, u8 *key, int len, int algorithm){
+int Crypto::decrypt_buffer_cbc(u8 *ciphertext, u8 *plaintext, u8 *initial_IV, u8 *key, int len, int algorithm){
 
   unsigned char nullblock[16]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
   u8 *prevciphertext=NULL;
@@ -595,7 +551,7 @@ int decrypt_buffer_cbc(u8 *ciphertext, u8 *plaintext, u8 *initial_IV, u8 *key, i
   * @warning Parameter key MUST be at least 32bytes long.
   * @warning Length of plaintext must be a multiple of the cipher block size
   *          (8 bytes for Blowfish, 16 bytes for the rest).                   */
-int encrypt_buffer_cfb(u8 *ciphertext, u8 *plaintext, u8 *initial_IV, u8 *key, int len, int algorithm){
+int Crypto::encrypt_buffer_cfb(u8 *ciphertext, u8 *plaintext, u8 *initial_IV, u8 *key, int len, int algorithm){
   unsigned char nullblock[16]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
   unsigned char buffer[16]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
   unsigned char backup[16]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
@@ -678,7 +634,7 @@ int encrypt_buffer_cfb(u8 *ciphertext, u8 *plaintext, u8 *initial_IV, u8 *key, i
   * @warning Parameter key MUST be at least 32bytes long.
   * @warning Length of ciphertext must be a multiple of the cipher block size.
   *          (8 bytes for Blowfish, 16 bytes for the rest).                   */
-int decrypt_buffer_cfb(u8 *ciphertext, u8 *plaintext, u8 *initial_IV, u8 *key, int len, int algorithm){
+int Crypto::decrypt_buffer_cfb(u8 *ciphertext, u8 *plaintext, u8 *initial_IV, u8 *key, int len, int algorithm){
   unsigned char nullblock[16]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
   unsigned char buffer[16]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
   unsigned char backup[16]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
@@ -760,7 +716,7 @@ int decrypt_buffer_cfb(u8 *ciphertext, u8 *plaintext, u8 *initial_IV, u8 *key, i
   * @warning Parameter key MUST be at least 32bytes long.
   * @warning Length of plaintext must be a multiple of the cipher block size
   *          (8 bytes for Blowfish, 16 bytes for the rest).                   */
-int encrypt_buffer_ofb(u8 *ciphertext, u8 *plaintext, u8 *initial_IV, u8 *key, int len, int algorithm){
+int Crypto::encrypt_buffer_ofb(u8 *ciphertext, u8 *plaintext, u8 *initial_IV, u8 *key, int len, int algorithm){
   unsigned char O_vector[16]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
   int blocksize=0, i=0, j=0;
 
@@ -839,7 +795,7 @@ int encrypt_buffer_ofb(u8 *ciphertext, u8 *plaintext, u8 *initial_IV, u8 *key, i
   * @warning Parameter key MUST be at least 32bytes long.
   * @warning Length of ciphertext must be a multiple of the cipher block size.
   *          (8 bytes for Blowfish, 16 bytes for the rest).                   */
-int decrypt_buffer_ofb(u8 *ciphertext, u8 *plaintext, u8 *initial_IV, u8 *key, int len, int algorithm){
+int Crypto::decrypt_buffer_ofb(u8 *ciphertext, u8 *plaintext, u8 *initial_IV, u8 *key, int len, int algorithm){
   unsigned char O_vector[16]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
   int blocksize=0, i=0, j=0;
 
@@ -916,7 +872,7 @@ int decrypt_buffer_ofb(u8 *ciphertext, u8 *plaintext, u8 *initial_IV, u8 *key, i
   * @warning Parameter key MUST be at least 32bytes long.
   * @warning Length of plaintext must be a multiple of the cipher block size
   *          (8 bytes for Blowfish, 16 bytes for the rest).                   */
-int encrypt_buffer_ecb(u8 *ciphertext, u8 *plaintext, u8 *key, int len, int algorithm){
+int Crypto::encrypt_buffer_ecb(u8 *ciphertext, u8 *plaintext, u8 *key, int len, int algorithm){
   int blocksize=0;
 
   /* First, get cipher block size*/
@@ -975,7 +931,7 @@ int encrypt_buffer_ecb(u8 *ciphertext, u8 *plaintext, u8 *key, int len, int algo
   * @warning Parameter key MUST be at least 32bytes long.
   * @warning Length of ciphertext must be a multiple of the cipher block size.
   *          (8 bytes for Blowfish, 16 bytes for the rest).                   */
-int decrypt_buffer_ecb(u8 *ciphertext, u8 *plaintext, u8 *key, int len, int algorithm){
+int Crypto::decrypt_buffer_ecb(u8 *ciphertext, u8 *plaintext, u8 *key, int len, int algorithm){
   int blocksize=0;
 
   /* First, get cipher block size*/
@@ -1021,9 +977,7 @@ int decrypt_buffer_ecb(u8 *ciphertext, u8 *plaintext, u8 *key, int len, int algo
 } /* End of decrypt_buffer_ecb() */
 
 
-
-
-int encrypt_buffer(u8 *in, size_t inlen, u8 *out, u8 *key, size_t keylen, u8 *iv, int cipher, int mode){
+int Crypto::encrypt_buffer(u8 *in, size_t inlen, u8 *out, u8 *key, size_t keylen, u8 *iv, int cipher, int mode){
   if(in==NULL || inlen==0 || out==NULL || key==NULL || keylen==0)
     return OP_FAILURE;
 
@@ -1048,7 +1002,7 @@ int encrypt_buffer(u8 *in, size_t inlen, u8 *out, u8 *key, size_t keylen, u8 *iv
 } /* End of encrypt_buffer() */
 
 
-int decrypt_buffer(u8 *in, size_t inlen, u8 *out, u8 *key, size_t keylen, u8 *iv, int cipher, int mode){
+int Crypto::decrypt_buffer(u8 *in, size_t inlen, u8 *out, u8 *key, size_t keylen, u8 *iv, int cipher, int mode){
   if(in==NULL || inlen==0 || out==NULL || key==NULL || keylen==0)
     return OP_FAILURE;
 
@@ -1073,47 +1027,6 @@ int decrypt_buffer(u8 *in, size_t inlen, u8 *out, u8 *key, size_t keylen, u8 *iv
 } /* End of decrypt_buffer() */
 
 
-#define MAX_SALT_LEN 128
-int pbkdf2_sha256(const u8 *passphrase, size_t passphrase_len, u8 *salt, size_t salt_len, size_t desired_key_len, u8 *final_key_buff, u32 nrounds){
-  u32 i=0, j=0, cnt=0;
-  u8 digest_1[SHA256_HASH_LEN];
-  u8 digest_2[SHA256_HASH_LEN];
-  u8 aux_salt[MAX_SALT_LEN+4];
-  u8 aux_digest[SHA256_HASH_LEN];
-  size_t bytes_written=0;
-  
-  /* Safe Checks */
-  if(passphrase==NULL || salt==NULL || salt_len==0 || salt_len>MAX_SALT_LEN ||
-     final_key_buff==NULL || desired_key_len==0 || nrounds==0)
-      return OP_FAILURE;
-  /* Copy the salt to our aux buffer */
-  memcpy(aux_salt, salt, salt_len);
-  /* Derive that key! */
-  for(cnt=1; desired_key_len>0; cnt++){
-    aux_salt[salt_len]   = (cnt >> 24)&0xFF;
-    aux_salt[salt_len+1] = (cnt >> 16)&0xFF;
-    aux_salt[salt_len+2] = (cnt >> 8)&0xFF;
-    aux_salt[salt_len+3] = cnt&0xFF;
-    HMAC_SHA256::hmac_sha256(passphrase, passphrase_len, aux_salt, salt_len+4, digest_1, SHA256_HASH_LEN);
-    memcpy(aux_digest, digest_1, sizeof(aux_digest));
-    for (i = 1; i < nrounds; i++) {
-        HMAC_SHA256::hmac_sha256(passphrase, passphrase_len, digest_1, SHA256_HASH_LEN, digest_2, SHA256_HASH_LEN);
-        memcpy(digest_1, digest_2, SHA256_HASH_LEN);
-	for (j = 0; j < SHA256_HASH_LEN; j++){
-            aux_digest[j] ^= digest_1[j];
-        }
-    }
-    bytes_written=MIN(desired_key_len, SHA256_HASH_LEN);
-    memcpy(final_key_buff, aux_digest, bytes_written);
-    desired_key_len-=bytes_written;
-    final_key_buff+=bytes_written;
-  };
-  return OP_SUCCESS;
-} /* End of pbkdf2_sha256() */
-
-
-
-
 /** Derives a key from the supplied passphrase material.
   * @param passphrase must be a NULL-terminated string containing a passphrase
   * (the longer the better)
@@ -1121,7 +1034,7 @@ int pbkdf2_sha256(const u8 *passphrase, size_t passphrase_len, u8 *salt, size_t 
   * number of bits.
   * @para bits is the length, in bits, of the desired key. */
 #define RFC2898_ITERATIONS 1024
-static int derive_cipher_key(const char *passphrase, u8 *result, int bits){
+int Crypto::derive_cipher_key(const char *passphrase, u8 *result, int bits){
   /* SALT = HEX: 0xa1d4bab5947f583c8bf8f77cd42cf267
    *        DEC: 215110261169822265005096709055935476327
    * If you want added security, change this magic number to a random 128-bit
@@ -1129,26 +1042,25 @@ static int derive_cipher_key(const char *passphrase, u8 *result, int bits){
   u8 salt[16]={0xa1,0xd4,0xba,0x13,0x37,0xde,0xad,0xbe,0xef,0xca,0xfe,0x19,0x73,0x44,0x76,0x77};
   if(passphrase==NULL || result==NULL || bits%8!=0)
      fatal(OUT_2, "%s(): Invalid parameter supplied", __func__);
-  pbkdf2_sha256((u8*)passphrase, strlen(passphrase), salt, 16, bits/8, result, RFC2898_ITERATIONS);
+  PBKDF2::pbkdf2_sha256((u8*)passphrase, strlen(passphrase), salt, 16, bits/8, result, RFC2898_ITERATIONS);
   return OP_SUCCESS;
 } /* End of derive_key() */
 
-int derive_cipher_key_512(const char *passphrase, u8 *result){
+int Crypto::derive_cipher_key_512(const char *passphrase, u8 *result){
   return derive_cipher_key(passphrase, result, 512);
 }
 
-int derive_cipher_key_256(const char *passphrase, u8 *result){
+int Crypto::derive_cipher_key_256(const char *passphrase, u8 *result){
   return derive_cipher_key(passphrase, result, 256);
 }
 
-int derive_cipher_key_128(const char *passphrase, u8 *result){
+int Crypto::derive_cipher_key_128(const char *passphrase, u8 *result){
   return derive_cipher_key(passphrase, result, 128);
 }
 
-int derive_cipher_key_64(const char *passphrase, u8 *result){
+int Crypto::derive_cipher_key_64(const char *passphrase, u8 *result){
   return derive_cipher_key(passphrase, result, 64);
 }
-
 
 
 /** Derives a key from the supplied passphrase material.
@@ -1157,7 +1069,7 @@ int derive_cipher_key_64(const char *passphrase, u8 *result){
   * @param result should point to a buffer big enough to hold the requested
   * number of bits.
   * @para bits is the length, in bits, of the desired key. */
-static int derive_mac_key(const char *passphrase, u8 *result, int bits){
+int Crypto::derive_mac_key(const char *passphrase, u8 *result, int bits){
   /* SALT = HEX: 0xa1d4ba0ba0ede553bd9da29307ea2883
    *        DEC: 215110247704882105819699438618558474371
    * If you want added security, change this magic number to a random 128-bit
@@ -1165,30 +1077,28 @@ static int derive_mac_key(const char *passphrase, u8 *result, int bits){
   u8 salt[16]={0xa1,0xd4,0xba,0x0b,0xa0,0xed,0xe5,0x53,0xbd,0x9d,0xa2,0x93,0x07,0xea,0x28,0x83};
   if(passphrase==NULL || result==NULL || bits%8!=0)
      fatal(OUT_2, "%s(): Invalid parameter supplied", __func__);
-  pbkdf2_sha256((u8*)passphrase, strlen(passphrase), salt, 16, bits/8, result, RFC2898_ITERATIONS);
+  PBKDF2::pbkdf2_sha256((u8*)passphrase, strlen(passphrase), salt, 16, bits/8, result, RFC2898_ITERATIONS);
   return OP_SUCCESS;
 } /* End of derive_key() */
 
-int derive_mac_key_512(const char *passphrase, u8 *result){
+int Crypto::derive_mac_key_512(const char *passphrase, u8 *result){
   return derive_mac_key(passphrase, result, 512);
 }
 
-int derive_mac_key_256(const char *passphrase, u8 *result){
+int Crypto::derive_mac_key_256(const char *passphrase, u8 *result){
   return derive_mac_key(passphrase, result, 256);
 }
 
-int derive_mac_key_128(const char *passphrase, u8 *result){
+int Crypto::derive_mac_key_128(const char *passphrase, u8 *result){
   return derive_mac_key(passphrase, result, 128);
 }
 
-int derive_mac_key_64(const char *passphrase, u8 *result){
+int Crypto::derive_mac_key_64(const char *passphrase, u8 *result){
   return derive_mac_key(passphrase, result, 64);
 }
 
 
-
-
-int derive_port_sequence(const char *passphrase, tcp_port_t *dest, size_t total){
+int Crypto::derive_port_sequence(const char *passphrase, tcp_port_t *dest, size_t total){
   u8 aux_key[SHA256_HASH_LEN];
   u8 hash[SHA256_HASH_LEN];
   u8 pg_salt[16]={0xf3,0x2b,0x20,0x7d,0xec,0x9e,0x08,0xb9,0x0b,0x8f,0x68,0xaf,0x61,0xc5,0xaa,0x4c};
@@ -1199,7 +1109,7 @@ int derive_port_sequence(const char *passphrase, tcp_port_t *dest, size_t total)
   if(passphrase==NULL || dest==NULL || total>65535)
       fatal(OUT_2, "%s(%p, %p, %lu): Invalid parameter supplied.", __func__, passphrase, (void *)dest, (unsigned long)total);
 
-  pbkdf2_sha256((u8*)passphrase, strlen(passphrase), pg_salt, 16, SHA256_HASH_LEN, aux_key, RFC2898_ITERATIONS);
+  PBKDF2::pbkdf2_sha256((u8*)passphrase, strlen(passphrase), pg_salt, 16, SHA256_HASH_LEN, aux_key, RFC2898_ITERATIONS);
   memset(hash, 0, SHA256_HASH_LEN);
 
   for(i=0; i<(u32)total; i++){
@@ -1216,3 +1126,43 @@ int derive_port_sequence(const char *passphrase, tcp_port_t *dest, size_t total)
 }
 
 
+/** Opens system's PRNG (device /dev/urandom) and fills the supplied buffer with
+  * supposedly nice random data.
+  * @return OP_SUCCESS on success.
+  * @return less than 0 in case of error.                                     */
+int Crypto::get_random_bytes(u8 *dst, int bytes){
+ int dev_urandom_fd=0;
+ int i=0;
+
+ if(dst == NULL || bytes <=0 )
+    return OP_FAILURE;
+
+  /* Open urandom device read-only */
+  dev_urandom_fd=open("/dev/urandom", O_RDONLY );
+
+  if (dev_urandom_fd != -1 ){ /* If /dev/random exists read "len" bytes */
+
+        if ( (i=read(dev_urandom_fd, dst, bytes)) < 0 ){ /* Error */
+            close(dev_urandom_fd);  /* printf("Error opening /dev/random\n"); */
+            return OP_FAILURE;
+        }
+        else if (i == 0){ /* EOF */
+            close(dev_urandom_fd);  /* printf("EOF read from /dev/random\n"); */
+            return -2;
+        }
+        else if (i == bytes){ /* Enough data was read   */
+            close(dev_urandom_fd);  /* printf("All bytes read from /dev/random\n"); */
+            return OP_SUCCESS;
+        }
+        else if (i < bytes){ /* Not enough data was read */
+            close(dev_urandom_fd);  /* printf("Not enough bytes read from /dev/random\n"); */
+            return -3;
+        }
+        else{
+           /* This should never happen */
+            printf("#32k8DSF8V: Something is really broken. Please report a bug.\n");
+            return -4;
+        }
+  }
+return OP_SUCCESS;
+} /* End of get_random_bytes() */

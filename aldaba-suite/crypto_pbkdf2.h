@@ -42,41 +42,18 @@
  *                                                                         *
  ***************************************************************************/
 
-/* crypto_tools.h */
+#ifndef __PBKDF2_H__
+#define __PBKDF2_H__ 1
 
-int test_crypto(void);
-int test_serpent(void);
-int test_twofish(void);
-int test_rijndael(void);
-int test_blowfish(void);
-int test_sha256(void);
-int test_hmacsha256(void);
-int test_pbkdf2_sha256(void);
-int test_md5(void);
-int get_urandom_bytes(u8 *dst, int bytes);
-int encrypt_buffer_cbc(u8 *ciphertext, u8 *plaintext, u8 *initial_IV, u8 *key, int len, int algorithm);
-int decrypt_buffer_cbc(u8 *ciphertext, u8 *plaintext, u8 *initial_IV, u8 *key, int len, int algorithm);
-int encrypt_buffer_cfb(u8 *ciphertext, u8 *plaintext, u8 *initial_IV, u8 *key, int len, int algorithm);
-int decrypt_buffer_cfb(u8 *ciphertext, u8 *plaintext, u8 *initial_IV, u8 *key, int len, int algorithm);
-int encrypt_buffer_ofb(u8 *ciphertext, u8 *plaintext, u8 *initial_IV, u8 *key, int len, int algorithm);
-int decrypt_buffer_ofb(u8 *ciphertext, u8 *plaintext, u8 *initial_IV, u8 *key, int len, int algorithm);
-int encrypt_buffer_ecb(u8 *ciphertext, u8 *plaintext, u8 *key, int len, int algorithm);
-int decrypt_buffer_ecb(u8 *ciphertext, u8 *plaintext, u8 *key, int len, int algorithm);
-int encrypt_buffer(u8 *in, size_t inlen, u8 *out, u8 *key, size_t keylen, u8 *iv, int cipher, int mode);
-int decrypt_buffer(u8 *in, size_t inlen, u8 *out, u8 *key, size_t keylen, u8 *iv, int cipher, int mode);
+#include "aldaba.h"
 
+class PBKDF2 {
 
-int pbkdf2_sha256(const u8 *passphrase, size_t passphrase_len, u8 *salt, size_t salt_len, size_t desired_key_len, u8 *final_key_buff, u32 nrounds);
+    private:
 
-int derive_cipher_key_512(const char *passphrase, u8 *result);
-int derive_cipher_key_256(const char *passphrase, u8 *result);
-int derive_cipher_key_128(const char *passphrase, u8 *result);
-int derive_cipher_key_64(const char *passphrase, u8 *result);
+    public:
+        static int pbkdf2_sha256(const u8 *passphrase, size_t passphrase_len, u8 *salt, size_t salt_len, size_t desired_key_len, u8 *final_key_buff, u32 nrounds);
 
-int derive_mac_key_512(const char *passphrase, u8 *result);
-int derive_mac_key_256(const char *passphrase, u8 *result);
-int derive_mac_key_128(const char *passphrase, u8 *result);
-int derive_mac_key_64(const char *passphrase, u8 *result);
+}; /* End of class PBKDF2 */
 
-int derive_port_sequence(const char *passphrase, tcp_port_t *dest, size_t total);
-/* EOF */
+#endif /* __PBKDF2_H__ */
