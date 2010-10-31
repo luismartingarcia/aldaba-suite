@@ -46,7 +46,7 @@
 #include "aldaba.h"
 #include "output.h"
 #include "tools.h"
-#include "crypto_tools.h"
+#include "Crypto.h"
 #include "hmac_sha256.h"
 #include "IPAddress.h"
 #include <assert.h>
@@ -441,7 +441,7 @@ int SPAHeader::encrypt(int cipher, int mode, u8 *key, size_t keylen){
   u8 *iv=(u8 *)(&this->h);
   size_t len=SPA_HEADER_LEN-SPA_IV_LEN;
 
-  if( encrypt_buffer(start, len, ciphertext, key, keylen, iv, cipher, mode)!=OP_SUCCESS )
+  if( Crypto::encrypt_buffer(start, len, ciphertext, key, keylen, iv, cipher, mode)!=OP_SUCCESS )
       return OP_FAILURE;
   memcpy(start, ciphertext, len);
   return OP_SUCCESS;
@@ -454,7 +454,7 @@ int SPAHeader::decrypt(int cipher, int mode, u8 *key, size_t keylen){
   u8 *iv=(u8 *)(&this->h);
   size_t len=SPA_HEADER_LEN-SPA_IV_LEN;
 
-  if( decrypt_buffer(start, len, plaintext, key, keylen, iv, cipher, mode)!=OP_SUCCESS )
+  if( Crypto::decrypt_buffer(start, len, plaintext, key, keylen, iv, cipher, mode)!=OP_SUCCESS )
       return OP_FAILURE;
   memcpy(start, plaintext, len);
   return OP_SUCCESS;
