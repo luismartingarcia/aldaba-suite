@@ -51,7 +51,7 @@
 #include <unistd.h>
 #include <getopt.h>
 
-
+/* getopt() globals */
 extern char *optarg;
 extern int optind, opterr, optopt;
 
@@ -131,10 +131,7 @@ int ArgParser::parse_portlist(const char *portlist, GeneralOps *opt ){
 } /* End of  parse_portlist(); */
 
 
-/** Processes argument -k, --passphrase. The function takes a string containing
-  * a passphrase, generates a SHA256 hash of the passphrase, salted with a four
-  * byte value and stores the result in member opt->e_key of the supplied
-  * GeneralOps structure                                                   */
+/** Processes argument -P, --passphrase. */
 int ArgParser::process_arg_passphrase(GeneralOps *opt, const char * arg){
   if(opt==NULL || arg==NULL)
     fatal(OUT_2, "%s(): NULL parameter supplied", __func__);
@@ -145,9 +142,8 @@ int ArgParser::process_arg_passphrase(GeneralOps *opt, const char * arg){
 
 
 /** Processes argument -t, --target-ports. The function takes a string
-  * containing a list of TCP/UDP port numbers, converts them into 16-bit
-  * integers and stores them in  member opt->pkseq[] of the supplied
-  * GeneralOps structure.                                                  */
+  * containing a list of TCP/UDP port numbers and converts them into 16-bit
+  * integers. */
 int ArgParser::process_arg_port_sequence(GeneralOps *opt, const char * arg){
   if(opt==NULL || arg==NULL)
     fatal(OUT_2, "%s(): NULL parameter supplied", __func__);
@@ -197,15 +193,12 @@ int ArgParser::process_arg_verbosity(GeneralOps *opt, const char * arg){
 int ArgParser::process_arg_technique(GeneralOps *opt, const char * arg){
   if(opt==NULL || arg==NULL)
       fatal(OUT_2, "%s(): NULL parameter supplied", __func__);
-
-  if( !strcasecmp("IP-Id", arg ) || !strcasecmp("IPId", arg ) ||
-      !strcasecmp("portknocking", arg ) || !strcasecmp("PK", arg ) ){
-        opt->setMode(MODE_PORTKNOCKING);
-  }else if ( !strcasecmp("UDP", arg) || !strcasecmp("SPA", arg ) ||
-            !strcasecmp("single-packet-authorization", arg ) ){
-        opt->setMode(MODE_SPA);
+  if( !strcasecmp("portknocking", arg ) || !strcasecmp("PK", arg ) ){
+    opt->setMode(MODE_PORTKNOCKING);
+  }else if(!strcasecmp("SPA", arg ) || !strcasecmp("single-packet-authorization", arg ) ){
+    opt->setMode(MODE_SPA);
   }else{
-        fatal(OUT_2, "Invalid technique supplied (%s).", arg);
+    fatal(OUT_2, "Invalid technique supplied (%s).", arg);
   }
   return OP_SUCCESS;
 } /* End of process_arg_technique() */
