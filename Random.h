@@ -46,14 +46,22 @@
 #define __RANDOM_H__ 1
 
 #include "aldaba.h"
-#include <openssl/rand.h>
+#include "tools.h"
 
+#define POOL_MAX_LEN 2048
+#define RND_IV_LEN 128
+#define PBKDF2_ROUNDS 100
 
 class Random {
 
     private:
         bool init_done;
+        u32 consumed;
 
+        u8 pool[POOL_MAX_LEN+RND_IV_LEN];
+        u8 next_iv[RND_IV_LEN];
+        int get_system_random(u8 *dst, int bytes);
+        
     public:
 
         /* Constructors and destructors */
@@ -61,7 +69,7 @@ class Random {
         ~Random();
         void reset();
         int init();
-        int init(u8 *buff, u32 buff_len);
+        int reinit();
 
         int getRandomData(void *buff, size_t buff_len);
         u8 *getRandomData(size_t buff_len);
