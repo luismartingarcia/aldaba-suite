@@ -49,13 +49,9 @@
 
 class AddressResolver{
 
-    private:
-
     public:
-
         AddressResolver();
         ~AddressResolver();
-
         static int resolve(IPAddress *resolved_ip, int addr_family);
 };
 
