@@ -58,13 +58,12 @@ int daemonize(void);
 int gets_noecho(char *buffer, int buflen);
 int gets_noecho_stars(char *buffer, int buflen);
 long int get_decent_random_seed(int seed);
-int fill_buffer_with_random_data(char *buffer, int buffer_len);
+int fill_buffer_with_unsecure_random_data(char *buffer, int buffer_len);
 int display_table_header(int mode, int family);
 int display_table_delimiter(int technique);
 int print_Ethernet_header(int vblevel, char *packet);
 int print_UDP_IP_header(int vblevel, char *packet);
 int print_TCP_IP_header(int vblevel, char *packet);
-int wipe_buffer(unsigned char *buffer, int len);
 void cleanup(void);
 int getinterfaceaddr(char *iface_name, struct in_addr *ip);
 int setSocketNonBlocking(int fd);
@@ -134,5 +133,7 @@ int url_encode(const char *src, char *to, size_t to_len);
 int url_decode(const char *src, char *to, size_t to_len);
 bool starts_with(const char *string, const char *start);
 size_t read_until(int fd, char *buff, size_t bufflen, const char *delimiter);
+
+int set_descriptor_blocking_state(int fd, bool blocking);
 
 #endif /* __TOOLS_H__ */
