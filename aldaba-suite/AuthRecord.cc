@@ -67,6 +67,9 @@ void AuthRecord::reset() {
 } /* End of reset() */
 
 
+/** Determines if the record has expired, based on current time
+  * @return true if the record has expired.
+  * @return false otherwise */
 bool AuthRecord::expired(u32 now){
   if(  (now-MAX_CLOCK_SKEW_SECONDS)< this->timestamp && this->timestamp < (now+MAX_CLOCK_SKEW_SECONDS) )
     return false;
@@ -75,7 +78,9 @@ bool AuthRecord::expired(u32 now){
 } /* End of expired() */
 
 
-/* Determines if the authentication records matches with the supplied values. */
+/** Determines if the authentication record matches with the supplied values.
+  * @return true if the record matches.
+  * @return false otherwise */
 bool AuthRecord::matches(u32 time, u8 *nonce_val, size_t nonce_len){
   if(this->timestamp==time){
     if(!memcmp(this->nonce, nonce_val, MIN(nonce_len, MAX_AUTH_RECORD_NONCE_LEN))){
@@ -86,7 +91,7 @@ bool AuthRecord::matches(u32 time, u8 *nonce_val, size_t nonce_len){
 } /* End of matches() */
 
 
-/* Determines if two authentication records are equal. */
+/** Determines if two authentication records are equal. */
 bool AuthRecord::operator==(const AuthRecord& other) const {
   if( this->timestamp==other.timestamp ){
     if(!memcmp(this->nonce, other.nonce, MAX_AUTH_RECORD_NONCE_LEN)){
@@ -97,10 +102,13 @@ bool AuthRecord::operator==(const AuthRecord& other) const {
 } /* End of operator== */
 
 
+/** Returns the record's timestamp */
 u32 AuthRecord::getTimestamp(){
   return this->timestamp;
 }
 
+
+/** Returns the record's nonce */
 u8 *AuthRecord::getNonce(){
   return this->nonce;
 }
