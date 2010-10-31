@@ -58,6 +58,14 @@ AddressResolver::~AddressResolver(){
 
 }
 
+
+/** Resolves the internet-side IP address of the user's network. This is done
+  * by contacting the external IP address resolution service at
+  * whatismyip.aldabaknocking.com. The function takes a pointer to an IPAddress
+  * object, which will be used to store the resolved IP. addr_family must be
+  * one of AF_INET or AF_INET6.
+  * @return OP_SUCCESS if the resolution was successful
+  * @return OP_FAILURE in case of error. */
 int AddressResolver::resolve(IPAddress *resolved_ip, int addr_family){
   int pf=(addr_family==AF_INET6) ? PF_INET6 : PF_INET;
   int af=(addr_family==AF_INET6) ? AF_INET6 : AF_INET;
