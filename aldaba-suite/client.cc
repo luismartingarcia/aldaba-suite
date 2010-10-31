@@ -49,7 +49,6 @@
 #include "ClientOps.h"
 #include "output.h"
 #include "client.h"
-#include "crypto_tools.h"
 #include "blowfish.h"
 #include "twofish.h"
 #include "rijndael.h"
@@ -59,6 +58,7 @@
 #include "Random.h"
 #include "PKClient.h"
 #include "SPAClient.h"
+#include "Crypto.h"
 
 ClientOps o;
 
@@ -94,7 +94,7 @@ int main(int argc, char *argv[]){
     return -i;
 
   /* Test crypto functions against known correct values                        */
-  if ( test_crypto() != OP_SUCCESS ){
+  if ( Crypto::test() != OP_SUCCESS ){
     fatal(OUT_2, "Some cryptographic function is corrupted. Please report a bug.");
   }
 

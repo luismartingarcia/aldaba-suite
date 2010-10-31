@@ -47,7 +47,7 @@
 
 #include "GeneralOps.h"
 #include "output.h"
-#include "crypto_tools.h"
+#include "Crypto.h"
 
 /* Constructor */
 GeneralOps::GeneralOps(){
@@ -176,7 +176,7 @@ int GeneralOps::setSequencePort(tcp_port_t val){
 
 /** Generate Port Sequence */
 int GeneralOps::derivePortSequence(size_t ports_needed){
-  derive_port_sequence(this->passphrase, this->pkseq, ports_needed);
+  Crypto::derive_port_sequence(this->passphrase, this->pkseq, ports_needed);
   this->total_pkseq_ports=ports_needed;
   this->pkseq_set=true;
   return OP_SUCCESS;
@@ -493,7 +493,7 @@ bool GeneralOps::issetPassphrase(){
 int GeneralOps::computeCipherKey(){
   if(!this->issetPassphrase())
     fatal(OUT_2, "%s(): Cannot compute cipher key if no passphrase has been set", __func__);
-  if( derive_cipher_key_256(passphrase, this->cipher_key) != OP_SUCCESS ){
+  if( Crypto::derive_cipher_key_256(passphrase, this->cipher_key) != OP_SUCCESS ){
       return OP_FAILURE;
   }else{
       this->cipher_key_set=true;
@@ -558,7 +558,7 @@ bool GeneralOps::issetCipherKey(){
 int GeneralOps::computeMacKey(){
   if(!this->issetPassphrase())
     fatal(OUT_2, "%s(): Cannot compute MAC key if no passphrase has been set", __func__);
-  if( derive_mac_key_256(passphrase, this->mac_key) != OP_SUCCESS ){
+  if( Crypto::derive_mac_key_256(passphrase, this->mac_key) != OP_SUCCESS ){
       return OP_FAILURE;
   }else{
       this->mac_key_set=true;

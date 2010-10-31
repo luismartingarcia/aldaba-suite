@@ -95,7 +95,7 @@ TARGET_SERVER = aldabad
 TARGET_COOKIE_SERVER = cookied
 
 export SRCS = ArgParserClient.cc ArgParserServer.cc ArgParser.cc blowfish.cc   \
-              client.cc Server.cc crypto_tools.cc md5.cc rijndael.cc           \
+              client.cc Server.cc Crypto.cc crypto_pbkdf2.cc md5.cc rijndael.cc\
               serpent.cc sha256.cc tools.cc twofish.cc IPAddress.cc            \
               ClientOps.cc ServerOps.cc GeneralOps.cc output.cc PKClient.cc    \
               SPAClient.cc EthernetHeader.cc ICMPv4Header.cc IPv4Header.cc     \
@@ -108,7 +108,7 @@ export SRCS = ArgParserClient.cc ArgParserServer.cc ArgParser.cc blowfish.cc   \
               ssh_cookie_client.cc  ssh_cookie_server.cc
 
 export HDRS = aldaba.h ArgParserClient.h ArgParserServer.g ArgParser.h         \
-              blowfish.h client.h Server.h crypto_tools.h md5.h rijndael.h     \
+              blowfish.h client.h Server.h Crypto.h crypto_pbkdf2.h md5.h rijndael.h     \
               serpent.h sha256.h tools.h twofish.h IPAddress.h ClientOps.h     \
               ServerOps.h GeneralOps.h output.h PKClient.h SPAClient.h         \
               DataLinkLayerElement.h EthernetHeader.h ICMPv4Header.h           \
@@ -119,7 +119,7 @@ export HDRS = aldaba.h ArgParserClient.h ArgParserServer.g ArgParser.h         \
               post_auth.h PKAuthAttempt.h HTTPHeader.h AddressResolver.h       \
               AuthRecord.h 
 
-OBJS_CLIENT = ArgParserClient.o ArgParser.o blowfish.o client.o crypto_tools.o \
+OBJS_CLIENT = ArgParserClient.o ArgParser.o blowfish.o client.o Crypto.o \
               md5.o rijndael.o serpent.o sha256.o tools.o twofish.o            \
               IPAddress.o ClientOps.o GeneralOps.o output.o PKClient.o         \
               SPAClient.o EthernetHeader.o ICMPv4Header.o IPv4Header.o         \
@@ -127,9 +127,9 @@ OBJS_CLIENT = ArgParserClient.o ArgParser.o blowfish.o client.o crypto_tools.o \
               TCPHeader.o TransportLayerElement.o UDPHeader.o PKDataLight4.o   \
               PKDataLight6.o PKDataStrong4.o PKDataStrong6.o Random.o          \
               SPAHeader.o hmac_sha256.o HTTPHeader.o AddressResolver.o         \
-              ssh_cookie_client.o
+              ssh_cookie_client.o crypto_pbkdf2.o
 
-OBJS_SERVER = ArgParserServer.o ArgParser.o blowfish.o Server.o crypto_tools.o \
+OBJS_SERVER = ArgParserServer.o ArgParser.o blowfish.o Server.o Crypto.o \
               md5.o rijndael.o serpent.o sha256.o tools.o twofish.o            \
               IPAddress.o ServerOps.o GeneralOps.o output.o EthernetHeader.o   \
               ICMPv4Header.o IPv4Header.o IPv6Header.o NetworkLayerElement.o   \
@@ -137,7 +137,7 @@ OBJS_SERVER = ArgParserServer.o ArgParser.o blowfish.o Server.o crypto_tools.o \
               UDPHeader.o PKDataLight4.o PKDataLight6.o PKDataStrong4.o        \
               PKDataStrong6.o Random.o SPAHeader.o hmac_sha256.o PKServer.o    \
               SPAServer.o post_auth.o PKAuthAttempt.o AuthRecord.o             \
-              ssh_cookie_client.o
+              ssh_cookie_client.o crypto_pbkdf2.o
 
 OBJS_COOKIE_SERVER = ssh_cookie_server.o
 

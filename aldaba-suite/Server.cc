@@ -49,7 +49,7 @@
 #include "GeneralOps.h"
 #include "ServerOps.h"
 #include "output.h"
-#include "crypto_tools.h"
+#include "Crypto.h"
 #include "blowfish.h"
 #include "twofish.h"
 #include "rijndael.h"
@@ -97,7 +97,7 @@ int main(int argc, char *argv[]){
     return -i;
 
  /* Test crypto functions against known correct values                        */
- if ( test_crypto() != OP_SUCCESS ){
+ if ( Crypto::test() != OP_SUCCESS ){
     fatal(OUT_2, "Some cryptographic function is corrupted. Please report a bug.");
  }
 
