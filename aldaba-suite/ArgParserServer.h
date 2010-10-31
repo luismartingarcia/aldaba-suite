@@ -54,7 +54,6 @@
 class ArgParserServer : public ArgParser {
 
   public:
-
     ArgParserServer();
     ~ArgParserServer();
     static int parse_arguments(int argc, char *argv[], ServerOps *opt);

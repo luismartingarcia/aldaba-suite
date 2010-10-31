@@ -243,7 +243,7 @@ int ArgParserServer::parse_arguments(int argc, char *argv[], ServerOps *opt) {
 /** Displays help information. */
 int ArgParserServer::display_help(){
 
-const char *msg="\
+  const char *msg="\
   Aldaba Knocking Server %s - (C) Luis MartinGarcia, 2010.\n\
   http://www.aldabaknocking.com || aldabaknocking@gmail.com\n\
 \n\
@@ -450,13 +450,13 @@ int ArgParserServer::config_file_parser(ServerOps *opt, char * const filename){
 
 /** Prints current version number to stdout */
 void ArgParserServer::display_version(){
-    output(OUT_1, "\nAldaba Server %s. ( http://www.aldabaknocking.com )\n\n", CURRENT_VERSION);
+  output(OUT_1, "\nAldaba Server %s. ( http://www.aldabaknocking.com )\n\n", CURRENT_VERSION);
 }
 
 
 /** Prints app usage to stdout */
 void ArgParserServer::display_usage(){
-    output(OUT_1, "Usage: aldaba -P passphrase [options]\n");
+  output(OUT_1, "Usage: aldaba -P passphrase [options]\n");
 }
 
 
