@@ -51,21 +51,19 @@
 
 class AuthRecord {
 
-    private:
+  private:
     u32 timestamp;
     u8 nonce[MAX_AUTH_RECORD_NONCE_LEN];
 
-    public:
-        AuthRecord(u32 time, u8 *nonce, size_t nonce_len);
-        ~AuthRecord();
-        void reset();
-
-        bool operator==(const AuthRecord& other) const;
-        
-        bool expired(u32 now);
-        bool matches(u32 time, u8 *nonce, size_t nonce_len);
-        u32 getTimestamp();
-        u8 *getNonce();
+  public:
+    AuthRecord(u32 time, u8 *nonce, size_t nonce_len);
+    ~AuthRecord();
+    void reset();
+    bool operator==(const AuthRecord& other) const;
+    bool expired(u32 now);
+    bool matches(u32 time, u8 *nonce, size_t nonce_len);
+    u32 getTimestamp();
+    u8 *getNonce();
 
 }; /* End of class AuthRecord */
 
