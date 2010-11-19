@@ -21,7 +21,6 @@
      -v, --verbosity  <levl>  : Level of verbosity [0-9].
      -4, --ipv4               : Use IP version 4 addresses
      -6, --ipv6               : Use IP version 6 addresses
-     --ssh-cookie             : Enable Aldaba OpenSSH cookie extension
      -h, --help               : Display usage information.
      -V, --version            : Display current version.
 

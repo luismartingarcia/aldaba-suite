@@ -4,7 +4,7 @@ Content-type: text/html
 <HTML><HEAD><TITLE>Man page of ALDABA</TITLE>
 </HEAD><BODY>
 <H1>ALDABA</H1>
-Section: Aldaba Reference Guide (8)<BR>Updated: 11/15/2010<BR><A HREF="#index">Index</A>
+Section: Aldaba Reference Guide (8)<BR>Updated: 11/19/2010<BR><A HREF="#index">Index</A>
 <A HREF="/cgi-bin/man/man2html">Return to Main Contents</A><HR>
 
 
@@ -73,7 +73,6 @@ The following option summary is the output of Aldaba Client when run with no arg
      -v, --verbosity  &lt;levl&gt;  : Level of verbosity [0-9].
      -4, --ipv4               : Use IP version 4 addresses
      -6, --ipv6               : Use IP version 6 addresses
-     --ssh-cookie             : Enable Aldaba OpenSSH cookie extension
      -h, --help               : Display usage information.
      -V, --version            : Display current version.
 
@@ -375,6 +374,14 @@ Decreases the verbosity level, causing Aldaba to print less information during i
 
 <P>
 
+<B>-C </B><B></B><I>path</I>, <B>--config </B><B></B><I>path</I> (Read configuration from file)
+<DL COMPACT><DT><DD>
+Tells Aldaba client to read configuration from a specific configuration file. Supplied path may be absolute or relative to the current directory. Alternatively, it is possible to run the client simply like &quot;aldaba
+<B>start</B>&quot;, what makes it read the default configuration file (typically stored in /etc/aldaba/conf/aldaba.conf or /usr/local/etc/aldaba/conf/aldaba.conf
+</DL>
+
+<P>
+
 <B>-V</B>, <B>--version</B> (Display Version)
 <DL COMPACT><DT><DD>
 Displays current version and quits.
@@ -427,6 +434,6 @@ Luis MartinGarcia
 This document was created by
 <A HREF="/cgi-bin/man/man2html">man2html</A>,
 using the manual pages.<BR>
-Time: 19:01:11 GMT, November 15, 2010
+Time: 19:21:29 GMT, November 19, 2010
 </BODY>
 </HTML>

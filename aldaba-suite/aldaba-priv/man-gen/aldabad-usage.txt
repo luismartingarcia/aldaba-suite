@@ -17,7 +17,6 @@
      -6, --ipv6               : Use IP version 6 addresses
      -h, --help               : Display usage information.
      -V, --version            : Display current version.
-     --ssh-cookie             : Enable Aldaba OpenSSH cookie extension
      --promiscuous            : Put network interface intro promiscuous mode
 
    

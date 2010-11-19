@@ -2,12 +2,12 @@
 .\"     Title: aldabad
 .\"    Author: [see the "Authors" section]
 .\" Generator: DocBook XSL Stylesheets v1.75.1 <http://docbook.sf.net/>
-.\"      Date: 11/15/2010
+.\"      Date: 11/19/2010
 .\"    Manual: Aldaba Reference Guide
 .\"    Source: Aldaba
 .\"  Language: English
 .\"
-.TH "ALDABAD" "8" "11/15/2010" "Aldaba" "Aldaba Reference Guide"
+.TH "ALDABAD" "8" "11/19/2010" "Aldaba" "Aldaba Reference Guide"
 .\" -----------------------------------------------------------------
 .\" * set default formatting
 .\" -----------------------------------------------------------------
@@ -57,7 +57,6 @@ The following option summary is the output of Aldaba Server when run with no arg
      \-6, \-\-ipv6               : Use IP version 6 addresses
      \-h, \-\-help               : Display usage information\&.
      \-V, \-\-version            : Display current version\&.
-     \-\-ssh\-cookie             : Enable Aldaba OpenSSH cookie extension
      \-\-promiscuous            : Put network interface intro promiscuous mode
 
    
@@ -338,6 +337,12 @@ Automatically sets maximum verbosity level and disables daemon mode\&.
 Automatically sets verbose and logging levels to 0\&. No output or logs will be generated\&.
 .RE
 .SH "MISCELLANEOUS OPTIONS"
+.PP
+\fB\-C \fR\fB\fIpath\fR\fR, \fB\-\-config \fR\fB\fIpath\fR\fR (Read configuration from file)
+.RS 4
+Tells Aldaba server to read configuration from a specific configuration file\&. Supplied path may be absolute or relative to the current directory\&. Alternatively, it is possible to run the server simply like "aldabad
+\fBstart\fR", what makes it read the default configuration file (typically stored in /etc/aldabad/conf/aldabad\&.conf or /usr/local/etc/aldabad/conf/aldabad\&.conf
+.RE
 .PP
 \fB\-I \fR, \fB\-\-interactive \fR (Interactive mode)
 .RS 4

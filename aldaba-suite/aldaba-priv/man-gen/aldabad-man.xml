@@ -573,6 +573,24 @@
 
             <varlistentry>
                 <term>
+                    <option>-C <replaceable>path</replaceable></option>,
+                    <option>--config <replaceable>path</replaceable></option> (Read configuration from file)
+                </term>
+                <listitem>
+                    <para>
+                         Tells Aldaba server to read configuration from a specific
+                         configuration file. Supplied path may be absolute or
+                         relative to the current directory. Alternatively, it
+                         is possible to run the server simply like "aldabad <option>start</option>",
+                         what makes it read the default configuration file (typically
+                         stored in /etc/aldabad/conf/aldabad.conf or
+                         /usr/local/etc/aldabad/conf/aldabad.conf)
+                    </para>
+                </listitem>
+            </varlistentry>
+
+            <varlistentry>
+                <term>
                     <option>-I </option>,
                     <option>--interactive </option>  (Interactive mode)
                 </term>
