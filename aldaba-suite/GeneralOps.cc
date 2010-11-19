@@ -723,6 +723,11 @@ int GeneralOps::enableSSHCookie(){
   return OP_SUCCESS;
 } /* End of enableSSHCookie() */
 
+int GeneralOps::disableSSHCookie(){
+  this->ssh_cookie=false;
+  return OP_SUCCESS;
+} /* End of disableSSHCookie() */
+
 
 /* Returns true if option has been set */
 bool GeneralOps::SSHCookie(){

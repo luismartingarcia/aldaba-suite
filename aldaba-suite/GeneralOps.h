@@ -195,6 +195,7 @@ class GeneralOps {
         const char *getIPVersion_str();
 
         int enableSSHCookie();
+        int disableSSHCookie();
         bool SSHCookie();
 
 }; /* End of class GeneralOps */
