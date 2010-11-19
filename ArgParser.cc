@@ -365,3 +365,19 @@ int ArgParser::process_arg_auth(GeneralOps *opt, const char * arg){
   opt->setAuthType(auth);
   return OP_SUCCESS;
 } /* End of process_arg_field() */
+
+
+/** Processes argument ssh-cookie. This function takes a string containing
+  * "4", "ipv4", "6" or "ipv6" and sets the appropriate version of the IP
+  * protocol in the supplied ClientOps structure                       */
+int ArgParser::process_arg_ssh_cookie(GeneralOps *opt, const char * arg){
+  if(opt==NULL || arg==NULL)
+      fatal(OUT_2, "%s(): NULL parameter supplied", __func__);
+  if ( !strcasecmp(arg, "no" ) || !strcasecmp(arg, "0") || !strcasecmp(arg, "disable") )
+    opt->disableSSHCookie();
+  else  if ( !strcasecmp(arg, "yes" ) || !strcasecmp(arg, "1") || !strcasecmp(arg, "enable") )
+    opt->enableSSHCookie();
+  else
+    fatal(OUT_2, "Invalid ssh-cookie parameter supplied (%s).", arg);
+  return OP_SUCCESS;
+} /* End of process_arg_ssh_cookie() */
