@@ -381,3 +381,19 @@ int ArgParser::process_arg_ssh_cookie(GeneralOps *opt, const char * arg){
     fatal(OUT_2, "Invalid ssh-cookie parameter supplied (%s).", arg);
   return OP_SUCCESS;
 } /* End of process_arg_ssh_cookie() */
+
+
+/** Processes argument ip-version. This function takes a string containing
+  * "4", "ipv4", "6" or "ipv6" and sets the appropriate version of the IP
+  * protocol in the supplied ClientOps structure                       */
+int ArgParser::process_arg_ip_version(GeneralOps *opt, const char * arg){
+  if(opt==NULL || arg==NULL)
+      fatal(OUT_2, "%s(): NULL parameter supplied", __func__);
+  if ( !strcmp(arg, "4" ) || !strcasecmp(arg, "ipv4") )
+    opt->setIPVersion(AF_INET);
+  else  if ( !strcmp(arg, "6" ) || !strcasecmp(arg, "ipv6") )
+    opt->setIPVersion(AF_INET6);
+  else
+    fatal(OUT_2, "Invalid IP version supplied (%s).", arg);
+  return OP_SUCCESS;
+} /* End of process_arg_ip_version() */

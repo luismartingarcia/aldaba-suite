@@ -80,6 +80,13 @@ int ArgParserClient::parse_arguments(int argc, char *argv[], ClientOps *opt) {
   if(argc<=1){
     ArgParserClient::display_usage();
     exit(1);
+  }else if( argc==2 ){ /* SPECIAL CASE: "$ aldaba start" reads default config file */
+      if( !strcasecmp(argv[1], "start")){
+        char config_file[1024];
+        sprintf(config_file, "%s/%s", CLIENT_CONF_DIR, CLIENT_CONF_FILE_NAME);
+        ArgParserClient::config_file_parser(opt, config_file);
+        return OP_SUCCESS;
+      }
   }
 
  struct option long_options[] ={
@@ -137,8 +144,9 @@ int ArgParserClient::parse_arguments(int argc, char *argv[], ClientOps *opt) {
   {"AES",               no_argument,            0,        0},
   {"serpent",           no_argument,            0,        0},
   {"SP",                no_argument,            0,        0},
-  {"resolve-IP",        optional_argument,      0,        0},
-  {"resolve",           optional_argument,      0,        0},
+  {"resolve-IP",        no_argument,            0,        0},
+  {"resolve-ip",        no_argument,            0,        0},
+  {"resolve",           no_argument,            0,        0},
   {"ssh-cookie",        no_argument,            0,        0},
   {0, 0, 0, 0}
  };
@@ -180,10 +188,7 @@ int ArgParserClient::parse_arguments(int argc, char *argv[], ClientOps *opt) {
         ArgParserClient::process_arg_cipher(opt, "serpent");
     } else if (!strcasecmp(long_options[option_index].name, "resolve-ip") ||
                !strcasecmp(long_options[option_index].name, "resolve")){
-        if(optarg){
-            opt->setAddressResolver(optarg);
-        }
-        opt->resolve(true);
+        ArgParserClient::process_arg_resolve_ip(opt, "enable");
     } else if (strcasecmp(long_options[option_index].name, "ssh-cookie") == 0 ){
         ArgParserClient::process_arg_ssh_cookie(opt, "enable");
     } else if (strcasecmp(long_options[option_index].name, "ip-version") == 0 ){
@@ -327,7 +332,6 @@ const char *msg="\
      -v, --verbosity  <levl>  : Level of verbosity [0-9].\n\
      -4, --ipv4               : Use IP version 4 addresses\n\
      -6, --ipv6               : Use IP version 6 addresses\n\
-     --ssh-cookie             : Enable Aldaba OpenSSH cookie extension\n\
      -h, --help               : Display usage information.\n\
      -V, --version            : Display current version.\n\
 \n\
@@ -354,7 +358,7 @@ return OP_SUCCESS;
 
 /** Parses client's configuration file and sets the appropriate values in
   * structure ClientOps.                                                  */
-int ArgParserClient::config_file_parser(ClientOps *opt, char * const filename){
+int ArgParserClient::config_file_parser(ClientOps *opt, const char * filename){
 
   FILE* file;
   char linebuf[CONFIG_FILE_LINE_SIZE];
@@ -373,7 +377,7 @@ int ArgParserClient::config_file_parser(ClientOps *opt, char * const filename){
     fatal(OUT_2, "%s(): NULL parameter supplied", __func__);
 
   if ((file = fopen(filename, "r")) == NULL){
-      warning(OUT_1, "ERROR : Error opening file '%s'\n", filename);
+      fatal(OUT_1, "Couldn't open configuration file '%s'\n", filename);
       return OP_FAILURE;
   }
 
@@ -494,6 +498,16 @@ int ArgParserClient::config_file_parser(ClientOps *opt, char * const filename){
                 return i;
             else
                 continue;
+        }else if (!strcasecmp("field", fopt)){
+            if( (i = process_arg_field(opt, farg)) != OP_SUCCESS)
+                return i;
+            else
+                continue;
+        }else if (!strcasecmp("auth", fopt)){
+            if( (i = process_arg_auth(opt, farg)) != OP_SUCCESS)
+                return i;
+            else
+                continue;
         }else if (!strcasecmp("verbosity", fopt)){
             if( (i = process_arg_verbosity(opt, farg)) != OP_SUCCESS)
                 return i;
@@ -531,6 +545,11 @@ int ArgParserClient::config_file_parser(ClientOps *opt, char * const filename){
                 continue;
         }else if (!strcasecmp("ssh-cookie", fopt)){
             if( (i = process_arg_ssh_cookie(opt, farg)) != OP_SUCCESS)
+                return i;
+            else
+                continue;
+        }else if (!strcasecmp("resolve-ip", fopt)){
+            if( (i = process_arg_resolve_ip(opt, farg)) != OP_SUCCESS)
                 return i;
             else
                 continue;
@@ -697,102 +716,18 @@ int ArgParserClient::process_arg_decoys(ClientOps *opt, const char *arg){
 } /* End of process_arg_decoys() */
 
 
-/** This function queries a web page (whatismyip.aldabaknocking.com) to resolve
-  * the external IP address of the system. The result is stored in member
-  * opt->knock_ip of the supplied ClientOps structure.
-  * This code may be prone to buffer overflows. I've tried to do my best and
-  * check everything to ensure the code is safe, but I need other people having
-  * a look at it. Please let me know if you find something I should change     */
-int ArgParserClient::process_arg_resolve_IP(ClientOps *opt){
-
-int sockfd=0;
-int recvbytes=0;
-unsigned int i=0;
-unsigned int ipstring_len=0;
-char buffer[1024];
-struct hostent *dsthost;
-struct sockaddr_in dst;
-char *ipstring=NULL;
-char resolved_ip[MAX_IP_LEN+1];
-char httpget[512];
-
-snprintf(httpget, 512,
-        "GET / HTTP/1.1\r\n"
-        "Host: %s\r\n"
-        "User-Agent: %s\r\n"
-        "Accept: text/plain,text/html\r\n"
-        "\r\n",
-        DEFAULT_IP_RESOLVER_SITE,
-        DEFAULT_IP_RESOLVER_USERAGENT);
-
- if (opt == NULL)
-    fatal(OUT_2, "%s(): NULL parameter supplied.", __func__);
- 
- memset(&buffer, 0, sizeof(buffer));
- memset(&dst, 0, sizeof(struct sockaddr_in));
-
- if ((dsthost=gethostbyname("whatismyip.aldabaknocking.com")) == NULL)  /* Resolve name */
-    fatal(OUT_2, "Unable to resolve host whatismyip.aldabaknocking.com.");
- if ((sockfd = socket(PF_INET, SOCK_STREAM, 0)) == -1) 
-    fatal(OUT_2, "Unable to resolve IP. Could not acquire system socket.");
-
- dst.sin_family = AF_INET;
- dst.sin_port = htons(80);
- dst.sin_addr = *((struct in_addr *)dsthost->h_addr);
-
- if (connect(sockfd, (struct sockaddr *)&dst, sizeof(struct sockaddr) ) == -1)
-    fatal(OUT_2, "Unable connect to the IP resolver at %s.", DEFAULT_IP_RESOLVER_SITE );
- if (send(sockfd, httpget, strlen(httpget), 0) == -1)
-     fatal(OUT_2, "Unable resolve IP address. Send operation failed");
-
- output(OUT_7,"|_ The following HTTP GET Request was sent to %s:%d:\n\n%s\n",inet_ntoa(dst.sin_addr),ntohs(dst.sin_port), httpget);
-
- if ((recvbytes=recv(sockfd, buffer, 1023, 0)) == -1)
-     fatal(OUT_2, "Unable resolve IP address. Receive operation failed");
- buffer[recvbytes]=0;
- output(OUT_7,"|_ The following data was received from to %s:\n\n%s\n",inet_ntoa(dst.sin_addr),buffer);
-
-// This is what we are supposed to get:
-// [<---RECEIVED BUFFER-------------------------------->] Len= recvbytes
-// [HTTP...         ...<IP_ADDR>11.22.33.44</IP_ADDR>...]
-//                              [<---IPSTRING---------->] Len=
-//                     |
-//                     |        |
-//                     |        |
-//                    [+]->i   [.]->i+strlen("<IP_ADDR>")
-
-
-/* Look for occurence of substring "<IP_ADDR>"*/
-for (i=0; strncmp(buffer+i, "<IP_ADDR>", strlen("<IP_ADDR>")) && i < ( recvbytes - strlen("<IP_ADDR>")) ; i++);
-
-
-if ( (int)(i + strlen("<IP_ADDR>")) >= recvbytes)
-    fatal(OUT_2, "Unable resolve IP address. Not enough data received from the resolver");
-
-ipstring = buffer + i + strlen("<IP_ADDR>");
-
-if ( (ipstring_len = recvbytes - i - strlen("<IP_ADDR>")) < MIN_IP_LEN)
-    fatal(OUT_2, "Unable resolve IP address. Received bogus IP address");
-
-
-/* Increment i while numbers or dots are found. This should give the lenght of the IP address*/
-for(i=0; i<ipstring_len && ( isdigit(ipstring[i]) || ipstring[i]=='.' ) ; i++);
-
-/* It looks like an IP so copy it. */
-strncpy(resolved_ip, ipstring, i);
-resolved_ip[i]=0;
-
-/* It may not be a valid IP so we have to check */
-
-if( opt->setKnockIP(resolved_ip)!= OP_SUCCESS ){
-    fatal(OUT_2, "Unable resolve IP address. Received bogus IP address");
-}else{
-    output(OUT_5,"|_ Resolved External IP: %s\n", resolved_ip);
-    close(sockfd);
-}
-return OP_SUCCESS;
-
-} /* End of process_arg_resolve_IP() */
+/** Processes argument --resolve-ip. */
+int ArgParserClient::process_arg_resolve_ip(ClientOps *opt, const char *arg){
+  if(opt==NULL || arg==NULL)
+      fatal(OUT_2, "%s(): NULL parameter supplied", __func__);
+  if ( !strcasecmp(arg, "yes" ) || !strcasecmp(arg, "1") || !strcasecmp(arg, "enable"))
+    opt->resolve(true);
+  else  if ( !strcmp(arg, "0" ) || !strcasecmp(arg, "close") || !strcasecmp(arg, "disable") )
+    opt->resolve(false);
+  else
+    fatal(OUT_2, "Invalid resolve-ip parameter supplied (%s).", arg);
+  return OP_SUCCESS;
+} /* End of process_arg_resolve_ip() */
 
 
 int ArgParserClient::parse_hostname_list(const char *list, vector<IPAddress> *targetvector){
@@ -830,22 +765,6 @@ int ArgParserClient::parse_hostname_list(const char *list, vector<IPAddress> *ta
   free(list_backup);
   return OP_SUCCESS;
 } /* End of parse_hostname_list() */
-
-
-/** Processes argument ip-version. This function takes a string containing
-  * "4", "ipv4", "6" or "ipv6" and sets the appropriate version of the IP
-  * protocol in the supplied ClientOps structure                       */
-int ArgParserClient::process_arg_ip_version(ClientOps *opt, const char * arg){
-  if(opt==NULL || arg==NULL)
-      fatal(OUT_2, "%s(): NULL parameter supplied", __func__);
-  if ( !strcmp(arg, "4" ) || !strcasecmp(arg, "ipv4") )
-    opt->setIPVersion(AF_INET);
-  else  if ( !strcmp(arg, "6" ) || !strcasecmp(arg, "ipv6") )
-    opt->setIPVersion(AF_INET6);
-  else
-    fatal(OUT_2, "Invalid IP version supplied (%s).", arg);
-  return OP_SUCCESS;
-} /* End of process_arg_ip_version() */
 
 
 /** Prints current version number to stdout */

@@ -69,6 +69,7 @@ class ArgParser {
     static int process_arg_field(GeneralOps *opt, const char * arg);
     static int process_arg_auth(GeneralOps *opt, const char * arg);
     static int process_arg_ssh_cookie(GeneralOps *opt, const char * arg);
+    static int process_arg_ip_version(GeneralOps *opt, const char * arg);
 
 }; /* End of class ArgParser*/
 

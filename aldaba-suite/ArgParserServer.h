@@ -61,9 +61,9 @@ class ArgParserServer : public ArgParser {
     static void display_usage();
     static int handle_cmdline_args(int argc, char *argv[],  ServerOps *opt);
     static int display_help();
-    static int config_file_parser(ServerOps *opt, char * const filename);
-    static int process_arg_promiscuous(ServerOps *opt);
-    static int process_arg_daemonize(ServerOps *opt);
+    static int config_file_parser(ServerOps *opt, const char * filename);
+    static int process_arg_promiscuous(ServerOps *opt, const char * arg);
+    static int process_arg_daemonize(ServerOps *opt, const char * arg);
     static int process_arg_linkhdrlen(ServerOps *opt, const char * arg);
     static int process_arg_bpf(ServerOps *opt, const char * arg);
 

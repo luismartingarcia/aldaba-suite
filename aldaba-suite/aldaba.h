@@ -241,8 +241,6 @@ using namespace std;
 #define MAX_CLOCK_SKEW_SECONDS 10 //(86400) /* Acceptable clock skew: 24 hours */
 #define AUTH_RECORD_PURGE_INTERVAL 10
 
-
-
 /* Exit codes for the main() function. */
 /* UNIX standard: exit codes have to be small positive integers [0-255]       */
 #define EXIT_SUCCESS 0           /**< Normal termination                      */
@@ -316,17 +314,14 @@ using namespace std;
 #define DEFAULT_VERBOSITY_SERVER OUT_2  /**< Default level of verbosity       */
 #define KNOCKATTEMPT_TTL_SECS 10        /**< Min number of seconds before discarding a knock in progress */
 #define KNOCKATTEMPT_TTL_USECS 0        /**< Min number of microseconds before discarding a knock in progress.(Must be less than 999 999!)*/
-#define CONFIG_FILE_PATH_SERVER "/etc/aldabad/aldabad.conf" /**< Path to default config file */ /* Make sure file exists!*/
-
+#define SERVER_CONF_FILE_NAME "aldabad.conf"
 
 /* CLIENT SPECIFIC VALUES */
 /* General values */
 #define DEFAULT_VERBOSITY_CLIENT 4 /**< Default verbosity level               */
 #define DEFAULT_LOGGING_CLIENT 0   /**< Default logging level                 */
 #define MAX_PKSEQ_PORTS MAX_KNOCKS /**< Max number of ports in the PK sequence */
-#define MAX_DECOYS 65535           /**< Max number of decoys                  */
-#define REMOVE_DUP_LIMIT 5000      /**< When more that N noise packets are sent, the portlist is not checked for duplicates   */
-#define CONFIG_FILE_PATH_CLIENT "/etc/aldaba/aldaba.conf" /**< Path to default config file */ /* Make sure file exists!*/
+#define CLIENT_CONF_FILE_NAME "aldaba.conf"
 
 /* This is provided just in case someone wants to continue execution
    after a fatal error. However, as fatal() is normally called when
