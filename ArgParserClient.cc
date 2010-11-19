@@ -119,8 +119,7 @@ int ArgParserClient::parse_arguments(int argc, char *argv[], ClientOps *opt) {
   {"config",            required_argument,      0,      'C'},
   {"field",             required_argument,      0,      'f'},
   {"auth",              required_argument,      0,      'A'},
-  {"ipid",              no_argument,            0,        0},
-  {"ip-id",             no_argument,            0,        0},
+  {"ip-version",        required_argument,      0,        0},
   {"portknocking",      no_argument,            0,        0},
   {"pk",                no_argument,            0,        0},
   {"spa",               no_argument,            0,        0},
@@ -187,6 +186,8 @@ int ArgParserClient::parse_arguments(int argc, char *argv[], ClientOps *opt) {
         opt->resolve(true);
     } else if (strcasecmp(long_options[option_index].name, "ssh-cookie") == 0 ){
         opt->enableSSHCookie();
+    } else if (strcasecmp(long_options[option_index].name, "ip-version") == 0 ){
+        ArgParserClient::process_arg_ip_version(opt, optarg);
     }
  // } else if (strcasecmp(long_options[option_index].name, "") == 0 ){
  // } else if (strcasecmp(long_options[option_index].name, "") == 0 ){
@@ -194,11 +195,11 @@ int ArgParserClient::parse_arguments(int argc, char *argv[], ClientOps *opt) {
 
     /* Single char Opts */
     case '4': /* IPv4 */
-        opt->setIPVersion(AF_INET);
+        ArgParserClient::process_arg_ip_version(opt, "4");
     break;
 
     case '6': /* IPv6 */
-        opt->setIPVersion(AF_INET6);
+        ArgParserClient::process_arg_ip_version(opt, "6");
     break;
 
     case 'a': /* Action */
@@ -458,89 +459,81 @@ int ArgParserClient::config_file_parser(ClientOps *opt, char * const filename){
 
     noarg:
 
-        if (!strcasecmp("hostname", fopt)){
+        if (!strcasecmp("hostname", fopt) ){
             if( (i = process_arg_hostname(opt, farg)) != 0)
                 return i;
             else
                 continue;
-        }
-        if (!strcasecmp("port", fopt)){
-            if( (i = process_arg_knock_port(opt, farg)) != 0)
-                return i;
-            else
-                continue;
-        }
-        if (!strcasecmp("target-ports", fopt)){
-            if( (i = process_arg_port_sequence(opt, farg)) != 0)
-                return i;
-            else
-                continue;
-        }
-        if (!strcasecmp("passphrase", fopt)){
-            if( (i = process_arg_passphrase(opt, farg)) != 0)
-                return i;
-            else
-                continue;
-        }
-        if (!strcasecmp("technique", fopt)){
-            if( (i = process_arg_technique(opt, farg)) != 0)
-                return i;
-            else
-                continue;
-        }
-        if (!strcasecmp("interface", fopt)){
-            if( (i = process_arg_interface(opt, farg)) != 0)
-                return i;
-            else
-                continue;
-        }
-        if (!strcasecmp("source-ip", fopt)){
-            if( (i = process_arg_src_ip(opt, farg)) != 0)
-                return i;
-            else
-                continue;
-        }
-        if (!strcasecmp("knock-ip", fopt)){
+        }else if (!strcasecmp("authorized-ip", fopt) ){
             if( (i = process_arg_knock_ip(opt, farg)) != 0)
                 return i;
             else
                 continue;
-        }
-        if (!strcasecmp("action", fopt)){
-            if( (i = process_arg_action(opt, farg)) != 0)
+        }else if (!strcasecmp("source-ip", fopt)){
+            if( (i = process_arg_src_ip(opt, farg)) != 0)
                 return i;
             else
                 continue;
-        }
-        if (!strcasecmp("verbosity", fopt)){
+        }else if (!strcasecmp("port", fopt)){
+            if( (i = process_arg_knock_port(opt, farg)) != 0)
+                return i;
+            else
+                continue;
+        }else if (!strcasecmp("passphrase", fopt)){
+            if( (i = process_arg_passphrase(opt, farg)) != 0)
+                return i;
+            else
+                continue;
+        }else if (!strcasecmp("technique", fopt)){
+            if( (i = process_arg_technique(opt, farg)) != 0)
+                return i;
+            else
+                continue;
+        }else if (!strcasecmp("target-ports", fopt)){
+            if( (i = process_arg_port_sequence(opt, farg)) != 0)
+                return i;
+            else
+                continue;
+        }else if (!strcasecmp("verbosity", fopt)){
             if( (i = process_arg_verbosity(opt, farg)) != 0)
                 return i;
             else
                 continue;
-        }
-        if (!strcasecmp("noise", fopt)){
+        }else if (!strcasecmp("interface", fopt)){
+            if( (i = process_arg_interface(opt, farg)) != 0)
+                return i;
+            else
+                continue;
+        }else if (!strcasecmp("action", fopt)){
+            if( (i = process_arg_action(opt, farg)) != 0)
+                return i;
+            else
+                continue;
+        }else if (!strcasecmp("noise", fopt)){
             if( (i = process_arg_noise(opt, farg)) != 0)
                 return i;
             else
                 continue;
-        }
-        if (!strcasecmp("decoys", fopt)){
+        }else if (!strcasecmp("decoys", fopt)){
             if( (i = process_arg_decoys(opt, farg)) != 0)
                 return i;
             else
                 continue;
-        }
-        if (!strcasecmp("cipher", fopt)){
+        }else if (!strcasecmp("cipher", fopt)){
             if( (i = process_arg_cipher(opt, farg)) != 0)
                 return i;
             else
                 continue;
-        }
-        else{
-
-        warning(OUT_1, "WARNING : %s : line %d : Unknown option '%s'\n", filename, line_num, fopt);
+        }else if (!strcasecmp("ip-version", fopt)){
+            if( (i = process_arg_ip_version(opt, farg)) != 0)
+                return i;
+            else
+                continue;
+        }else{
+            warning(OUT_1, "WARNING : %s : line %d : Unknown option '%s'\n", filename, line_num, fopt);
                 continue;
         }
+
 
 /*        if (!strcasecmp("", fopt)){
             if( (i = process_arg_e(opt, farg)) != 0)
@@ -833,6 +826,23 @@ int ArgParserClient::parse_hostname_list(const char *list, vector<IPAddress> *ta
   free(list_backup);
   return OP_SUCCESS;
 } /* End of parse_hostname_list() */
+
+
+/** Processes argument ip-version. This function takes a string containing
+  * "4", "ipv4", "6" or "ipv6" and sets the appropriate version of the IP
+  * protocol in the supplied ClientOps structure                       */
+int ArgParserClient::process_arg_ip_version(ClientOps *opt, const char * arg){
+  if(opt==NULL || arg==NULL)
+      fatal(OUT_2, "%s(): NULL parameter supplied", __func__);
+  if ( !strcmp(arg, "4" ) || !strcasecmp(arg, "ipv4") )
+    opt->setIPVersion(AF_INET);
+  else  if ( !strcmp(arg, "6" ) || !strcasecmp(arg, "ipv6") )
+    opt->setIPVersion(AF_INET6);
+  else
+    fatal(OUT_2, "Invalid IP version supplied (%s).", arg);
+  return OP_SUCCESS;
+} /* End of process_arg_ip_version() */
+
 
 
 /** Prints current version number to stdout */
