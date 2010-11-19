@@ -72,6 +72,7 @@ class ArgParserClient : public ArgParser {
     static int process_arg_noise(ClientOps *opt, const char * arg);
     static int process_arg_decoys(ClientOps *opt, const char * arg);
     static int process_arg_resolve_IP(ClientOps *opt);
+    static int process_arg_ip_version(ClientOps *opt, const char * arg);
 
 }; /* End of class ArgParser*/
 
