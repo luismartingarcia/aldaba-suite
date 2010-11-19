@@ -4,7 +4,7 @@ Content-type: text/html
 <HTML><HEAD><TITLE>Man page of ALDABAD</TITLE>
 </HEAD><BODY>
 <H1>ALDABAD</H1>
-Section: Aldaba Reference Guide (8)<BR>Updated: 11/15/2010<BR><A HREF="#index">Index</A>
+Section: Aldaba Reference Guide (8)<BR>Updated: 11/19/2010<BR><A HREF="#index">Index</A>
 <A HREF="/cgi-bin/man/man2html">Return to Main Contents</A><HR>
 
 
@@ -69,7 +69,6 @@ The following option summary is the output of Aldaba Server when run with no arg
      -6, --ipv6               : Use IP version 6 addresses
      -h, --help               : Display usage information.
      -V, --version            : Display current version.
-     --ssh-cookie             : Enable Aldaba OpenSSH cookie extension
      --promiscuous            : Put network interface intro promiscuous mode
 
    
@@ -468,6 +467,14 @@ Automatically sets verbose and logging levels to 0. No output or logs will be ge
 
 <P>
 
+<B>-C </B><B></B><I>path</I>, <B>--config </B><B></B><I>path</I> (Read configuration from file)
+<DL COMPACT><DT><DD>
+Tells Aldaba server to read configuration from a specific configuration file. Supplied path may be absolute or relative to the current directory. Alternatively, it is possible to run the server simply like &quot;aldabad
+<B>start</B>&quot;, what makes it read the default configuration file (typically stored in /etc/aldabad/conf/aldabad.conf or /usr/local/etc/aldabad/conf/aldabad.conf
+</DL>
+
+<P>
+
 <B>-I </B>, <B>--interactive </B> (Interactive mode)
 <DL COMPACT><DT><DD>
 Forces Aldaba Server to run interactively instead of in daemon mode. By default it runs as a system daemon.
@@ -526,6 +533,6 @@ Luis MartinGarcia
 This document was created by
 <A HREF="/cgi-bin/man/man2html">man2html</A>,
 using the manual pages.<BR>
-Time: 19:01:12 GMT, November 15, 2010
+Time: 19:21:30 GMT, November 19, 2010
 </BODY>
 </HTML>
