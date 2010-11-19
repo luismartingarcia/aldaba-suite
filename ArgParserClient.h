@@ -63,7 +63,7 @@ class ArgParserClient : public ArgParser {
     static int handle_cmdline_args(int argc, char *argv[],  ClientOps *opt);
     static int parse_hostname_list(const char *list, vector<IPAddress> *targetvector);
     static int display_help();
-    static int config_file_parser(ClientOps *opt, char * const filename);
+    static int config_file_parser(ClientOps *opt, const char * filename);
     static int process_arg_hostname(ClientOps *opt, const char * arg);
     static int process_arg_src_ip(ClientOps *opt, const char * arg);
     static int process_arg_knock_ip(ClientOps *opt, const char * arg);
@@ -71,8 +71,7 @@ class ArgParserClient : public ArgParser {
     static int process_arg_action(ClientOps *opt, const char * arg);
     static int process_arg_noise(ClientOps *opt, const char * arg);
     static int process_arg_decoys(ClientOps *opt, const char * arg);
-    static int process_arg_resolve_IP(ClientOps *opt);
-    static int process_arg_ip_version(ClientOps *opt, const char * arg);
+    static int process_arg_resolve_ip(ClientOps *opt, const char * arg);
 
 }; /* End of class ArgParser*/
 

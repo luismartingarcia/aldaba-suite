@@ -76,6 +76,16 @@ int ArgParserServer::parse_arguments(int argc, char *argv[], ServerOps *opt) {
 
   if(opt==NULL)
     fatal(OUT_2, "%s(): NULL parameter supplied", __func__);
+  
+  /* SPECIAL CASE: "$ aldabad start" reads default config file */
+  if( argc==2 ){
+      if( !strcasecmp(argv[1], "start")){
+        char config_file[1024];
+        sprintf(config_file, "%s/%s", SERVER_CONF_DIR, SERVER_CONF_FILE_NAME);
+        ArgParserServer::config_file_parser(opt, config_file);
+        return OP_SUCCESS;
+      }
+  }
 
  struct option long_options[] ={
   {"ipv4",              no_argument,            0,      '4'},
@@ -95,6 +105,7 @@ int ArgParserServer::parse_arguments(int argc, char *argv[], ServerOps *opt) {
   {"verbosity",         optional_argument,      0,      'v'},
   {"version",           no_argument,            0,      'V'},
   {"interactive",       no_argument,            0,      'I'},
+  {"daemonize",         no_argument,            0,        0},
   {"promiscuous",       no_argument,            0,        0},
   {"promisc",           no_argument,            0,        0},
   {"portknocking",      no_argument,            0,        0},
@@ -129,35 +140,36 @@ int ArgParserServer::parse_arguments(int argc, char *argv[], ServerOps *opt) {
 
     if ( !strcasecmp(long_options[option_index].name, "portknocking") ||
          !strcasecmp(long_options[option_index].name, "pk") ) {
-        opt->setMode(MODE_PORTKNOCKING);
+        ArgParserServer::process_arg_technique(opt, "PK");
     } else if ( !strcasecmp(long_options[option_index].name, "spa") ) {
-        opt->setMode(MODE_SPA);
+        ArgParserServer::process_arg_technique(opt, "SPA");
     } else if (!strcasecmp(long_options[option_index].name, "debug")){
         opt->setVerbosityLevel(MAX_VERBOSITY_LEVEL);
         opt->setLoggingLevel(MAX_LOGGING_LEVEL);
-        opt->setDaemonize(false);
+        ArgParserServer::process_arg_daemonize(opt, "disable");
     } else if (!strcasecmp(long_options[option_index].name, "blowfish") ||
                !strcasecmp(long_options[option_index].name, "BF")){
-        opt->setCipher(ALG_BLOWFISH);
+        ArgParserServer::process_arg_cipher(opt, "blowfish");
     } else if (!strcasecmp(long_options[option_index].name, "twofish") ||
                !strcasecmp(long_options[option_index].name, "TF")){
-        opt->setCipher(ALG_TWOFISH);
+        ArgParserServer::process_arg_cipher(opt, "twofish");
     } else if (!strcasecmp(long_options[option_index].name, "rijndael") ||
                !strcasecmp(long_options[option_index].name, "RJ") ||
                !strcasecmp(long_options[option_index].name, "AES") ){
-        opt->setCipher(ALG_RIJNDAEL);
+        ArgParserServer::process_arg_cipher(opt, "aes");
     } else if (!strcasecmp(long_options[option_index].name, "serpent") ||
                !strcasecmp(long_options[option_index].name, "SP")){
-        opt->setCipher(ALG_SERPENT);
+        ArgParserServer::process_arg_cipher(opt, "serpent");
     } else if (!strcasecmp(long_options[option_index].name, "bpf-filter") ){
        ArgParserServer::process_arg_bpf(opt, optarg);
     } else if (!strcasecmp(long_options[option_index].name, "promiscuous") ||
                !strcasecmp(long_options[option_index].name, "promisc")){
-        ArgParserServer::process_arg_promiscuous(opt);
+        ArgParserServer::process_arg_promiscuous(opt, "enable");
     } else if (strcasecmp(long_options[option_index].name, "ssh-cookie") == 0 ){
         opt->enableSSHCookie();
+    } else if (strcasecmp(long_options[option_index].name, "daemonize") == 0 ){
+        ArgParserServer::process_arg_daemonize(opt, "enable");
     }
- // } else if (strcasecmp(long_options[option_index].name, "") == 0 ){
  // } else if (strcasecmp(long_options[option_index].name, "") == 0 ){
 
     break; /* case 0 */
@@ -192,8 +204,8 @@ int ArgParserServer::parse_arguments(int argc, char *argv[], ServerOps *opt) {
         exit(0);
     break;
 
-    case 'I': /* Interactive moee (don't daemonize) */
-        opt->setDaemonize(false);
+    case 'I': /* Interactive mode (don't daemonize) */
+        ArgParserServer::process_arg_daemonize(opt, "disable");
     break;
 
     case 'i': /* Network interface */
@@ -263,7 +275,6 @@ int ArgParserServer::display_help(){
      -6, --ipv6               : Use IP version 6 addresses\n\
      -h, --help               : Display usage information.\n\
      -V, --version            : Display current version.\n\
-     --ssh-cookie             : Enable Aldaba OpenSSH cookie extension\n\
      --promiscuous            : Put network interface intro promiscuous mode\n\
 \n\
    \n\
@@ -289,7 +300,7 @@ return OP_SUCCESS;
 
 /** Parses server's configuration file and sets the appropriate values in
   * structure ServerOps.                                                  */
-int ArgParserServer::config_file_parser(ServerOps *opt, char * const filename){
+int ArgParserServer::config_file_parser(ServerOps *opt, const char * filename){
   FILE* file;
   char linebuf[CONFIG_FILE_LINE_SIZE];
   char *fopt=NULL;
@@ -307,7 +318,7 @@ int ArgParserServer::config_file_parser(ServerOps *opt, char * const filename){
     fatal(OUT_2, "%s(): NULL parameter supplied", __func__);
 
   if ((file = fopen(filename, "r")) == NULL){
-      warning(OUT_1, "ERROR : Error opening file '%s'\n", filename);
+      fatal(OUT_1, "Couldn't open configuration file '%s'\n", filename);
       return OP_FAILURE;
   }
 
@@ -392,46 +403,78 @@ int ArgParserServer::config_file_parser(ServerOps *opt, char * const filename){
 
     noarg:
 
-        if (!strcasecmp("target-ports", fopt)){
-            if( (i = process_arg_port_sequence(opt, farg)) != 0)
-                return i;
-            else
-                continue;
-        }
+
         if (!strcasecmp("passphrase", fopt)){
-            if( (i = process_arg_passphrase(opt, farg)) != 0)
+            if( (i = process_arg_passphrase(opt, farg)) != OP_SUCCESS)
                 return i;
             else
                 continue;
-        }
-        if (!strcasecmp("technique", fopt)){
-            if( (i = process_arg_technique(opt, farg)) != 0)
+        }else if (!strcasecmp("technique", fopt)){
+            if( (i = process_arg_technique(opt, farg)) != OP_SUCCESS)
                 return i;
             else
                 continue;
-        }
-        if (!strcasecmp("interface", fopt)){
-            if( (i = process_arg_interface(opt, farg)) != 0)
+        }else if (!strcasecmp("target-ports", fopt)){
+            if( (i = process_arg_port_sequence(opt, farg)) != OP_SUCCESS)
                 return i;
             else
                 continue;
-        }
-        if (!strcasecmp("verbosity", fopt)){
-            if( (i = process_arg_verbosity(opt, farg)) != 0)
+        }else if (!strcasecmp("field", fopt)){
+            if( (i = process_arg_field(opt, farg)) != OP_SUCCESS)
                 return i;
             else
                 continue;
-        }
-        if (!strcasecmp("cipher", fopt)){
-            if( (i = process_arg_cipher(opt, farg)) != 0)
+        }else if (!strcasecmp("auth", fopt)){
+            if( (i = process_arg_auth(opt, farg)) != OP_SUCCESS)
                 return i;
             else
                 continue;
-        }
-        else{
+        }else if (!strcasecmp("verbosity", fopt)){
+            if( (i = process_arg_verbosity(opt, farg)) != OP_SUCCESS)
+                return i;
+            else
+                continue;
+        }else if (!strcasecmp("interface", fopt)){
+            if( (i = process_arg_interface(opt, farg)) != OP_SUCCESS)
+                return i;
+            else
+                continue;
+        }else if (!strcasecmp("cipher", fopt)){
+            if( (i = process_arg_cipher(opt, farg)) != OP_SUCCESS)
+                return i;
+            else
+                continue;
+        }else if (!strcasecmp("ip-version", fopt)){
+            if( (i = process_arg_ip_version(opt, farg)) != OP_SUCCESS)
+                return i;
+            else
+                continue;
+        }else if (!strcasecmp("ssh-cookie", fopt)){
+            if( (i = process_arg_ssh_cookie(opt, farg)) != OP_SUCCESS)
+                return i;
+            else
+                continue;
+        }else if (!strcasecmp("promiscuous", fopt)){
+            if( (i = process_arg_promiscuous(opt, farg)) != OP_SUCCESS)
+                return i;
+            else
+                continue;
+        }else if (!strcasecmp("daemonize", fopt)){
+            if( (i = process_arg_daemonize(opt, farg)) != OP_SUCCESS)
+                return i;
+            else
+                continue;
+        }else if (!strcasecmp("bpf-filter", fopt)){
+            if( (i = process_arg_bpf(opt, farg)) != OP_SUCCESS)
+                return i;
+            else
+                continue;
+        }else{
             warning(OUT_1, "WARNING : %s : line %d : Unknown option '%s'\n", filename, line_num, fopt);
                 continue;
         }
+
+
 /*        if (!strcasecmp("", fopt)){
             if( (i = process_arg_e(opt, farg)) != 0)
                 return i;
@@ -460,18 +503,28 @@ void ArgParserServer::display_usage(){
 }
 
 
-int ArgParserServer::process_arg_promiscuous(ServerOps *opt){
-  if(opt==NULL)
-    fatal(OUT_2, "%s(): NULL parameter supplied", __func__);
-  opt->setPromiscuous(true);
+int ArgParserServer::process_arg_promiscuous(ServerOps *opt, const char * arg){
+  if(opt==NULL || arg==NULL)
+      fatal(OUT_2, "%s(): NULL parameter supplied", __func__);
+  if ( !strcasecmp(arg, "yes" ) || !strcasecmp(arg, "1") || !strcasecmp(arg, "enable"))
+    opt->setPromiscuous(true);
+  else  if ( !strcmp(arg, "0" ) || !strcasecmp(arg, "close") || !strcasecmp(arg, "disable") )
+    opt->setPromiscuous(false);
+  else
+    fatal(OUT_2, "Invalid --promiscuous parameter supplied (%s).", arg);
   return OP_SUCCESS;
 } /* End of process_arg_promiscuous() */
 
 
-int ArgParserServer::process_arg_daemonize(ServerOps *opt){
-  if(opt==NULL)
-    fatal(OUT_2, "%s(): NULL parameter supplied", __func__);
-  opt->setDaemonize(true);
+int ArgParserServer::process_arg_daemonize(ServerOps *opt, const char * arg){
+  if(opt==NULL || arg==NULL)
+      fatal(OUT_2, "%s(): NULL parameter supplied", __func__);
+  if ( !strcasecmp(arg, "yes" ) || !strcasecmp(arg, "1") || !strcasecmp(arg, "enable"))
+    opt->setDaemonize(true);
+  else  if ( !strcmp(arg, "0" ) || !strcasecmp(arg, "close") || !strcasecmp(arg, "disable") )
+    opt->setDaemonize(false);
+  else
+    fatal(OUT_2, "Invalid --daemonize parameter supplied (%s).", arg);
   return OP_SUCCESS;
 } /* End of process_arg_daemonize() */
 

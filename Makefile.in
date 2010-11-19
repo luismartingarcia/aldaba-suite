@@ -56,6 +56,8 @@ sbindir = @sbindir@
 mandir = @mandir@
 srcdir = @srcdir@
 scriptsdir = @sysconfdir@/aldabad/scripts
+serverconfdir = @sysconfdir@/aldabad/conf
+clientconfdir = @sysconfdir@/aldaba/conf
 export RELEASE_DATE := $(shell date +"%b %d, %Y")
 export NDIR=$(shell pwd)
 
@@ -66,7 +68,7 @@ CCOPT =
 DBGFLAGS = -Wall
 STRIP = @STRIP@
 
-DEFS = @DEFS@ -DALDABA_NAME=\"$(ALDABA_NAME)\" -DALDABA_URL=\"$(ALDABA_URL)\" -DALDABA_PLATFORM=\"$(ALDABA_PLATFORM)\" -DSCRIPTSDIR=\"$(scriptsdir)\"
+DEFS = @DEFS@ -DALDABA_NAME=\"$(ALDABA_NAME)\" -DALDABA_URL=\"$(ALDABA_URL)\" -DALDABA_PLATFORM=\"$(ALDABA_PLATFORM)\" -DSCRIPTSDIR=\"$(scriptsdir)\" -DSERVER_CONF_DIR=\"$(serverconfdir)\" -DCLIENT_CONF_DIR=\"$(clientconfdir)\"
 # With GCC, add extra security checks to source code.
 # http://gcc.gnu.org/ml/gcc-patches/2004-09/msg02055.html
 # Level 1 only makes changes that don't affect "conforming" programs,
@@ -207,7 +209,7 @@ aldaba_distclean:
 	rm -rf autom4te.cache
 
 install-aldaba: $(TARGET_CLIENT) $(TARGET_SERVER)
-	$(INSTALL) -d $(DESTDIR)$(bindir) $(DESTDIR)$(mandir)/man8 $(DESTDIR)$(scriptsdir)
+	$(INSTALL) -d $(DESTDIR)$(bindir) $(DESTDIR)$(mandir)/man8 $(DESTDIR)$(scriptsdir) $(DESTDIR)$(serverconfdir) $(DESTDIR)$(clientconfdir)
 	$(INSTALL) -c -m 755 aldaba $(DESTDIR)$(bindir)/aldaba
 	$(INSTALL) -c -m 755 aldabad $(DESTDIR)$(bindir)/aldabad
 	$(INSTALL) -c -m 644 docs/$(TARGET_CLIENT).8 $(DESTDIR)$(mandir)/man8/
@@ -217,6 +219,8 @@ install-aldaba: $(TARGET_CLIENT) $(TARGET_SERVER)
 	cp -n scripts/aldaba_open.sh $(DESTDIR)$(scriptsdir)/
 	cp -n scripts/aldaba_close.sh $(DESTDIR)$(scriptsdir)/
 	cp -n scripts/aldaba_forward.sh $(DESTDIR)$(scriptsdir)/
+	cp -n conf/aldaba.conf $(DESTDIR)$(clientconfdir)/
+	cp -n conf/aldabad.conf $(DESTDIR)$(serverconfdir)/
 
 install: install-aldaba
 	@echo "Aldaba was installed successfully."
@@ -229,6 +233,8 @@ uninstall-aldaba:
 	rm -f $(DESTDIR)$(bindir)/$(TARGET_SERVER)
 	rm -f $(DESTDIR)$(mandir)/man1/$(TARGET_CLIENT).1
 	rm -rf $(DESTDIR)$(scriptsdir)
+	rm -rf $(DESTDIR)$(serverconfdir)
+	rm -rf $(DESTDIR)$(clientconfdir)
 
 ${srcdir}/configure: configure.ac 
 	cd ${srcdir} && autoconf
