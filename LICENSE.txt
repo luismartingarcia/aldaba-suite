@@ -32,13 +32,13 @@
  * with Aldaba; if not, write to the Free Software Foundation, Inc.,       *
  * 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA                *
  *                                                                         *
- * Please check file LICENSE.txt for the complete version of the license,  *
- * as this disclaimer does not contain the full information. Also, note    *
- * that although Aldaba is licensed under the GNU GPL v2.0 license, it may *
- * be possible to obtain copies of it under different, less restrictive,   *
- * alternative licenses. Requests will be studied on a case by case basis. *
- * If you wish to obtain Aldaba under a different license, please use the  *
- * email address shown above.                                              *
+ * Please check the rest of this file for the complete version of the      *
+ * license, as this disclaimer does not contain the full information.      *
+ * Also, note that although Aldaba is licensed under the GNU GPL v2.0      *
+ * license, it may be possible to obtain copies of it under different,     *
+ * less restrictive, alternative licenses. Requests will be studied on a   *
+ * case by case basis. If you wish to obtain Aldaba under a different      *
+ * license, please use the email address shown above.                      *
  *                                                                         *
  ***************************************************************************/
 

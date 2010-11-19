@@ -12,7 +12,7 @@
  *                                                                     *
  ************************************************************************/
 
-Version 0.2.0BETA1 Oct 30, 2010.
+Version 0.2.0 Nov 15, 2010.
 
   - Aldaba has been completly rewritten in C++.
   - Full support for IPv6

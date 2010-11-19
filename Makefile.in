@@ -154,7 +154,8 @@ export MISC2DIST = config.guess config.sub configure configure.ac Makefile.in  \
 	$(CXX) -c $(CPPFLAGS) $(CXXFLAGS) $< -o $@
 
 all:
-	$(MAKE) $(TARGET_CLIENT) $(TARGET_COOKIE_SERVER) $(TARGET_SERVER)
+	$(MAKE) $(TARGET_CLIENT) $(TARGET_SERVER)
+#	$(MAKE) $(TARGET_CLIENT) $(TARGET_COOKIE_SERVER) $(TARGET_SERVER)
 
 $(TARGET_CLIENT): $(OBJS_CLIENT)
 	@echo Compiling Aldaba Client
@@ -168,8 +169,8 @@ $(TARGET_SERVER): $(OBJS_SERVER)
 	$(CXX) $(LDFLAGS) -o $@ $(OBJS_SERVER) $(LIBS)
 	@echo Aldaba Server compiled successfully.
 
-$(TARGET_COOKIE_SERVER): $(OBJS_COOKIE_SERVER)
-	$(CXX) $(LDFLAGS) -o $@ $(OBJS_COOKIE_SERVER) $(LIBS)
+#$(TARGET_COOKIE_SERVER): $(OBJS_COOKIE_SERVER)
+#	$(CXX) $(LDFLAGS) -o $@ $(OBJS_COOKIE_SERVER) $(LIBS)
 
 
 
