@@ -320,18 +320,19 @@ const char *msg="\
   Options:\n\
      --pk, --spa              : Technique [\"PK\", \"SPA\"(default)].\n\
      -p, --port <port>        : Port to open/close on the remote host [integer].\n\
-     -S, --knock-ip   <addr>  : IP to authorize on the remote host [IP or host].\n\
+     -S, --knock-ip <addr>    : IP to authorize on the remote host [IP or host].\n\
      -f, --field <field>      : Covert channel protocol header field.\n\
-     -a, --action     <actn>  : Action taken by Aldaba server [\"Open\", \"Close\"].\n\
+     -a, --action <type>      : Action taken by Aldaba server [\"Open\", \"Close\"].\n\
      -t, --target-ports <seq> : Sequence of dest ports [comma separated list].\n\
-     -c  --cipher     <alg>   : Encryption algorithm [\"Twofish\", \"AES\", ...]\n\
-     -i, --interface  <name>  : Network interface to obtain IP address from.\n\
-     -s, --source-ip  <addr>  : Source IP address [IP or hostname].\n\
-     -d, --decoys     <addr>  : List of decoys [comma separated list of IPs].\n\
-     -n  --noise      <levl>  : Number of extra packets to be sent [integer].\n\
-     -v, --verbosity  <levl>  : Level of verbosity [0-9].\n\
-     -4, --ipv4               : Use IP version 4 addresses\n\
-     -6, --ipv6               : Use IP version 6 addresses\n\
+     -c  --cipher <algorithm> : Encryption algorithm [\"Twofish\", \"AES\", ...]\n\
+     -i, --interface <name>   : Network interface to obtain IP address from.\n\
+     -s, --source-ip <addr>   : Source IP address [IP or hostname].\n\
+     -d, --decoys <addr>      : List of decoys [comma separated list of IPs].\n\
+     -n  --noise <level>      : Number of extra packets to be sent [integer].\n\
+     -v, --verbosity <level>  : Level of verbosity [0-9].\n\
+     -4, --ipv4               : Use IP version 4 addresses.\n\
+     -6, --ipv6               : Use IP version 6 addresses.\n\
+     -C, --config <path>      : Read configuration from file.\n\
      -h, --help               : Display usage information.\n\
      -V, --version            : Display current version.\n\
 \n\

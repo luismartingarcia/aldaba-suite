@@ -267,12 +267,14 @@ int ArgParserServer::display_help(){
      --pk, --spa              : Technique [\"PK\", \"SPA\"(default)].\n\
      -t, --target-ports <seq> : Sequence of dest ports [comma separated list].\n\
      -f, --field <field>      : Covert channel protocol header field.\n\
-     -c  --cipher     <algo>  : Encryption algorithm [\"Twofish\", \"AES\", ...]\n\
-     -i, --interface  <name>  : Network interface to listen on.\n\
-     -v, --verbosity  <level> : Level of verbosity [0-9 (Default)].\n\
-     -l, --logging    <level> : Logging level [0-9].\n\
+     -c  --cipher <algorithm> : Encryption algorithm [\"Twofish\", \"AES\", ...]\n\
+     -i, --interface <name>   : Network interface to listen on.\n\
+     -v, --verbosity <level>  : Level of verbosity [0-9 (Default)].\n\
+     -l, --logging <level>    : Logging level [0-9].\n\
      -4, --ipv4               : Use IP version 4 addresses\n\
      -6, --ipv6               : Use IP version 6 addresses\n\
+     -C, --config <path>      : Read configuration from file.\n\
+     -I, --interactive        : Run interactively, not as a system daemon.\n\
      -h, --help               : Display usage information.\n\
      -V, --version            : Display current version.\n\
      --promiscuous            : Put network interface intro promiscuous mode\n\
