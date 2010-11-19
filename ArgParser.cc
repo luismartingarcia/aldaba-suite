@@ -172,8 +172,17 @@ int ArgParser::process_arg_interface(GeneralOps *opt, const char * arg){
   * global variable "vb".                                                     */
 int ArgParser::process_arg_verbosity(GeneralOps *opt, const char * arg){
   int vbs=0;
-  if(opt==NULL || arg==NULL)
+  if(opt==NULL)
       fatal(OUT_2, "%s(): NULL parameter supplied", __func__);
+
+  /* If the parameter is null, then user just supplied "-v". In this case,
+   * increment level by one (providing we have not reached the maximum level) */
+  if(arg==NULL){
+      int current_level=opt->getVerbosityLevel();
+      int new_level= (current_level>=MAX_VERBOSITY_LEVEL) ? MAX_VERBOSITY_LEVEL : current_level+1;
+      opt->setVerbosityLevel(new_level);
+      return OP_SUCCESS;
+  }
 
   vbs = strtol( arg, NULL, 10);
 
