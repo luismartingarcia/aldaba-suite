@@ -4,7 +4,7 @@ Content-type: text/html
 <HTML><HEAD><TITLE>Man page of ALDABA</TITLE>
 </HEAD><BODY>
 <H1>ALDABA</H1>
-Section: Aldaba Reference Guide (8)<BR>Updated: 11/19/2010<BR><A HREF="#index">Index</A>
+Section: Aldaba Reference Guide (8)<BR>Updated: 11/20/2010<BR><A HREF="#index">Index</A>
 <A HREF="/cgi-bin/man/man2html">Return to Main Contents</A><HR>
 
 
@@ -50,7 +50,7 @@ The following option summary is the output of Aldaba Client when run with no arg
 
 
 <PRE>
-  Aldaba Knocking Client 0.2.0 - (C) Luis MartinGarcia, 2010.
+  Aldaba Knocking Client 0.2.1 - (C) Luis MartinGarcia, 2010.
   <A HREF="http://www.aldabaknocking.com">http://www.aldabaknocking.com</A> || <A HREF="mailto:aldabaknocking@gmail.com">aldabaknocking@gmail.com</A>
 
   Usage: aldaba &lt;-P passphrase&gt; &lt;target_host&gt; [Options]]
@@ -61,18 +61,19 @@ The following option summary is the output of Aldaba Client when run with no arg
   Options:
      --pk, --spa              : Technique [&quot;PK&quot;, &quot;SPA&quot;(default)].
      -p, --port &lt;port&gt;        : Port to open/close on the remote host [integer].
-     -S, --knock-ip   &lt;addr&gt;  : IP to authorize on the remote host [IP or host].
+     -S, --knock-ip &lt;addr&gt;    : IP to authorize on the remote host [IP or host].
      -f, --field &lt;field&gt;      : Covert channel protocol header field.
-     -a, --action     &lt;actn&gt;  : Action taken by Aldaba server [&quot;Open&quot;, &quot;Close&quot;].
+     -a, --action &lt;type&gt;      : Action taken by Aldaba server [&quot;Open&quot;, &quot;Close&quot;].
      -t, --target-ports &lt;seq&gt; : Sequence of dest ports [comma separated list].
-     -c  --cipher     &lt;alg&gt;   : Encryption algorithm [&quot;Twofish&quot;, &quot;AES&quot;, ...]
-     -i, --interface  &lt;name&gt;  : Network interface to obtain IP address from.
-     -s, --source-ip  &lt;addr&gt;  : Source IP address [IP or hostname].
-     -d, --decoys     &lt;addr&gt;  : List of decoys [comma separated list of IPs].
-     -n  --noise      &lt;levl&gt;  : Number of extra packets to be sent [integer].
-     -v, --verbosity  &lt;levl&gt;  : Level of verbosity [0-9].
-     -4, --ipv4               : Use IP version 4 addresses
-     -6, --ipv6               : Use IP version 6 addresses
+     -c  --cipher &lt;algorithm&gt; : Encryption algorithm [&quot;Twofish&quot;, &quot;AES&quot;, ...]
+     -i, --interface &lt;name&gt;   : Network interface to obtain IP address from.
+     -s, --source-ip &lt;addr&gt;   : Source IP address [IP or hostname].
+     -d, --decoys &lt;addr&gt;      : List of decoys [comma separated list of IPs].
+     -n  --noise &lt;level&gt;      : Number of extra packets to be sent [integer].
+     -v, --verbosity &lt;level&gt;  : Level of verbosity [0-9].
+     -4, --ipv4               : Use IP version 4 addresses.
+     -6, --ipv6               : Use IP version 6 addresses.
+     -C, --config &lt;path&gt;      : Read configuration from file.
      -h, --help               : Display usage information.
      -V, --version            : Display current version.
 
@@ -377,7 +378,7 @@ Decreases the verbosity level, causing Aldaba to print less information during i
 <B>-C </B><B></B><I>path</I>, <B>--config </B><B></B><I>path</I> (Read configuration from file)
 <DL COMPACT><DT><DD>
 Tells Aldaba client to read configuration from a specific configuration file. Supplied path may be absolute or relative to the current directory. Alternatively, it is possible to run the client simply like &quot;aldaba
-<B>start</B>&quot;, what makes it read the default configuration file (typically stored in /etc/aldaba/conf/aldaba.conf or /usr/local/etc/aldaba/conf/aldaba.conf
+<B>start</B>&quot;, what makes it read the default configuration file (typically stored in /etc/aldaba/conf/aldaba.conf or /usr/local/etc/aldaba/conf/aldaba.conf)
 </DL>
 
 <P>
@@ -434,6 +435,6 @@ Luis MartinGarcia
 This document was created by
 <A HREF="/cgi-bin/man/man2html">man2html</A>,
 using the manual pages.<BR>
-Time: 19:21:29 GMT, November 19, 2010
+Time: 15:26:25 GMT, November 20, 2010
 </BODY>
 </HTML>

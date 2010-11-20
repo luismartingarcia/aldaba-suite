@@ -4,7 +4,7 @@ Content-type: text/html
 <HTML><HEAD><TITLE>Man page of ALDABAD</TITLE>
 </HEAD><BODY>
 <H1>ALDABAD</H1>
-Section: Aldaba Reference Guide (8)<BR>Updated: 11/19/2010<BR><A HREF="#index">Index</A>
+Section: Aldaba Reference Guide (8)<BR>Updated: 11/20/2010<BR><A HREF="#index">Index</A>
 <A HREF="/cgi-bin/man/man2html">Return to Main Contents</A><HR>
 
 
@@ -50,7 +50,7 @@ The following option summary is the output of Aldaba Server when run with no arg
 
 
 <PRE>
-  Aldaba Knocking Server 0.2.0 - (C) Luis MartinGarcia, 2010.
+  Aldaba Knocking Server 0.2.1 - (C) Luis MartinGarcia, 2010.
   <A HREF="http://www.aldabaknocking.com">http://www.aldabaknocking.com</A> || <A HREF="mailto:aldabaknocking@gmail.com">aldabaknocking@gmail.com</A>
 
   Usage: aldabad &lt;-P passphrase&gt; [Options]
@@ -61,12 +61,14 @@ The following option summary is the output of Aldaba Server when run with no arg
      --pk, --spa              : Technique [&quot;PK&quot;, &quot;SPA&quot;(default)].
      -t, --target-ports &lt;seq&gt; : Sequence of dest ports [comma separated list].
      -f, --field &lt;field&gt;      : Covert channel protocol header field.
-     -c  --cipher     &lt;algo&gt;  : Encryption algorithm [&quot;Twofish&quot;, &quot;AES&quot;, ...]
-     -i, --interface  &lt;name&gt;  : Network interface to listen on.
-     -v, --verbosity  &lt;level&gt; : Level of verbosity [0-9 (Default)].
-     -l, --logging    &lt;level&gt; : Logging level [0-9].
+     -c  --cipher &lt;algorithm&gt; : Encryption algorithm [&quot;Twofish&quot;, &quot;AES&quot;, ...]
+     -i, --interface &lt;name&gt;   : Network interface to listen on.
+     -v, --verbosity &lt;level&gt;  : Level of verbosity [0-9 (Default)].
+     -l, --logging &lt;level&gt;    : Logging level [0-9].
      -4, --ipv4               : Use IP version 4 addresses
      -6, --ipv6               : Use IP version 6 addresses
+     -C, --config &lt;path&gt;      : Read configuration from file.
+     -I, --interactive        : Run interactively, not as a system daemon.
      -h, --help               : Display usage information.
      -V, --version            : Display current version.
      --promiscuous            : Put network interface intro promiscuous mode
@@ -470,7 +472,7 @@ Automatically sets verbose and logging levels to 0. No output or logs will be ge
 <B>-C </B><B></B><I>path</I>, <B>--config </B><B></B><I>path</I> (Read configuration from file)
 <DL COMPACT><DT><DD>
 Tells Aldaba server to read configuration from a specific configuration file. Supplied path may be absolute or relative to the current directory. Alternatively, it is possible to run the server simply like &quot;aldabad
-<B>start</B>&quot;, what makes it read the default configuration file (typically stored in /etc/aldabad/conf/aldabad.conf or /usr/local/etc/aldabad/conf/aldabad.conf
+<B>start</B>&quot;, what makes it read the default configuration file (typically stored in /etc/aldabad/conf/aldabad.conf or /usr/local/etc/aldabad/conf/aldabad.conf)
 </DL>
 
 <P>
@@ -533,6 +535,6 @@ Luis MartinGarcia
 This document was created by
 <A HREF="/cgi-bin/man/man2html">man2html</A>,
 using the manual pages.<BR>
-Time: 19:21:30 GMT, November 19, 2010
+Time: 15:26:27 GMT, November 20, 2010
 </BODY>
 </HTML>

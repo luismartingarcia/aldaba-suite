@@ -1,4 +1,4 @@
-  Aldaba Knocking Server 0.2.0 - (C) Luis MartinGarcia, 2010.
+  Aldaba Knocking Server 0.2.1 - (C) Luis MartinGarcia, 2010.
   http://www.aldabaknocking.com || aldabaknocking@gmail.com
 
   Usage: aldabad <-P passphrase> [Options]
@@ -9,12 +9,14 @@
      --pk, --spa              : Technique ["PK", "SPA"(default)].
      -t, --target-ports <seq> : Sequence of dest ports [comma separated list].
      -f, --field <field>      : Covert channel protocol header field.
-     -c  --cipher     <algo>  : Encryption algorithm ["Twofish", "AES", ...]
-     -i, --interface  <name>  : Network interface to listen on.
-     -v, --verbosity  <level> : Level of verbosity [0-9 (Default)].
-     -l, --logging    <level> : Logging level [0-9].
+     -c  --cipher <algorithm> : Encryption algorithm ["Twofish", "AES", ...]
+     -i, --interface <name>   : Network interface to listen on.
+     -v, --verbosity <level>  : Level of verbosity [0-9 (Default)].
+     -l, --logging <level>    : Logging level [0-9].
      -4, --ipv4               : Use IP version 4 addresses
      -6, --ipv6               : Use IP version 6 addresses
+     -C, --config <path>      : Read configuration from file.
+     -I, --interactive        : Run interactively, not as a system daemon.
      -h, --help               : Display usage information.
      -V, --version            : Display current version.
      --promiscuous            : Put network interface intro promiscuous mode
