@@ -107,7 +107,7 @@ using namespace std;
  * GENERAL, USER-TUNABLE, DEFINES                                      *
  *                                                                     *
  ***********************************************************************/
-#define CURRENT_VERSION "0.2.0"  /**< Current version number                  */
+#define CURRENT_VERSION "0.2.1"  /**< Current version number                  */
 
 /* General values                                                             */
 #define MAX_PASSPHRASE_LEN 256   /**< Max length of a passphrase              */
