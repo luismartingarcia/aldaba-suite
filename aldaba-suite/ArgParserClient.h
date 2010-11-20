@@ -67,6 +67,7 @@ class ArgParserClient : public ArgParser {
     static int process_arg_hostname(ClientOps *opt, const char * arg);
     static int process_arg_src_ip(ClientOps *opt, const char * arg);
     static int process_arg_knock_ip(ClientOps *opt, const char * arg);
+    static int process_arg_forward_ip(ClientOps *opt, const char * arg);
     static int process_arg_knock_port(ClientOps *opt, const char * arg);
     static int process_arg_action(ClientOps *opt, const char * arg);
     static int process_arg_noise(ClientOps *opt, const char * arg);

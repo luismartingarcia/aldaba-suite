@@ -96,6 +96,9 @@ int ArgParserClient::parse_arguments(int argc, char *argv[], ClientOps *opt) {
   {"spa-ip",            required_argument,      0,      'K'},
   {"authorized-ip",     required_argument,      0,      'K'},
 
+  {"forward-ip",        required_argument,      0,      'F'},
+  {"fwd-ip",            required_argument,      0,      'F'},
+
   {"source-ip",         required_argument,      0,      'S'},
   {"src-ip",            required_argument,      0,      'S'},
   {"src",               required_argument,      0,      'S'},
@@ -152,7 +155,7 @@ int ArgParserClient::parse_arguments(int argc, char *argv[], ClientOps *opt) {
  };
 
  /* Iterate over the paramter list and parse those args  */
- while((arg = getopt_long_only(argc,argv,"46A:a:c:C:d:f:hi:K:l::n:P:p:q::S:t:t:Vv::", long_options, &option_index)) != EOF) {
+ while((arg = getopt_long_only(argc,argv,"46A:a:c:C:d:f:F:hi:K:l::n:P:p:q::S:t:t:Vv::", long_options, &option_index)) != EOF) {
 
   aux8=aux16=aux32=0;
 
@@ -229,6 +232,10 @@ int ArgParserClient::parse_arguments(int argc, char *argv[], ClientOps *opt) {
 
     case 'f': /* Field */
         ArgParserClient::process_arg_field(opt, optarg);
+    break;
+
+    case 'F': /* Forward IP address */
+        ArgParserClient::process_arg_forward_ip(opt, optarg);
     break;
 
     case 'h': /* Help  */
@@ -554,6 +561,11 @@ int ArgParserClient::config_file_parser(ClientOps *opt, const char * filename){
                 return i;
             else
                 continue;
+        }else if (!strcasecmp("forward-ip", fopt)){
+            if( (i = process_arg_forward_ip(opt, farg)) != OP_SUCCESS)
+                return i;
+            else
+                continue;
         }else{
             warning(OUT_1, "WARNING : %s : line %d : Unknown option '%s'\n", filename, line_num, fopt);
                 continue;
@@ -615,6 +627,19 @@ int ArgParserClient::process_arg_knock_ip(ClientOps *opt, const char * arg){
       fatal(OUT_2, "Unable to resolve supplied Knock IP address (%s)", arg);
   return OP_SUCCESS;
 } /* End of process_arg_knock_ip */
+
+
+/** Processes argument -F, --forward-ip. The function takes a string containing
+  * a host name, resolves it's associated IP address and fills member
+  * opt->forward_ip of the supplied ClientOps structure.                    */
+int ArgParserClient::process_arg_forward_ip(ClientOps *opt, const char * arg){
+  if(opt==NULL || arg==NULL)
+      fatal(OUT_2, "%s(): NULL parameter supplied", __func__);
+  /* Store supplied IP or hostname */
+  if( opt->setForwardIP(arg) == OP_FAILURE )
+      fatal(OUT_2, "Unable to resolve supplied Forward IP address (%s)", arg);
+  return OP_SUCCESS;
+} /* End of process_arg_forward_ip */
 
 
 /** Processes argument -p, --port. The function takes a string containing a

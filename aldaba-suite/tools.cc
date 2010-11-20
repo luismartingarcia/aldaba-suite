@@ -2150,3 +2150,49 @@ size_t read_until(int fd, char *buff, size_t bufflen, const char *delimiter){
   }
   return bytes_read+1;
 } /* End of readUtil() */
+
+
+int read_password(char *dest, size_t dest_len, size_t *final_read_bytes) {
+
+    struct termios old_settings;
+    struct termios new_settings;
+    size_t bytes_read=0;
+    char c='\0';
+
+    /* Grab current terminal settings */
+    if (tcgetattr(fileno(stdin), &old_settings) != 0)
+        return OP_FAILURE;
+
+    /* Play around with the flags */
+    new_settings = old_settings;
+    new_settings.c_lflag &= ~ECHO || ECHOCTL;
+
+    /* Set the new settings */
+    if (tcsetattr(fileno(stdin), TCSAFLUSH, &new_settings) != 0)
+        return OP_FAILURE;
+
+    /* Read the password. */
+    while((c=getchar())!='\n' && ((bytes_read+1)<dest_len)){
+        if(c =='\b'){
+            if (bytes_read > 0) {
+                bytes_read--;
+                printf("\b \b");
+            }
+        }else{
+            dest[bytes_read++] = c;
+            printf("*");
+        }
+    }
+    printf("\n");
+    dest[bytes_read] = '\0';
+
+    /* Indicate how many bytes we have read */
+    if(final_read_bytes!=NULL)
+        *final_read_bytes=bytes_read;
+
+    /* Restore terminal settings. */
+    if( tcsetattr(fileno(stdin), TCSAFLUSH, &old_settings) != 0 )
+        return OP_FAILURE;
+
+    return OP_SUCCESS;
+} /* End of read_password() */

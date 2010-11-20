@@ -18,8 +18,9 @@
 # $1 is the external port
 # $2 is the internal port
 # $3 is the port protocol
-# $4 is the authorized IP address
+# $4 is the incoming IP address
+# $5 is the target IP address
 # It should return 0 on success and -1 in case of error.
 
-echo "This script should forward port $1/$3 to port $2/$3 for address $4"
+echo "This script should forward traffic targetted to port $1/$3 from address $4 to port $2/$3 in address $5"
 exit 0

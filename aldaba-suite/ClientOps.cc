@@ -84,6 +84,9 @@ void ClientOps::reset(){
     knock_ip.reset();
     knock_ip_set=false;
 
+    forward_ip.reset();
+    forward_ip_set=false;
+
     memset(knock_ports, 0, sizeof(knock_ports));
     knock_ports_set=0;
 
@@ -262,8 +265,6 @@ int ClientOps::setKnockIP(IPAddress val){
 /** Sets Knock IP address.
  *  @return OP_SUCCESS on success and OP_FAILURE in case of error.           */
 int ClientOps::setKnockIP(const char *val){
-  // TODO: This function should convert from a IP in decimal dot
-  // notation into an IPAddress object.
   if( this->knock_ip.setAddress(val) != OP_SUCCESS ){
     return OP_FAILURE;
   }
@@ -282,6 +283,38 @@ IPAddress ClientOps::getKnockIP(){
 bool ClientOps::issetKnockIP(){
   return this->knock_ip_set;
 } /* End of issetKnockIP() */
+
+
+/** Sets ForwardIP.
+ *  @return OP_SUCCESS on success and OP_FAILURE in case of error.           */
+int ClientOps::setForwardIP(IPAddress val){
+  this->forward_ip=val;
+  this->forward_ip_set=true;
+  return OP_SUCCESS;
+} /* End of setForwardIP() */
+
+
+/** Sets Knock IP address.
+ *  @return OP_SUCCESS on success and OP_FAILURE in case of error.           */
+int ClientOps::setForwardIP(const char *val){
+  if( this->forward_ip.setAddress(val) != OP_SUCCESS ){
+    return OP_FAILURE;
+  }
+  this->forward_ip_set=true;
+  return OP_SUCCESS;
+} /* End of setForwardIP() */
+
+
+/** Returns value of attribute forward_ip */
+IPAddress ClientOps::getForwardIP(){
+  return this->forward_ip;
+} /* End of getForwardIP() */
+
+
+/* Returns true if option has been set */
+bool ClientOps::issetForwardIP(){
+  return this->forward_ip_set;
+} /* End of issetForwardIP() */
 
 
 /** Sets KnockPort.
@@ -721,6 +754,19 @@ int ClientOps::validateConfiguration(){
     }
   }
 
+  /* Check user is using the forward-ip parameter correctly */
+  if( this->issetForwardIP() ){
+      if( this->getMode()==MODE_PORTKNOCKING )
+          fatal(OUT_2, "Forwarding can only be used in SPA mode.");
+      if(!this->issetKnockPort(KNOCK_PORT_1) || !this->issetKnockPort(KNOCK_PORT_2))
+          fatal(OUT_2, "Forwarding requires two ports to be specified.");
+      /* If user supplied a forward IP but no action, just set the forward action automatically */
+      if(!this->issetAction(KNOCK_PORT_1) && !this->issetAction(KNOCK_PORT_2) ){
+           this->setAction(ACTION_FORWARD); /* Set action p1 */
+           this->setAction(ACTION_FORWARD); /* Set action p2 */
+      }
+  }
+
   /* if no action was specified, default to ACTION_OPEN */
   if (!this->issetAction(KNOCK_PORT_1)){
     this->setAction(DEFAULT_ACTION);
@@ -742,6 +788,10 @@ int ClientOps::validateConfiguration(){
               if(this->getAction(KNOCK_PORT_1)!=this->getAction(KNOCK_PORT_2))
                   fatal(OUT_2, "When using forwarding, both knock ports must be configured with --action forward");
           }
+      }
+      /* Make sure that if forwarding was enabled, the user supplied a forward IP address */
+      if(this->getAction(KNOCK_PORT_1)==ACTION_FORWARD && this->issetForwardIP()==false){
+        fatal(OUT_2, "When using forwarding, you need to supply a forward IP address");
       }
   }
 

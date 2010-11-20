@@ -76,14 +76,18 @@ int open_port(tcp_port_t port, IPAddress ip, u8 proto){
 
 
 /** Executes /etc/aldabad/aldaba_open.sh using the system() call. */
-int forward_port(tcp_port_t from, tcp_port_t to, IPAddress ip, u8 proto){
+int forward_port(tcp_port_t from, tcp_port_t to, IPAddress ip, IPAddress fwd_ip, u8 proto){
   output(OUT_9, "%s()\n", __func__);
   char msg[2001];
+  char in_ip_str[128];
+  char fwd_ip_str[128];
   memset(msg, 0, sizeof(msg));
   const char *proto_str=NULL;
   if( (proto_str=portproto2str(proto))==NULL )
       return OP_FAILURE;
-  snprintf(msg, 2000, "%s/%s %d %d %s %s &", SCRIPTSDIR, FORWARD_SCRIPT_NAME, from, to, proto_str, ip.toString());
+  snprintf(in_ip_str, 127,"%s", ip.toString());
+  snprintf(fwd_ip_str, 127,"%s", fwd_ip.toString());
+  snprintf(msg, 2000, "%s/%s %d %d %s %s %s &", SCRIPTSDIR, FORWARD_SCRIPT_NAME, from, to, proto_str, in_ip_str, fwd_ip_str);
   if( system(msg)==-1 )
       return OP_FAILURE;
   return OP_SUCCESS;

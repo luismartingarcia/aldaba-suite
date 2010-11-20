@@ -73,6 +73,9 @@ class ClientOps : public GeneralOps {
         IPAddress knock_ip; /**< Knock IP (IP to which the port will be opened to*/
         bool knock_ip_set;
 
+        IPAddress forward_ip; /**< IP address for SPA forwarding action */
+        bool forward_ip_set;
+
         tcp_port_t knock_ports[MAX_KNOCK_PORTS]; /**< Knock Port (port to open)         */
         size_t knock_ports_set;
 
@@ -125,6 +128,11 @@ class ClientOps : public GeneralOps {
         int setKnockIP(const char *val);
         IPAddress getKnockIP();
         bool issetKnockIP();
+
+        int setForwardIP(IPAddress val);
+        int setForwardIP(const char *val);
+        IPAddress getForwardIP();
+        bool issetForwardIP();
 
         int setKnockPort(tcp_port_t val);
         tcp_port_t getKnockPort(size_t index);
