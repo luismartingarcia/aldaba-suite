@@ -75,35 +75,43 @@
    +--                                                           --+
 11 |                                                               |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-12 |                           Timestamp                           |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+12 |                                                               |
+   +--                                                           --+
 13 |                                                               |
-   +--                                                           --+
+   +--                     Forward IP Address                    --+
 14 |                                                               |
-   +--                           Nonce                           --+
-15 |                                                               |
    +--                                                           --+
-16 |                                                               |
+15 |                                                               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+   
+16 |                           Timestamp                           |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 17 |                                                               |
    +--                                                           --+
 18 |                                                               |
-   +--                          Username                         --+
+   +--                           Nonce                           --+
 19 |                                                               |
    +--                                                           --+
 20 |                                                               |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 21 |                                                               |
+   +--                                                           --+
+22 |                                                               |
+   +--                          Username                         --+
+23 |                                                               |
+   +--                                                           --+
+24 |                                                               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+25 |                                                               |
  . .                                                               .
  . .                           User Data                           .
  . .                                                               .
-27 |                                                               |
+31 |                                                               |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-28 |                                                               |
+32 |                                                               |
  . .                                                               .
  . .                   Message Authentication Code                 .
  . .                                                               .
-35 |                                                               |
+39 |                                                               |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 */
@@ -117,7 +125,7 @@
 #define SPA_USERNAME_LEN 16
 #define SPA_USERDATA_LEN 28
 #define SPA_MAC_LEN 32
-#define SPA_HEADER_LEN 144
+#define SPA_HEADER_LEN 160
 
 /* CONSTANTS DEFINED IN THE RFC */
 /* IP Versions */
@@ -166,6 +174,7 @@ class SPAHeader : public TransportLayerElement {
             u32 magic;
             u32 reserved;
             u8 address[SPA_ADDR_LEN];
+            u8 forward_address[SPA_ADDR_LEN];
             u32 timestamp;
             u8 nonce[SPA_NONCE_LEN];
             char username[SPA_USERNAME_LEN];
@@ -223,6 +232,13 @@ class SPAHeader : public TransportLayerElement {
         IPAddress getAddress();
         int getAddress(struct in_addr *addr);
         int getAddress(struct in6_addr *addr);
+
+        int setForwardAddress(u8 *val);
+        int setForwardAddress(struct in_addr addr);
+        int setForwardAddress(struct in6_addr addr);
+        IPAddress getForwardAddress();
+        int getForwardAddress(struct in_addr *addr);
+        int getForwardAddress(struct in6_addr *addr);
 
         int setTimestamp(u32 val);
         u32 getTimestamp();

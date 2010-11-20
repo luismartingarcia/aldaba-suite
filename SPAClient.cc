@@ -142,6 +142,16 @@ int SPAClient::run(){
     spa.setAddress( knock.getIPv6Address() );
   else
     spa.setAddress( knock.getIPv4Address() );
+
+  /* Set Forward IP if needed */
+  if( o.issetForwardIP() ){
+      IPAddress fwd_ip=o.getForwardIP();
+      if(fwd_ip.getVersion()==AF_INET6)
+        spa.setForwardAddress( fwd_ip.getIPv6Address() );
+      else
+        spa.setForwardAddress( fwd_ip.getIPv4Address() );
+  }
+
   spa.setTimestamp( (u32)time(NULL) );
   spa.setNonce( o.rand.getRandomData(SPA_NONCE_LEN) );
   //spa.setUsername("");

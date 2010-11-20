@@ -324,6 +324,65 @@ int SPAHeader::getAddress(struct in6_addr *addr){
 } /* End of getAddress() */
 
 
+
+/** Sets ForwardAddress.
+  *  @return OP_SUCCESS on success and OP_FAILURE in case of error.           */
+int SPAHeader::setForwardAddress(struct in_addr addr){
+  memset(this->h.forward_address, 0, SPA_ADDR_LEN);
+  memcpy(this->h.forward_address, &addr.s_addr, 4);
+  return OP_SUCCESS;
+} /* End of setForwardAddress() */
+
+
+/** Sets ForwardAddress.
+  *  @return OP_SUCCESS on success and OP_FAILURE in case of error.           */
+int SPAHeader::setForwardAddress(struct in6_addr addr){
+  memcpy(this->h.forward_address, addr.s6_addr, 16);
+  return OP_SUCCESS;
+} /* End of setForwardAddress() */
+
+
+/** Returns value of attribute h.forward_address */
+IPAddress SPAHeader::getForwardAddress(){
+  IPAddress ip;
+  struct in_addr i4;
+  struct in6_addr i6;
+  if(this->getIPVersion()==0x04){
+      i4.s_addr= *((u32 *)this->h.forward_address);
+      ip.setAddress(i4);
+  }else{
+      memcpy(i6.s6_addr, this->h.forward_address, 16);
+      ip.setAddress(i6);
+  }
+  return ip;
+} /* End of getForwardAddress() */
+
+
+/** Returns value of attribute h.forward_address */
+int SPAHeader::getForwardAddress(struct in_addr *addr){
+  struct in_addr *pnt=(struct in_addr*)this->h.forward_address;
+  if(addr!=NULL && this->getIPVersion()==0x04){
+    *addr=*pnt;
+    return OP_SUCCESS;
+  }else{
+    return OP_FAILURE;
+  }
+} /* End of getForwardAddress() */
+
+
+/** Returns value of attribute h.forward_address */
+int SPAHeader::getForwardAddress(struct in6_addr *addr){
+  struct in6_addr *pnt=(struct in6_addr*)this->h.forward_address;
+  if(addr!=NULL && this->getIPVersion()==0x06){
+    *addr=*pnt;
+    return OP_SUCCESS;
+  }else{
+    return OP_FAILURE;
+  }
+} /* End of getForwardAddress() */
+
+
+
 /** Sets Timestamp.
   *  @return OP_SUCCESS on success and OP_FAILURE in case of error.           */
 int SPAHeader::setTimestamp(u32 val){

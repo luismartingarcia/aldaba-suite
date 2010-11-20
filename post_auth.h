@@ -59,7 +59,7 @@
 
 int close_port(tcp_port_t port, IPAddress ip, u8 proto);
 int open_port(tcp_port_t port, IPAddress ip, u8 proto);
-int forward_port(tcp_port_t from, tcp_port_t to, IPAddress ip, u8 proto);
+int forward_port(tcp_port_t from, tcp_port_t to, IPAddress ip,IPAddress fwd_ip, u8 proto);
 
 const char *portproto2str(u8 proto);
 

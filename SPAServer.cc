@@ -288,6 +288,7 @@ int SPAServer::post_auth(SPAHeader *spa){
   output(OUT_9, "%s()\n", __func__);
   assert(spa);
   IPAddress ip;
+  IPAddress fwd_ip;
 
    indent(OUT_4, 1, "Valid SPA authentication received [");
 
@@ -298,7 +299,8 @@ int SPAServer::post_auth(SPAHeader *spa){
   if(spa->getActionPort1()==SPA_ACTION_FORWARD){
       if(spa->getActionPort2()==SPA_ACTION_FORWARD && spa->getProtocolPort1()==spa->getProtocolPort2()){
           output(OUT_4, "Forward %d to %d for %s]\n", spa->getPort1(), spa->getPort2(), ip.toString() );
-          forward_port(spa->getPort1(), spa->getPort2(), ip, spa->getProtocolPort1());
+          fwd_ip=spa->getForwardAddress();
+          forward_port(spa->getPort1(), spa->getPort2(), ip, fwd_ip, spa->getProtocolPort1());
           return OP_SUCCESS;
       }else{
           return OP_FAILURE; /* Forwarding needs to be set on both ports */
