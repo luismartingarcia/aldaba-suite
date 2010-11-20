@@ -1,0 +1,323 @@
+/***********************************************************************
+ *                                                                     *
+ *                 _        _____               ____                   *
+ *         /\     | |      |  __ \      /\     |  _ \      /\          *
+ *        /  \    | |      | |  | |    /  \    | |_) |    /  \         *
+ *       / /\ \   | |      | |  | |   / /\ \   |  _ <    / /\ \        *
+ *      / ____ \  | |___   | |__| /  / ____ \  | |_) /  / ____ \       *
+ *     /_/    \_\ | ____|  |_____/  /_/    \_\ |____/  /_/    \_\      *
+ *                                                                     *
+ *                                                                     *
+ *                  --[ALDABA PROTOCOLS DEFINITION]--                  *
+ *                                                                     *
+ ************************************************************************/
+
+                             Novermber 2010.
+                           Luis MartinGarcia
+                         (luis.mgarc@gmail.com)
+
+                      ============================
+
+
+
+================
+ PORT KNOCKING 
+================
+
+LIGHT MODE
+
+ IPv4 Light Mode
+
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ 0 |                    Authorized IPv4 Address                    |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ 1 |           Knock Port          | Message Authentication Code |A|
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+ Message length = 64bits.
+ MAC = 15bits (most significant bits).
+ Random data = 0bits.
+ Replayable: Yes
+
+
+
+ IPv6 Light Mode
+
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ 0 |                                                               |
+   +                                                               +
+ 1 |                                                               |
+   +                    Authorized IPv6 Address                    +
+ 2 |                                                               |
+   +                                                               +
+ 3 |                                                               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ 4 |           Knock Port          |                               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                             +-+
+ 5 |                  Message Authentication Code                |A|
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+ Message length = 192bits.
+ MAC = 47bits (most significant bits).
+ Random data = 0bits.
+ Replayable: Yes
+
+
+STRONG MODE
+
+ IPv4 Strong Mode
+
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ 0 |                                                               |
+   +                            Nonce                              +
+ 1 |                                                               |
+   +                             +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ 2 |                             |A|           Knock Port          |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ 3 |                           Timestamp                           |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ 4 |                    Authorized IPv4 Address                    |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ 5 |                                                               |
+   +                                                               +
+ 6 |                   Message Authentication Code                 |
+   +                                                               +
+ 7 |                                                               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+ MAC = 96bits (most significant bits).
+ Random data = 79bits.
+ Timestamp = 32bits.
+ Replayable: No. The nonce is not allowed to be reused within the 
+             acceptable time window.
+
+
+ IPv6 Strong Mode
+
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ 0 |                                                               |
+   +                            Nonce                              +
+ 1 |                                                               |
+   +                             +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ 2 |                             |A|           Knock Port          |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ 3 |                           Timestamp                           |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ 4 |                                                               |
+   +                                                               +
+ 5 |                                                               |
+   +                    Authorized IPv6 Address                    +
+ 6 |                                                               |
+   +                                                               +
+ 7 |                                                               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ 8 |                                                               |
+   +                                                               +
+ 9 |                                                               |
+   +                   Message Authentication Code                 +
+10 |                                                               |
+   +                                                               +
+11 |                                                               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+ MAC = 128 bits.
+ Random data = 79bits.
+ Timestamp = 32bits.
+ Replayable: No. The nonce is not allowed to be reused within the 
+             acceptable time window.
+
+
+
+==============================
+ SINGLE PACKET AUTHORIZATION
+==============================
+
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ 0 |                                                               |
+   +--                                                           --+
+ 1 |                                                               |
+   +--                   Initialization Vector                   --+
+ 2 |                                                               |
+   +--                                                           --+
+ 3 |                                                               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ 4 |  SPA Version  |  IP Version   |Prot#1 |Actn#1 |Prot#2 |Actn#2 |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ 5 |            Port #1            |            Port #2            |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ 6 |                          Magic Number                         |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ 7 |                            Reserved                           |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ 8 |                                                               |
+   +--                                                           --+
+ 9 |                                                               |
+   +--                   Authorized IP Address                   --+
+10 |                                                               |
+   +--                                                           --+
+11 |                                                               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+12 |                                                               |
+   +--                                                           --+
+13 |                                                               |
+   +--                     Forward IP Address                    --+
+14 |                                                               |
+   +--                                                           --+
+15 |                                                               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+   
+16 |                           Timestamp                           |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+17 |                                                               |
+   +--                                                           --+
+18 |                                                               |
+   +--                           Nonce                           --+
+19 |                                                               |
+   +--                                                           --+
+20 |                                                               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+21 |                                                               |
+   +--                                                           --+
+22 |                                                               |
+   +--                          Username                         --+
+23 |                                                               |
+   +--                                                           --+
+24 |                                                               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+25 |                                                               |
+ . .                                                               .
+ . .                           User Data                           .
+ . .                                                               .
+31 |                                                               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+32 |                                                               |
+ . .                                                               .
+ . .                   Message Authentication Code                 .
+ . .                                                               .
+39 |                                                               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+
+Initialization Vector: 128 bits.
+    Cryptographically secure random number that the receiving end should use as
+    initilization vector when decrypting the packet.
+
+SPA Version: 8 bits.
+    Highest protocol version that the packet complies with. This document covers
+    version 1 (0x01). 
+
+IP Version: 8 bits
+    Version of the IP addresses in the packet ("Authorized IP Address" field and
+    "Forward IP Address" field). It may contain one of the following values:
+        0x04 : The "Authorized IP Address" field contains an IPv4 address.
+        0x06 : The "Authorized IP Address" field contains an IPv6 address.
+
+Prot#1:  4 bits.
+    Transport-layer protocol for which the port number specified in the 
+    "Port #1" field should be opened/closed. It may contain one of the 
+    following values:
+        0x0 : Any protocol
+        0x1 : Protocol TCP
+        0x2 : Protocol UDP
+        0x3 : Protocol SCTP        
+
+Actn#1: 4 bits.
+    Desired action to execute for Port #1 upon successful authentication. It may
+    contain one of the following values:
+        0x1 : Open Port #1
+        0x2 : Close Port #1
+        0x3 : Forward Port #1 to Port #2
+    If forwarding is desired, both Actn#1 and Actn#2 MUST take the value 0x3.
+    Failure to set both fields will result in the server discarding the packet.
+    
+
+Port#2: 4 bits.
+    Same as the "Prot#1" field but for Port #2.
+    
+Actn#2: 4 bits.
+    Same as the "Actn#1" field but for Port #2.
+    
+Port #1: 16 bits
+    Port number to be opened/closed/forwarded upon successful authentication. 
+    It MUST be specified in network byte order, and may take values in the range 
+    [0, 65535]. Port number may be set to zero to indicate that no port should
+    be opened or closed. Server behaviour in this case is left unspecified, so 
+    it should be up to the particular implementation to decide what actions
+    should be taken. Some servers may validate the packet and use data in 
+    the "User Data" field to determine what to do.
+
+Magic Number: 32 bits
+    Special magic value. When the receiving end decrypts the first cipher block,
+    it MUST check the presence of the magic number, and refuse to decrypt the 
+    rest of the packet if the expected value is not found. Magic number MUST 
+    take the value 0xA1DABA77, where A1 is the most significant byte. 
+    Implementations may choose their own magic number to increase obscurity, 
+    at the risk of not being interoperable with other implementation and
+    therefore, not being RFC-compliant. The magic number is provided as a basic
+    measure against Denial of Service attacks. With this approach, if an 
+    attacker starts flooding the server with bogus packets, on average, only 
+    one out of every 2^32 packets will be decrypted completely. This avoids
+    performing computationally-intensive operations (decryption and 
+    authentication) under the described scenario.
+
+Reserved: 32 bits.
+    Reserved for future use.
+
+Authorized IP Address: 128 bits.
+    IP Address from which the specified port will be accessed. This field has 
+    128 bits to allow use of both IPv4 and IPv6 addresses. When IPv4 is used, 
+    only the first four bytes are used. The rest may be set to zero or filled
+    with random data. If the "IP Version" field states that the address is IPv4,
+    the server MUST not use the data in the last 12 bytes of this field.
+
+Forward IP Address: 128 bits.
+    IP Address to forward incoming packets to. This field must be set only when
+    both ports have the forward action set. This address may be IPv4 or IPv6 but
+    must match the same IP version of the address in the "Authorized IP Address"
+    field.
+
+Timestamp: 32 bits.
+    Current time at the sender. This time is expressed as the number of seconds
+    elapsed since UTC 00:00, 01/01/1970 (epoch time). This time MUST be checked
+    by the server before validating the packet. In order to proceed with the 
+    authentication, the received timestamp MUST be fall inside a "reasonable" 
+    time window (where "reasonable" is left undefined on purpose, as it may
+    vary depending on the nature of the implementation and the host system).
+    If both ends have their local clocks synchronized, it is recommended to 
+    use a time window that does not exceed 30 seconds.
+
+Nonce: 128 bits.
+    Cryptographically secure random number that the receiving end should store
+    until the time window for the received timestamps expires. Servers MUST 
+    reject any packet whose nonce value has been seen in a previous 
+    authentication that took place inside such time window. Servers may safely
+    discard the nonce once the window expires.
+
+User Name: 128 bits.
+    This field may be used to store a user name. The meaning of this data is 
+    left unspecified. Implementations may choose to restrict access to certain
+    port ranges to particular users, etc. If no user name is specified, the 
+    field should be set to zero. Otherwise, the user name MUST be specified
+    using UTF-8 encoding, MUST only contain printable ASCII characters and MUST 
+    be NULL-terminated, this is, a byte with value 0x00 MUST be appended at the 
+    end of the name, except when its length already takes the full 128 bits. 
+
+User Data: 224 bits.
+    This field may store any kind of client generated data. The meaning of this
+    data is implementation-dependant. Implementations may choose to interpret 
+    it as additional authentication data for the specified user name, or for 
+    any other purpose.
+
+Message Authentication Code: 256 bits.
+    This field contains the message authentication code that provides the 
+    authentication and integrity properties. The algorithm to be used should
+    be HMAC-SHA256.
