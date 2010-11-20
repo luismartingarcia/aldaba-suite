@@ -39,13 +39,15 @@
  * Things that have NOT been done yet                                        *
  *****************************************************************************/
 
-* URGENT: Improve random number seeding.
-* write wireshark dissector for PK and SPA protos.
+* Write a basic iptables skeleton for the aldaba_forward.sh script.
+
 * Make sure things like -p3/udp -v9 -p4 --forward are not allowed by the client.
   Currently the server discards SPA packets where the two knock port don't have
   the same protocol, but it's output looks like it hanged.
         |_Valid SPA authentication received [
     (returns OP_FAILURE before printing the whole sentence)
+
+* Write wireshark dissector for PK and SPA protos.
 
 /*****************************************************************************
  * Things that have been solved already                                      *
