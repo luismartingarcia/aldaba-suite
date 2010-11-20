@@ -2,12 +2,12 @@
 .\"     Title: aldaba
 .\"    Author: [see the "Authors" section]
 .\" Generator: DocBook XSL Stylesheets v1.75.1 <http://docbook.sf.net/>
-.\"      Date: 11/19/2010
+.\"      Date: 11/20/2010
 .\"    Manual: Aldaba Reference Guide
 .\"    Source: Aldaba
 .\"  Language: English
 .\"
-.TH "ALDABA" "8" "11/19/2010" "Aldaba" "Aldaba Reference Guide"
+.TH "ALDABA" "8" "11/20/2010" "Aldaba" "Aldaba Reference Guide"
 .\" -----------------------------------------------------------------
 .\" * set default formatting
 .\" -----------------------------------------------------------------
@@ -38,7 +38,7 @@ The following option summary is the output of Aldaba Client when run with no arg
 .RS 4
 .\}
 .nf
-  Aldaba Knocking Client 0\&.2\&.0 \- (C) Luis MartinGarcia, 2010\&.
+  Aldaba Knocking Client 0\&.2\&.1 \- (C) Luis MartinGarcia, 2010\&.
   http://www\&.aldabaknocking\&.com || aldabaknocking@gmail\&.com
 
   Usage: aldaba <\-P passphrase> <target_host> [Options]]
@@ -49,18 +49,19 @@ The following option summary is the output of Aldaba Client when run with no arg
   Options:
      \-\-pk, \-\-spa              : Technique ["PK", "SPA"(default)]\&.
      \-p, \-\-port <port>        : Port to open/close on the remote host [integer]\&.
-     \-S, \-\-knock\-ip   <addr>  : IP to authorize on the remote host [IP or host]\&.
+     \-S, \-\-knock\-ip <addr>    : IP to authorize on the remote host [IP or host]\&.
      \-f, \-\-field <field>      : Covert channel protocol header field\&.
-     \-a, \-\-action     <actn>  : Action taken by Aldaba server ["Open", "Close"]\&.
+     \-a, \-\-action <type>      : Action taken by Aldaba server ["Open", "Close"]\&.
      \-t, \-\-target\-ports <seq> : Sequence of dest ports [comma separated list]\&.
-     \-c  \-\-cipher     <alg>   : Encryption algorithm ["Twofish", "AES", \&.\&.\&.]
-     \-i, \-\-interface  <name>  : Network interface to obtain IP address from\&.
-     \-s, \-\-source\-ip  <addr>  : Source IP address [IP or hostname]\&.
-     \-d, \-\-decoys     <addr>  : List of decoys [comma separated list of IPs]\&.
-     \-n  \-\-noise      <levl>  : Number of extra packets to be sent [integer]\&.
-     \-v, \-\-verbosity  <levl>  : Level of verbosity [0\-9]\&.
-     \-4, \-\-ipv4               : Use IP version 4 addresses
-     \-6, \-\-ipv6               : Use IP version 6 addresses
+     \-c  \-\-cipher <algorithm> : Encryption algorithm ["Twofish", "AES", \&.\&.\&.]
+     \-i, \-\-interface <name>   : Network interface to obtain IP address from\&.
+     \-s, \-\-source\-ip <addr>   : Source IP address [IP or hostname]\&.
+     \-d, \-\-decoys <addr>      : List of decoys [comma separated list of IPs]\&.
+     \-n  \-\-noise <level>      : Number of extra packets to be sent [integer]\&.
+     \-v, \-\-verbosity <level>  : Level of verbosity [0\-9]\&.
+     \-4, \-\-ipv4               : Use IP version 4 addresses\&.
+     \-6, \-\-ipv6               : Use IP version 6 addresses\&.
+     \-C, \-\-config <path>      : Read configuration from file\&.
      \-h, \-\-help               : Display usage information\&.
      \-V, \-\-version            : Display current version\&.
 
@@ -274,7 +275,7 @@ Decreases the verbosity level, causing Aldaba to print less information during i
 \fB\-C \fR\fB\fIpath\fR\fR, \fB\-\-config \fR\fB\fIpath\fR\fR (Read configuration from file)
 .RS 4
 Tells Aldaba client to read configuration from a specific configuration file\&. Supplied path may be absolute or relative to the current directory\&. Alternatively, it is possible to run the client simply like "aldaba
-\fBstart\fR", what makes it read the default configuration file (typically stored in /etc/aldaba/conf/aldaba\&.conf or /usr/local/etc/aldaba/conf/aldaba\&.conf
+\fBstart\fR", what makes it read the default configuration file (typically stored in /etc/aldaba/conf/aldaba\&.conf or /usr/local/etc/aldaba/conf/aldaba\&.conf)
 .RE
 .PP
 \fB\-V\fR, \fB\-\-version\fR (Display Version)
