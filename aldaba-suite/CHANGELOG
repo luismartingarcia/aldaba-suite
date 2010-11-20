@@ -12,13 +12,18 @@
  *                                                                     *
  ************************************************************************/
 
-Version 0.2.1 ???, 2010.
+Version 0.2.1 Nov 20, 2010.
 
+  - Added support for IP address forwarding to the SPA protocol. This lets
+    Aldaba Server act as a NAT traversal facilitator. It should be noted that
+    this change breaks backward compatibility with the implementation of SPA
+    in release 0.2.0.
   - Added support for configuration files in both client and server. Now
     default config files are installed and read when running "aldaba start" or
     "aldabad start". Also, custom config files may be supplied through the
     command line using the --config parameter.
   - Fixed a bug in verbosity level specification.
+  
 
 Version 0.2.0 Nov 15, 2010.
 
