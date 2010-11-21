@@ -411,12 +411,12 @@
 
                             <varlistentry>
                                 <term>Level 4</term>
-                                <para> Information about knocking attempts .</para>
+                                <para> Information about knocking attempts.</para>
                             </varlistentry>
 
                             <varlistentry>
                                 <term>Level 5</term>
-                                <para> Information about current configuration .</para>
+                                <para> Information about current configuration.</para>
                             </varlistentry>
 
                             <varlistentry>
