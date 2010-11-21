@@ -24,7 +24,6 @@
 
     <refsect1 id="aldabad-man-description">
         <title>Description</title>
-        <indexterm><primary>Aldaba</primary><secondary>description of</secondary></indexterm>
         <para>
             Aldaba is an open-source Port Knocking and Single Packet Authorization
             system. This document describes the latest version of Aldaba Server,
@@ -42,13 +41,8 @@
             with no arguments. It's a quick cheatsheet that lists the most common options.
         </para>
 
-        <indexterm class="startofrange" id="aldaba-usage-indexterm"><primary sortas="#">summary of options (Aldaba)</primary></indexterm>
-        <indexterm class="startofrange" id="aldaba-usage-aldaba-indexterm"><primary>command-line options</primary><secondary>of Aldaba</secondary></indexterm>
+        <screen><xi:include href="aldabad-usage.txt" parse="text" xmlns:xi="http://www.w3.org/2001/XInclude" /></screen>
 
-        &aldabad-usage;
-
-        <indexterm class="endofrange" startref="aldaba-usage-aldaba-indexterm"/>
-        <indexterm class="endofrange" startref="aldaba-usage-indexterm"/>
 
     </refsect1>
 
