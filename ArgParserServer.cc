@@ -259,7 +259,7 @@ int ArgParserServer::display_help(){
   Aldaba Knocking Server %s - (C) Luis MartinGarcia, 2010.\n\
   http://www.aldabaknocking.com || aldabaknocking@gmail.com\n\
 \n\
-  Usage: aldabad <-P passphrase> [Options]\n\
+  Usage: aldabad [Options]\n\
 \n\
   Parameters:\n\
      -P, --passphrase <pass>  : Passphrase used to generate the crypto keys.\n\

@@ -280,11 +280,13 @@
                         one for message encryption).
                         It must be at least 8 characters long and have a maximum
                         of 256 characters. If it contains spaces, it should be 
-                        enclosed in double quotes (e.g: -k "Use this to encrypt
+                        enclosed in double quotes (e.g: -P "Use this to encrypt
                         it all"). Special characters should be escaped using a 
                         backslash. Passphrases longer than 256 characters are
                         valid but will be truncated. Cryptographic keys are
                         derived from this passphrase using the PBKDF2 algorithm.
+                        If no passphrase is supplied, it will be asked
+                        interactively (providing interactive mode is set).
                     </para>
                 </listitem>
             </varlistentry>

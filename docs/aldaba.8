@@ -2,12 +2,12 @@
 .\"     Title: aldaba
 .\"    Author: [see the "Authors" section]
 .\" Generator: DocBook XSL Stylesheets v1.75.1 <http://docbook.sf.net/>
-.\"      Date: 11/20/2010
-.\"    Manual: Aldaba Reference Guide
+.\"      Date: 11/26/2010
+.\"    Manual: Aldaba Client Reference Guide
 .\"    Source: Aldaba
 .\"  Language: English
 .\"
-.TH "ALDABA" "8" "11/20/2010" "Aldaba" "Aldaba Reference Guide"
+.TH "ALDABA" "8" "11/26/2010" "Aldaba" "Aldaba Client Reference Guide"
 .\" -----------------------------------------------------------------
 .\" * set default formatting
 .\" -----------------------------------------------------------------
@@ -22,17 +22,14 @@
 aldaba \- Single Packet Authorization and Port Knocking client
 .SH "SYNOPSIS"
 .HP \w'\fBaldaba\fR\ 'u
-\fBaldaba\fR [\fIOptions\fR] {\fItargets\fR}
+\fBaldaba\fR [\fIOptions\fR] {\fItarget\fR}
 .SH "DESCRIPTION"
-.\" Aldaba: description of
 .PP
 Aldaba is an open\-source Port Knocking and Single Packet Authorization system\&. This document describes the latest version of Aldaba Client, part of the Aldaba Suite, available from
 \m[blue]\fB\%http://www.aldabaknocking.com\fR\m[]
 .SH "OPTIONS SUMMARY"
 .PP
 The following option summary is the output of Aldaba Client when run with no arguments\&. It\'s a quick cheatsheet that lists the most common options\&.
-.\" summary of options (Aldaba)
-.\" command-line options: of Aldaba
 .sp
 .if n \{\
 .RS 4
@@ -41,7 +38,7 @@ The following option summary is the output of Aldaba Client when run with no arg
   Aldaba Knocking Client 0\&.2\&.1 \- (C) Luis MartinGarcia, 2010\&.
   http://www\&.aldabaknocking\&.com || aldabaknocking@gmail\&.com
 
-  Usage: aldaba <\-P passphrase> <target_host> [Options]]
+  Usage: aldaba [Options] {Target Host}
 
   Parameters:
      <target_host>            : Name or address of the target server
@@ -75,8 +72,6 @@ The following option summary is the output of Aldaba Client when run with no arg
 .if n \{\
 .RE
 .\}
-.\" 
-.\" 
 .SH "MODES OF OPERATION"
 .PP
 .PP
@@ -206,7 +201,7 @@ Strong authentication provides a much more secure and robust client authenticati
 .PP
 \fB\-P \fR\fB\fIstring\fR\fR, \fB\-\-passphase \fR\fB\fIstring\fR\fR (Set passphrase)
 .RS 4
-Passphrase to be used to generate the necessary cryptographic keys (one for message authentication and one for message encryption)\&. It must be at least 8 characters long and have a maximum of 256 characters\&. If it contains spaces, it should be enclosed in double quotes (e\&.g: \-k "Use this to encrypt it all")\&. Special characters should be escaped using a backslash\&. Passphrases longer than 256 characters are valid but will be truncated\&. Cryptographic keys are derived from this passphrase using the PBKDF2 algorithm\&.
+Passphrase to be used to generate the necessary cryptographic keys (one for message authentication and one for message encryption)\&. It must be at least 8 characters long and have a maximum of 256 characters\&. If it contains spaces, it should be enclosed in double quotes (e\&.g: \-k "Use this to encrypt it all")\&. Special characters should be escaped using a backslash\&. Passphrases longer than 256 characters are valid but will be truncated\&. Cryptographic keys are derived from this passphrase using the PBKDF2 algorithm\&. If no passphrase is supplied, it will be asked interactively\&.
 .RE
 .PP
 \fB\-c\fR, \fB\-\-cipher\fR (Set encryption algorithm)
@@ -290,7 +285,7 @@ Displays help information and quits\&.
 .SH "BUGS"
 .PP
 Please, report any bugs you find through the Aldaba development mailing list or directly to aldabaknocking@gmail\&.com\&. Please try to include as much information as possible\&. In general it\'s a good idea to include the output of the command "uname \-a", the version of Aldaba you are using and a brief description of the topology of the network you are using Aldaba from (subnets, routers, firewalls, etc)\&. See
-\m[blue]\fB\%http://http://www.aldabaknocking.com/development\fR\m[]
+\m[blue]\fB\%http://www.aldabaknocking.com/development\fR\m[]
 for more details\&.
 .SH "AUTHORS"
 .PP

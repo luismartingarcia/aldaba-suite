@@ -1,7 +1,7 @@
   Aldaba Knocking Server 0.2.1 - (C) Luis MartinGarcia, 2010.
   http://www.aldabaknocking.com || aldabaknocking@gmail.com
 
-  Usage: aldabad <-P passphrase> [Options]
+  Usage: aldabad [Options]
 
   Parameters:
      -P, --passphrase <pass>  : Passphrase used to generate the crypto keys.
