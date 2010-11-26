@@ -522,44 +522,12 @@ int ClientOps::validateConfiguration(){
   IPAddress knock_addr;
   IPAddress source_addr;
 
- /*-------------------------*
-  *  MANDATORY PARAMETERS   *
-  *-------------------------*/
-  if(!this->issetPassphrase()){
-    fatal(OUT_2,"No passphrase supplied. Please supply one.");
-  }else{
-      this->computeCipherKey();
-      this->computeMacKey();
-  }
-
   /* -> If no IP version is set, go with IP version 4 */
   if( !this->issetIPVersion() )
     this->setIPVersion(AF_INET);
 
   if(!this->issetHostname())
     fatal(OUT_2, "No target host was specified. Please supply one.");
-
-
-
-//   /* If no encryption key was supplied, ask interactively for a passphrase */
-//  char buffer[MAX_PASSPHRASE_LEN +1];
-//  if( !this->issetCipherKey() ){
-//    memset(buffer, 0, MAX_PASSPHRASE_LEN +1);
-//    printf("Please enter your passphrase key: ");
-//    gets_noecho_stars(buffer, MAX_PASSPHRASE_LEN+1);
-//    printf("\n\n");
-//
-//    if( strlen(buffer) < MIN_PASSPHRASE_LEN )
-//        fatal(OUT_2, "Supplied passphrase is too short. Passphrases need to contain at least %d characters", MIN_PASSPHRASE_LEN );
-//    else{
-//        if ( this->setCipherKey(buffer)!=OP_SUCCESS )
-//           fatal(OUT_2, "Failed to derive encryption key from passphrase");
-//    }
-//  }
-
-
-  /* Time for contraints! */
-
 
  /*----------------------------*
   * OPERATION MODE (PK or SPA) *
@@ -798,6 +766,23 @@ int ClientOps::validateConfiguration(){
   /* If user requested noise, generate some random port numbers */
   if(this->issetNoisePackets() )
     this->generateNoisePorts();
+
+  /* If no passphrase was supplied, ask interactively */
+  if(!this->issetPassphrase()){
+    size_t read_bytes=0;
+    char buffer[MAX_PASSPHRASE_LEN];
+    memset(buffer, 0, MAX_PASSPHRASE_LEN);
+    printf("Please enter the passphrase: ");
+    read_password(buffer, MAX_PASSPHRASE_LEN-1, &read_bytes);
+    printf("\n");
+    if( strlen(buffer) < MIN_PASSPHRASE_LEN ){
+        fatal(OUT_2, "Supplied passphrase is too short. Passphrases need to contain at least %d characters", MIN_PASSPHRASE_LEN );
+    }else{
+        this->setPassphrase(buffer);
+    }
+  }
+  this->computeCipherKey();
+  this->computeMacKey();
 
   return OP_SUCCESS;
 } /* End of validateConfiguration() */
