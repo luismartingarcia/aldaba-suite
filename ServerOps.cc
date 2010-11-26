@@ -166,17 +166,7 @@ bool ServerOps::issetBPF(){
 
 int ServerOps::validateConfiguration(){
 
- /*-------------------------*
-  *  MANDATORY PARAMETERS   *
-  *-------------------------*/
-  if(!this->issetPassphrase()){
-    fatal(OUT_2,"No passphrase supplied. Please supply one.");
-  }else{
-      this->computeCipherKey();
-      this->computeMacKey();
-  }
-
-  /* -> If no IP version is set, go with IP version 4 */
+ /* -> If no IP version is set, go with IP version 4 */
  if( !this->issetIPVersion() )
     this->setIPVersion(AF_INET);
 
@@ -306,6 +296,26 @@ int ServerOps::validateConfiguration(){
     else
         this->setInterface(iface);
     }
+  /* If no passphrase was supplied, ask interactively if possible */
+  if(!this->issetPassphrase()){
+    if( this->getDaemonize()==false){
+        size_t read_bytes=0;
+        char buffer[MAX_PASSPHRASE_LEN];
+        memset(buffer, 0, MAX_PASSPHRASE_LEN);
+        printf("Please enter the passphrase: ");
+        read_password(buffer, MAX_PASSPHRASE_LEN-1, &read_bytes);
+        printf("\n");
+        if( strlen(buffer) < MIN_PASSPHRASE_LEN ){
+            fatal(OUT_2, "Supplied passphrase is too short. Passphrases need to contain at least %d characters", MIN_PASSPHRASE_LEN );
+        }else{
+            this->setPassphrase(buffer);
+        }
+      }else{
+          fatal(OUT_2, "Aldaba Server cannot be run in daemon mode without supplying a passphrase through the command line.");
+      }
+  }
+  this->computeCipherKey();
+  this->computeMacKey();
 
   return OP_SUCCESS;
 } /* End of validateConfiguration() */

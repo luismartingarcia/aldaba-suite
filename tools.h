@@ -133,7 +133,7 @@ int url_encode(const char *src, char *to, size_t to_len);
 int url_decode(const char *src, char *to, size_t to_len);
 bool starts_with(const char *string, const char *start);
 size_t read_until(int fd, char *buff, size_t bufflen, const char *delimiter);
-
+int read_password(char *dest, size_t dest_len, size_t *final_read_bytes);
 int set_descriptor_blocking_state(int fd, bool blocking);
 
 #endif /* __TOOLS_H__ */
