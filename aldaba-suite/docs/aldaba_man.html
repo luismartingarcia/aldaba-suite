@@ -4,7 +4,7 @@ Content-type: text/html
 <HTML><HEAD><TITLE>Man page of ALDABA</TITLE>
 </HEAD><BODY>
 <H1>ALDABA</H1>
-Section: Aldaba Reference Guide (8)<BR>Updated: 11/20/2010<BR><A HREF="#index">Index</A>
+Section: Aldaba Client Reference Guide (8)<BR>Updated: 11/26/2010<BR><A HREF="#index">Index</A>
 <A HREF="/cgi-bin/man/man2html">Return to Main Contents</A><HR>
 
 
@@ -26,11 +26,10 @@ aldaba - Single Packet Authorization and Port Knocking client
 
 <DL COMPACT>
 <DT>
-<B>aldaba</B> [<I>Options</I>] {<I>targets</I>}
+<B>aldaba</B> [<I>Options</I>] {<I>target</I>}
 </DL>
 <A NAME="lbAD">&nbsp;</A>
 <H2>DESCRIPTION</H2>
-
 
 <P>
 
@@ -42,8 +41,6 @@ m[blue]<B><A HREF="http://www.aldabaknocking.com">http://www.aldabaknocking.com<
 <P>
 
 The following option summary is the output of Aldaba Client when run with no arguments. It's a quick cheatsheet that lists the most common options.
-
-
 <P>
 <DL COMPACT><DT><DD>
 
@@ -53,7 +50,7 @@ The following option summary is the output of Aldaba Client when run with no arg
   Aldaba Knocking Client 0.2.1 - (C) Luis MartinGarcia, 2010.
   <A HREF="http://www.aldabaknocking.com">http://www.aldabaknocking.com</A> || <A HREF="mailto:aldabaknocking@gmail.com">aldabaknocking@gmail.com</A>
 
-  Usage: aldaba &lt;-P passphrase&gt; &lt;target_host&gt; [Options]]
+  Usage: aldaba [Options] {Target Host}
 
   Parameters:
      &lt;target_host&gt;            : Name or address of the target server
@@ -86,8 +83,6 @@ The following option summary is the output of Aldaba Client when run with no arg
 </PRE>
 
 </DL>
-
-
 
 
 
@@ -279,7 +274,7 @@ Strong authentication provides a much more secure and robust client authenticati
 
 <B>-P </B><B></B><I>string</I>, <B>--passphase </B><B></B><I>string</I> (Set passphrase)
 <DL COMPACT><DT><DD>
-Passphrase to be used to generate the necessary cryptographic keys (one for message authentication and one for message encryption). It must be at least 8 characters long and have a maximum of 256 characters. If it contains spaces, it should be enclosed in double quotes (e.g: -k &quot;Use this to encrypt it all&quot;). Special characters should be escaped using a backslash. Passphrases longer than 256 characters are valid but will be truncated. Cryptographic keys are derived from this passphrase using the PBKDF2 algorithm.
+Passphrase to be used to generate the necessary cryptographic keys (one for message authentication and one for message encryption). It must be at least 8 characters long and have a maximum of 256 characters. If it contains spaces, it should be enclosed in double quotes (e.g: -k &quot;Use this to encrypt it all&quot;). Special characters should be escaped using a backslash. Passphrases longer than 256 characters are valid but will be truncated. Cryptographic keys are derived from this passphrase using the PBKDF2 algorithm. If no passphrase is supplied, it will be asked interactively.
 </DL>
 
 <P>
@@ -401,7 +396,7 @@ Displays help information and quits.
 <P>
 
 Please, report any bugs you find through the Aldaba development mailing list or directly to <A HREF="mailto:aldabaknocking@gmail.com">aldabaknocking@gmail.com</A>. Please try to include as much information as possible. In general it's a good idea to include the output of the command &quot;uname -a&quot;, the version of Aldaba you are using and a brief description of the topology of the network you are using Aldaba from (subnets, routers, firewalls, etc). See
-m[blue]<B><A HREF="http://http://www.aldabaknocking.com/development">http://http://www.aldabaknocking.com/development</A></B>m[]
+m[blue]<B><A HREF="http://www.aldabaknocking.com/development">http://www.aldabaknocking.com/development</A></B>m[]
 for more details.
 <A NAME="lbAO">&nbsp;</A>
 <H2>AUTHORS</H2>
@@ -435,6 +430,6 @@ Luis MartinGarcia
 This document was created by
 <A HREF="/cgi-bin/man/man2html">man2html</A>,
 using the manual pages.<BR>
-Time: 15:26:25 GMT, November 20, 2010
+Time: 12:41:46 GMT, November 26, 2010
 </BODY>
 </HTML>

@@ -2,12 +2,12 @@
 .\"     Title: aldabad
 .\"    Author: [see the "Authors" section]
 .\" Generator: DocBook XSL Stylesheets v1.75.1 <http://docbook.sf.net/>
-.\"      Date: 11/20/2010
-.\"    Manual: Aldaba Reference Guide
+.\"      Date: 11/26/2010
+.\"    Manual: Aldaba Server Reference Guide
 .\"    Source: Aldaba
 .\"  Language: English
 .\"
-.TH "ALDABAD" "8" "11/20/2010" "Aldaba" "Aldaba Reference Guide"
+.TH "ALDABAD" "8" "11/26/2010" "Aldaba" "Aldaba Server Reference Guide"
 .\" -----------------------------------------------------------------
 .\" * set default formatting
 .\" -----------------------------------------------------------------
@@ -24,15 +24,12 @@ aldabad \- Single Packet Authorization and Port Knocking server
 .HP \w'\fBaldabad\fR\ 'u
 \fBaldabad\fR [\fIOptions\fR]
 .SH "DESCRIPTION"
-.\" Aldaba: description of
 .PP
 Aldaba is an open\-source Port Knocking and Single Packet Authorization system\&. This document describes the latest version of Aldaba Server, part of the Aldaba Suite, available from
 \m[blue]\fB\%http://www.aldabaknocking.com\fR\m[]
 .SH "OPTIONS SUMMARY"
 .PP
 The following option summary is the output of Aldaba Server when run with no arguments\&. It\'s a quick cheatsheet that lists the most common options\&.
-.\" summary of options (Aldaba)
-.\" command-line options: of Aldaba
 .sp
 .if n \{\
 .RS 4
@@ -41,7 +38,7 @@ The following option summary is the output of Aldaba Server when run with no arg
   Aldaba Knocking Server 0\&.2\&.1 \- (C) Luis MartinGarcia, 2010\&.
   http://www\&.aldabaknocking\&.com || aldabaknocking@gmail\&.com
 
-  Usage: aldabad <\-P passphrase> [Options]
+  Usage: aldabad [Options]
 
   Parameters:
      \-P, \-\-passphrase <pass>  : Passphrase used to generate the crypto keys\&.
@@ -72,8 +69,6 @@ The following option summary is the output of Aldaba Server when run with no arg
 .if n \{\
 .RE
 .\}
-.\" 
-.\" 
 .SH "MODES OF OPERATION"
 .PP
 .PP
@@ -163,7 +158,7 @@ Strong authentication provides a much more secure and robust client authenticati
 .PP
 \fB\-P \fR\fB\fIstring\fR\fR, \fB\-\-passphase \fR\fB\fIstring\fR\fR (Set passphrase)
 .RS 4
-Passphrase to be used to generate the necessary cryptographic keys (one for message authentication and one for message encryption)\&. It must be at least 8 characters long and have a maximum of 256 characters\&. If it contains spaces, it should be enclosed in double quotes (e\&.g: \-k "Use this to encrypt it all")\&. Special characters should be escaped using a backslash\&. Passphrases longer than 256 characters are valid but will be truncated\&. Cryptographic keys are derived from this passphrase using the PBKDF2 algorithm\&.
+Passphrase to be used to generate the necessary cryptographic keys (one for message authentication and one for message encryption)\&. It must be at least 8 characters long and have a maximum of 256 characters\&. If it contains spaces, it should be enclosed in double quotes (e\&.g: \-P "Use this to encrypt it all")\&. Special characters should be escaped using a backslash\&. Passphrases longer than 256 characters are valid but will be truncated\&. Cryptographic keys are derived from this passphrase using the PBKDF2 algorithm\&. If no passphrase is supplied, it will be asked interactively (providing interactive mode is set)\&.
 .RE
 .PP
 \fB\-c\fR, \fB\-\-cipher\fR (Set encryption algorithm)
@@ -238,12 +233,12 @@ Warnings\&.
 .PP
 Level 4
 .RS 4
-Information about knocking attempts \&.
+Information about knocking attempts\&.
 .RE
 .PP
 Level 5
 .RS 4
-Information about current configuration \&.
+Information about current configuration\&.
 .RE
 .PP
 Level 6
@@ -363,7 +358,7 @@ Displays help information and quits\&.
 .SH "BUGS"
 .PP
 Please, report any bugs you find through the Aldaba development mailing list or directly to aldabaknocking@gmail\&.com\&. Please try to include as much information as possible\&. In general it\'s a good idea to include the output of the command "uname \-a", the version of Aldaba you are using and a brief description of the topology of the network you are using Aldaba from (subnets, routers, firewalls, etc)\&. See
-\m[blue]\fB\%http://http://www.aldabaknocking.com/development\fR\m[]
+\m[blue]\fB\%http://www.aldabaknocking.com/development\fR\m[]
 for more details\&.
 .SH "AUTHORS"
 .PP

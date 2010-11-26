@@ -19,7 +19,7 @@
                 <replaceable>Options</replaceable>
             </arg>
             <arg choice="req" rep="norepeat">
-                <replaceable>targets</replaceable>
+                <replaceable>target</replaceable>
             </arg>
         </cmdsynopsis>
     </refsynopsisdiv>
@@ -425,6 +425,8 @@
                         backslash. Passphrases longer than 256 characters are
                         valid but will be truncated. Cryptographic keys are
                         derived from this passphrase using the PBKDF2 algorithm.
+                        If no passphrase is supplied, it will be asked
+                        interactively.
                     </para>
                 </listitem>
             </varlistentry>

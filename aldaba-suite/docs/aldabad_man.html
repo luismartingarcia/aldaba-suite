@@ -4,7 +4,7 @@ Content-type: text/html
 <HTML><HEAD><TITLE>Man page of ALDABAD</TITLE>
 </HEAD><BODY>
 <H1>ALDABAD</H1>
-Section: Aldaba Reference Guide (8)<BR>Updated: 11/20/2010<BR><A HREF="#index">Index</A>
+Section: Aldaba Server Reference Guide (8)<BR>Updated: 11/26/2010<BR><A HREF="#index">Index</A>
 <A HREF="/cgi-bin/man/man2html">Return to Main Contents</A><HR>
 
 
@@ -31,7 +31,6 @@ aldabad - Single Packet Authorization and Port Knocking server
 <A NAME="lbAD">&nbsp;</A>
 <H2>DESCRIPTION</H2>
 
-
 <P>
 
 <DD>Aldaba is an open-source Port Knocking and Single Packet Authorization system. This document describes the latest version of Aldaba Server, part of the Aldaba Suite, available from
@@ -42,8 +41,6 @@ m[blue]<B><A HREF="http://www.aldabaknocking.com">http://www.aldabaknocking.com<
 <P>
 
 The following option summary is the output of Aldaba Server when run with no arguments. It's a quick cheatsheet that lists the most common options.
-
-
 <P>
 <DL COMPACT><DT><DD>
 
@@ -53,7 +50,7 @@ The following option summary is the output of Aldaba Server when run with no arg
   Aldaba Knocking Server 0.2.1 - (C) Luis MartinGarcia, 2010.
   <A HREF="http://www.aldabaknocking.com">http://www.aldabaknocking.com</A> || <A HREF="mailto:aldabaknocking@gmail.com">aldabaknocking@gmail.com</A>
 
-  Usage: aldabad &lt;-P passphrase&gt; [Options]
+  Usage: aldabad [Options]
 
   Parameters:
      -P, --passphrase &lt;pass&gt;  : Passphrase used to generate the crypto keys.
@@ -83,8 +80,6 @@ The following option summary is the output of Aldaba Server when run with no arg
 </PRE>
 
 </DL>
-
-
 
 
 
@@ -220,7 +215,7 @@ Strong authentication provides a much more secure and robust client authenticati
 
 <B>-P </B><B></B><I>string</I>, <B>--passphase </B><B></B><I>string</I> (Set passphrase)
 <DL COMPACT><DT><DD>
-Passphrase to be used to generate the necessary cryptographic keys (one for message authentication and one for message encryption). It must be at least 8 characters long and have a maximum of 256 characters. If it contains spaces, it should be enclosed in double quotes (e.g: -k &quot;Use this to encrypt it all&quot;). Special characters should be escaped using a backslash. Passphrases longer than 256 characters are valid but will be truncated. Cryptographic keys are derived from this passphrase using the PBKDF2 algorithm.
+Passphrase to be used to generate the necessary cryptographic keys (one for message authentication and one for message encryption). It must be at least 8 characters long and have a maximum of 256 characters. If it contains spaces, it should be enclosed in double quotes (e.g: -P &quot;Use this to encrypt it all&quot;). Special characters should be escaped using a backslash. Passphrases longer than 256 characters are valid but will be truncated. Cryptographic keys are derived from this passphrase using the PBKDF2 algorithm. If no passphrase is supplied, it will be asked interactively (providing interactive mode is set).
 </DL>
 
 <P>
@@ -324,14 +319,14 @@ Warnings.
 
 Level 4
 <DL COMPACT><DT><DD>
-Information about knocking attempts .
+Information about knocking attempts.
 </DL>
 
 <P>
 
 Level 5
 <DL COMPACT><DT><DD>
-Information about current configuration .
+Information about current configuration.
 </DL>
 
 <P>
@@ -502,7 +497,7 @@ Displays help information and quits.
 <P>
 
 Please, report any bugs you find through the Aldaba development mailing list or directly to <A HREF="mailto:aldabaknocking@gmail.com">aldabaknocking@gmail.com</A>. Please try to include as much information as possible. In general it's a good idea to include the output of the command &quot;uname -a&quot;, the version of Aldaba you are using and a brief description of the topology of the network you are using Aldaba from (subnets, routers, firewalls, etc). See
-m[blue]<B><A HREF="http://http://www.aldabaknocking.com/development">http://http://www.aldabaknocking.com/development</A></B>m[]
+m[blue]<B><A HREF="http://www.aldabaknocking.com/development">http://www.aldabaknocking.com/development</A></B>m[]
 for more details.
 <A NAME="lbAN">&nbsp;</A>
 <H2>AUTHORS</H2>
@@ -535,6 +530,6 @@ Luis MartinGarcia
 This document was created by
 <A HREF="/cgi-bin/man/man2html">man2html</A>,
 using the manual pages.<BR>
-Time: 15:26:27 GMT, November 20, 2010
+Time: 12:41:47 GMT, November 26, 2010
 </BODY>
 </HTML>

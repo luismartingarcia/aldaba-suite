@@ -319,7 +319,7 @@ const char *msg="\
   Aldaba Knocking Client %s - (C) Luis MartinGarcia, 2010.\n\
   http://www.aldabaknocking.com || aldabaknocking@gmail.com\n\
 \n\
-  Usage: aldaba <-P passphrase> <target_host> [Options]]\n\
+  Usage: aldaba [Options] {Target Host}\n\
 \n\
   Parameters:\n\
      <target_host>            : Name or address of the target server\n\

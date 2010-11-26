@@ -1,7 +1,7 @@
   Aldaba Knocking Client 0.2.1 - (C) Luis MartinGarcia, 2010.
   http://www.aldabaknocking.com || aldabaknocking@gmail.com
 
-  Usage: aldaba <-P passphrase> <target_host> [Options]]
+  Usage: aldaba [Options] {Target Host}
 
   Parameters:
      <target_host>            : Name or address of the target server
