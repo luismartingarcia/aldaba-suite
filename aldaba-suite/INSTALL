@@ -69,7 +69,7 @@
 | 3. CODE DOCUMENTATION  |
 +------------------------+
 
-Aldaba's soruce code is commented using Doxygen markup tags. To generate the 
+Aldaba's source code is commented using Doxygen markup tags. To generate the 
 documentation install doxygen in your system and run "doxygen Doxyfile" from
 directory aldaba-suite. Documentation will be generated in HTML format and will
 be placed in directory "../aldaba-doc/doxygen-doc"
