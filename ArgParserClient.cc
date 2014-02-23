@@ -67,11 +67,8 @@ ArgParserClient::~ArgParserClient() {
 
 int ArgParserClient::parse_arguments(int argc, char *argv[], ClientOps *opt) {
   int option_index=0;
-  u8 aux8=0;
-  u16 aux16=0;
-  u32 aux32=0;
   IPAddress auxIP;
-  int arg=NULL;
+  int arg=0;
 
   if(opt==NULL)
     fatal(OUT_2, "%s(): NULL parameter supplied", __func__);
@@ -156,8 +153,6 @@ int ArgParserClient::parse_arguments(int argc, char *argv[], ClientOps *opt) {
 
  /* Iterate over the paramter list and parse those args  */
  while((arg = getopt_long_only(argc,argv,"46A:a:c:C:d:f:F:hi:K:l::n:P:p:q::S:t:t:Vv::", long_options, &option_index)) != EOF) {
-
-  aux8=aux16=aux32=0;
 
   switch(arg) {
 

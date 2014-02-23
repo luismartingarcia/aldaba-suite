@@ -263,12 +263,12 @@ u8 *PKClient::build_packet(u32 *final_len, IPAddress *src_host, IPAddress *targe
   TCPHeader t;
   static u8 pkt[2048];
   u32 pkt_len=0;
-  u32 chunk_len=0;
+  //u32 chunk_len=0;
 
   if(chunk==NULL)
      fatal(OUT_2, "%s(): NULL parameter supplied\n", __func__);
 
-  chunk_len=field2len(field);
+  //chunk_len=field2len(field);
 
   /* Craft TCP Header. First set up all default values, then store knock data */
   t.setSrcPort((1024 + ( o.rand.getRandom16()%(65535-1024) )));
