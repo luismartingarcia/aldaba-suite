@@ -12,6 +12,20 @@
  *                                                                     *
  ************************************************************************/
 
+Version 0.2.2 Feb 23, 2014.
+
+  - Added the ability to accept incoming connections (after a successful
+    authentication) only for a period of time. By default new connections
+    from the authorized IPs are allowed for 120 seconds. After that,
+    the firewall rule is modified to only allow traffic for already 
+    established connections. Aldaba Server now provides a new command
+    line switch (-o, --open-time) to tune such time interval.
+    
+    This feature has been implemented by Sergio Ortega
+    (SergioOrtega89@gmail.com).
+    
+  - Minor changes to avoid compiler warnings.
+  
 Version 0.2.1 Nov 20, 2010.
 
   - Added support for IP address forwarding to the SPA protocol. This lets
