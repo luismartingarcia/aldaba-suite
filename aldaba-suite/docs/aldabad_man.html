@@ -4,7 +4,7 @@ Content-type: text/html
 <HTML><HEAD><TITLE>Man page of ALDABAD</TITLE>
 </HEAD><BODY>
 <H1>ALDABAD</H1>
-Section: Aldaba Server Reference Guide (8)<BR>Updated: 11/26/2010<BR><A HREF="#index">Index</A>
+Section: Aldaba Server Reference Guide (8)<BR>Updated: 02/23/2014<BR><A HREF="#index">Index</A>
 <A HREF="/cgi-bin/man/man2html">Return to Main Contents</A><HR>
 
 
@@ -56,6 +56,7 @@ The following option summary is the output of Aldaba Server when run with no arg
      -P, --passphrase &lt;pass&gt;  : Passphrase used to generate the crypto keys.
   Options:
      --pk, --spa              : Technique [&quot;PK&quot;, &quot;SPA&quot;(default)].
+     -o, --open-time &lt;secs&gt;   : Seconds while the port remains open accepting new connections.
      -t, --target-ports &lt;seq&gt; : Sequence of dest ports [comma separated list].
      -f, --field &lt;field&gt;      : Covert channel protocol header field.
      -c  --cipher &lt;algorithm&gt; : Encryption algorithm [&quot;Twofish&quot;, &quot;AES&quot;, ...]
@@ -100,7 +101,7 @@ This option tells Aldaba Server to run in SPA mode. Single Packet Authorization 
 
 <B>--pk</B> (Port Knocking Mode)
 <DL COMPACT><DT><DD>
-This option tells Aldaba Server to run in PK mode. Like SPA, Port Knocking lets users request access to a given port. However, the authentication message is transmitted stealthily, dividing it, and encoding each part in the headers of a TCP SYN packet. Port Knocking authentications are more difficult to detect from an attacker's point of view. However, the security provided by this technique is often weaker than in SPA.
+This option tells Aldaba Server to run in PaldabadK mode. Like SPA, Port Knocking lets users request access to a given port. However, the authentication message is transmitted stealthily, dividing it, and encoding each part in the headers of a TCP SYN packet. Port Knocking authentications are more difficult to detect from an attacker's point of view. However, the security provided by this technique is often weaker than in SPA.
 </DL>
 
 <A NAME="lbAG">&nbsp;</A>
@@ -479,6 +480,13 @@ Forces Aldaba Server to run interactively instead of in daemon mode. By default 
 
 <P>
 
+<B>-o </B><B></B><I>interval</I>, <B>--open-time </B><B></B><I>interval</I> (Set allowed connection window)
+<DL COMPACT><DT><DD>
+Tells Aldaba server for how long a port should be opened after a successful authentication before the firewall stops accepting new connections.
+</DL>
+
+<P>
+
 <B>-V</B>, <B>--version</B> (Display Version)
 <DL COMPACT><DT><DD>
 Displays current version and quits.
@@ -530,6 +538,6 @@ Luis MartinGarcia
 This document was created by
 <A HREF="/cgi-bin/man/man2html">man2html</A>,
 using the manual pages.<BR>
-Time: 12:41:47 GMT, November 26, 2010
+Time: 22:22:45 GMT, February 23, 2014
 </BODY>
 </HTML>

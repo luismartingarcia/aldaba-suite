@@ -61,21 +61,21 @@ int close_port(tcp_port_t port, IPAddress ip, u8 proto){
 
 
 /** Executes /etc/aldabad/aldaba_open.sh using the system() call. */
-int open_port(tcp_port_t port, IPAddress ip, u8 proto){
+int open_port(tcp_port_t port, IPAddress ip, u8 proto, int time){
   output(OUT_9, "%s()\n", __func__);
   char msg[2001];
   memset(msg, 0, sizeof(msg));
   const char *proto_str=NULL;
   if( (proto_str=portproto2str(proto))==NULL )
       return OP_FAILURE;
-  snprintf(msg, 2000, "%s/%s %d %s %s &", SCRIPTSDIR, OPEN_SCRIPT_NAME, port, proto_str, ip.toString());
+  snprintf(msg, 2000, "%s/%s %d %s %s %i &", SCRIPTSDIR, OPEN_SCRIPT_NAME, port, proto_str, ip.toString(), time);
   if( system(msg)==-1 )
       return OP_FAILURE;
   return OP_SUCCESS;
 } /* End of open_port() */
 
 
-/** Executes /etc/aldabad/aldaba_open.sh using the system() call. */
+/** Executes /etc/aldabad/aldaba_forward.sh using the system() call. */
 int forward_port(tcp_port_t from, tcp_port_t to, IPAddress ip, IPAddress fwd_ip, u8 proto){
   output(OUT_9, "%s()\n", __func__);
   char msg[2001];
@@ -91,7 +91,7 @@ int forward_port(tcp_port_t from, tcp_port_t to, IPAddress ip, IPAddress fwd_ip,
   if( system(msg)==-1 )
       return OP_FAILURE;
   return OP_SUCCESS;
-} /* End of open_port() */
+} /* End of forward_port() */
 
 
 const char *portproto2str(u8 proto){

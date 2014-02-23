@@ -308,6 +308,9 @@ using namespace std;
 #define PCAP_BUFSIZE_SPA 512       /**< Max number of bytes to capture (SPA)  */
 #define PCAP_BUFSIZE_PK 128        /**< Max number of bytes to capture (SPA)  */
 
+
+
+
 /* These are safe to play with:                                               */
 #define PCAP_OPTIMIZE 1                 /**< Optimize BPF filter code?        */
 #define DEFAULT_LOGGING_SERVER LOG_3    /**< Default level of logging         */
@@ -315,6 +318,12 @@ using namespace std;
 #define KNOCKATTEMPT_TTL_SECS 10        /**< Min number of seconds before discarding a knock in progress */
 #define KNOCKATTEMPT_TTL_USECS 0        /**< Min number of microseconds before discarding a knock in progress.(Must be less than 999 999!)*/
 #define SERVER_CONF_FILE_NAME "aldabad.conf"
+/* Number of seconds we allow incoming connections after a successful
+ * authentication (firewall opens a hole for a period of time and then 
+ * only allows traffic that belongs to establish connections) */
+#define DEFAULT_PORT_OPEN_WINDOW 120
+
+
 
 /* CLIENT SPECIFIC VALUES */
 /* General values */

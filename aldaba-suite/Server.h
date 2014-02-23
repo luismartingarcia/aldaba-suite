@@ -49,6 +49,8 @@
 int main(int argc, char *argv[]);
 void server_cleanup(void);
 void server_cleanup_signal(int signo);
+int script_init();
+int script_cleanup();
 
 
 class Server {

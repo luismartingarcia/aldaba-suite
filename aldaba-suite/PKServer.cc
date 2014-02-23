@@ -547,7 +547,7 @@ int PKServer::post_auth(PKDataStrong6 *pkdata){
 int PKServer::post_auth(tcp_port_t port, bool open, IPAddress ip){
   output(OUT_9, "%s()\n", __func__);
   if(open)
-    return open_port(port, ip, KNOCK_PORT_PROTO_ANY);
+    return open_port(port, ip, KNOCK_PORT_PROTO_ANY, o.getOpenTime());
   else
     return close_port(port, ip, KNOCK_PORT_PROTO_ANY);
 } /* End of post_auth() */

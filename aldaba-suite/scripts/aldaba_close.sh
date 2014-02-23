@@ -20,12 +20,13 @@
 # $3 is the IP address.
 # It should return 0 on success and -1 in case of error.
 
-echo "This script should close port number $1/$2 to address $3"
-exit 0;
+#echo "This script should close port number $1/$2 to address $3"
 
 # Here is an example:
-#   IPT="/sbin/iptables"
+   IPT="/sbin/iptables"
 
 #   Drop inbound packets
-#   $IPT -A INPUT -p tcp -j DROP --dport $1  --src $3 -m state --state NEW
-#   exit 0
+    echo "Removing $3:$1 rules..."
+    $IPT -w -D INPUT `$IPT -L INPUT -n --line-numbers | grep $3 | grep $1 | awk 'NR==1 {print $1}'`> /dev/null 2>&1
+    $IPT -w -D OUTPUT `$IPT -L OUTPUT -n --line-numbers | grep $3 | grep $1 | awk 'NR==1 {print $1}'`> /dev/null 2>&1
+    exit 0

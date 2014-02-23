@@ -63,6 +63,7 @@ class ArgParserServer : public ArgParser {
     static int display_help();
     static int config_file_parser(ServerOps *opt, const char * filename);
     static int process_arg_promiscuous(ServerOps *opt, const char * arg);
+    static int process_arg_open_time(ServerOps *opt, const char * arg);
     static int process_arg_daemonize(ServerOps *opt, const char * arg);
     static int process_arg_linkhdrlen(ServerOps *opt, const char * arg);
     static int process_arg_bpf(ServerOps *opt, const char * arg);
