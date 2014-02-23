@@ -63,6 +63,9 @@ class ServerOps : public GeneralOps {
         bool daemonize;
         bool daemonize_set;
 
+        int open_time;
+        bool open_time_set;
+
         u16 data_link_header_len;
         bool data_link_header_len_set;
 
@@ -79,6 +82,10 @@ class ServerOps : public GeneralOps {
         int setPromiscuous(bool val);
         bool getPromiscuous();
         bool issetPromiscuous();
+
+        int setOpenTime(int val);
+        int getOpenTime();
+        bool issetOpenTime();
 
         int setDaemonize(bool val);
         bool getDaemonize();

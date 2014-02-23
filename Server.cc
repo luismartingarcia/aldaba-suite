@@ -60,6 +60,7 @@
 #include "PKServer.h"
 #include "SPAServer.h"
 #include "Server.h"
+#include "post_auth.h"
 
 ServerOps o;
 PKServer pk_srv;
@@ -106,6 +107,7 @@ int main(int argc, char *argv[]){
     warning(OUT_2, "Failed to init PRNG. Generated random data may not be cryptographically secure.\n");
  }
 
+  
  /* Turn current process into a system daemon */
  if( o.getDaemonize() )
     daemonize();
@@ -124,8 +126,7 @@ int main(int argc, char *argv[]){
         fatal(OUT_2, "Unknown technique (%d). Please report a bug", o.getMode());
         return EXIT_FAILURE;
     break;
-  }
-  
+  }  
   return EXIT_SUCCESS;
 } /* End of main() */
 
@@ -144,6 +145,7 @@ void Server::reset(){
 
 
 int Server::init(){
+ script_init();
  print_banner();
  print_conf();
  return OP_SUCCESS;
@@ -440,6 +442,8 @@ void server_cleanup(void){
   fflush(stdout);
   fflush(stderr);
 
+  script_cleanup();
+
   _exit(0);
 
 } /* End of cleanup() */
@@ -450,6 +454,27 @@ void server_cleanup_signal(int signo){
   output(OUT_7, "Received signal %d\n", signo);
   server_cleanup();
 } /* End of server_cleanup_signal() */
+
+
+int script_init(){
+  char msg[2001];
+  memset(msg, 0, sizeof(msg));
+  snprintf(msg, 2000, "%s/%s %s &", SCRIPTSDIR, INIT_SCRIPT_NAME, SCRIPTSDIR);
+  if( system(msg)==-1 )
+      return -1;
+  return 0;
+} /* End of server_init() */
+
+int script_cleanup(){
+  char msg[2001];
+  memset(msg, 0, sizeof(msg));
+  snprintf(msg, 2000, "%s/%s %s", SCRIPTSDIR, CLEANUP_SCRIPT_NAME, SCRIPTSDIR);
+  if( system(msg)==-1 )
+      return -1;
+  return 0;
+
+  
+} /* End of server_init() */
 
 
 

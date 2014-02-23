@@ -101,6 +101,7 @@ int ArgParserServer::parse_arguments(int argc, char *argv[], ServerOps *opt) {
   {"pass",              required_argument,      0,      'P'},
   {"quiet",             optional_argument,      0,      'q'},
   {"target-ports",      required_argument,      0,      't'},
+  {"open-time",         optional_argument,      0,      'o'},
   {"ports",             required_argument,      0,      't'},
   {"verbosity",         optional_argument,      0,      'v'},
   {"version",           no_argument,            0,      'V'},
@@ -130,7 +131,7 @@ int ArgParserServer::parse_arguments(int argc, char *argv[], ServerOps *opt) {
  };
 
  /* Iterate over the paramter list and parse those args  */
- while((arg = getopt_long_only(argc,argv,"46a:A:c:C:d:f:hIi:l::P:q::t:Vv::", long_options, &option_index)) != EOF) {
+ while((arg = getopt_long_only(argc,argv,"46a:A:c:C:d:f:hIi:l::P:q::to:Vv::", long_options, &option_index)) != EOF) {
 
   aux8=aux16=aux32=0;
 
@@ -216,6 +217,10 @@ int ArgParserServer::parse_arguments(int argc, char *argv[], ServerOps *opt) {
         ArgParserServer::process_arg_verbosity(opt, optarg);
     break;
 
+    case 'o': /* Open Time */
+        ArgParserServer::process_arg_open_time(opt, optarg);
+    break;
+    
     case 'P': /* Passphrase */
         ArgParserServer::process_arg_passphrase(opt, optarg);
     break;
@@ -265,6 +270,7 @@ int ArgParserServer::display_help(){
      -P, --passphrase <pass>  : Passphrase used to generate the crypto keys.\n\
   Options:\n\
      --pk, --spa              : Technique [\"PK\", \"SPA\"(default)].\n\
+     -o, --open-time <secs>   : Seconds while the port remains open accepting new connections.\n\
      -t, --target-ports <seq> : Sequence of dest ports [comma separated list].\n\
      -f, --field <field>      : Covert channel protocol header field.\n\
      -c  --cipher <algorithm> : Encryption algorithm [\"Twofish\", \"AES\", ...]\n\
@@ -516,6 +522,17 @@ int ArgParserServer::process_arg_promiscuous(ServerOps *opt, const char * arg){
     fatal(OUT_2, "Invalid --promiscuous parameter supplied (%s).", arg);
   return OP_SUCCESS;
 } /* End of process_arg_promiscuous() */
+
+
+/** Processes argument -o, --open-time. 
+    Number of seconds that the port remains open for new connections*/
+int ArgParserServer::process_arg_open_time(ServerOps *opt, const char * arg){
+  if(opt==NULL || arg==NULL)
+    fatal(OUT_2, "%s(): NULL parameter supplied", __func__);
+  if( opt->setOpenTime(atoi(arg)) != OP_SUCCESS )
+    fatal(OUT_2, "Invalid open time supplied.");
+  return OP_SUCCESS;
+} /* End of process_arg_passphrase() */
 
 
 int ArgParserServer::process_arg_daemonize(ServerOps *opt, const char * arg){

@@ -7,6 +7,7 @@
      -P, --passphrase <pass>  : Passphrase used to generate the crypto keys.
   Options:
      --pk, --spa              : Technique ["PK", "SPA"(default)].
+     -o, --open-time <secs>   : Seconds while the port remains open accepting new connections.
      -t, --target-ports <seq> : Sequence of dest ports [comma separated list].
      -f, --field <field>      : Covert channel protocol header field.
      -c  --cipher <algorithm> : Encryption algorithm ["Twofish", "AES", ...]

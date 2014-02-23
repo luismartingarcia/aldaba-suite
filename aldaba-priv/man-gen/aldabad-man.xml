@@ -80,7 +80,7 @@
                 </term>
                 <listitem>
                     <para>
-                        This option tells Aldaba Server to run in PK mode.
+                        This option tells Aldaba Server to run in PaldabadK mode.
                         Like SPA, Port Knocking lets users request access to a
                         given port. However, the authentication message is
                         transmitted stealthily, dividing it, and encoding each
@@ -594,6 +594,18 @@
                     <para>
                          Forces Aldaba Server to run interactively instead of in
                          daemon mode. By default it runs as a system daemon.
+                    </para>
+                </listitem>
+            </varlistentry>
+
+            <varlistentry>
+                <term>
+                    <option>-o <replaceable>interval</replaceable></option>,
+                    <option>--open-time <replaceable>interval</replaceable></option> (Set allowed connection window)
+                </term>
+                <listitem>
+                    <para>
+                         Tells Aldaba server for how long a port should be opened after a successful authentication before the firewall stops accepting new connections.
                     </para>
                 </listitem>
             </varlistentry>

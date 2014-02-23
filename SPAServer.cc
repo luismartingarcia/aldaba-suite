@@ -307,7 +307,7 @@ int SPAServer::post_auth(SPAHeader *spa){
       }
   }else if(spa->getActionPort1()==SPA_ACTION_OPEN){
     output(OUT_4, "Open %d", spa->getPort1());
-    open_port(spa->getPort1(), ip, spa->getProtocolPort1());
+    open_port(spa->getPort1(), ip, spa->getProtocolPort1(),o.getOpenTime());
   }else if(spa->getActionPort1()==SPA_ACTION_CLOSE){
     output(OUT_4, "Close %d", spa->getPort1());
     close_port(spa->getPort1(), ip, spa->getProtocolPort1());
@@ -316,7 +316,7 @@ int SPAServer::post_auth(SPAHeader *spa){
   /* Now for port 2 */
   if(spa->getActionPort2()==SPA_ACTION_OPEN){
     output(OUT_4, "Open %d", spa->getPort2());
-    open_port(spa->getPort2(), ip, spa->getProtocolPort2());
+    open_port(spa->getPort2(), ip, spa->getProtocolPort2(),o.getOpenTime());
   }else if(spa->getActionPort2()==SPA_ACTION_CLOSE){
     output(OUT_4, "Close %d", spa->getPort2());
     close_port(spa->getPort2(), ip, spa->getProtocolPort2());

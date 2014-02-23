@@ -2,12 +2,12 @@
 .\"     Title: aldabad
 .\"    Author: [see the "Authors" section]
 .\" Generator: DocBook XSL Stylesheets v1.75.1 <http://docbook.sf.net/>
-.\"      Date: 11/26/2010
+.\"      Date: 02/23/2014
 .\"    Manual: Aldaba Server Reference Guide
 .\"    Source: Aldaba
 .\"  Language: English
 .\"
-.TH "ALDABAD" "8" "11/26/2010" "Aldaba" "Aldaba Server Reference Guide"
+.TH "ALDABAD" "8" "02/23/2014" "Aldaba" "Aldaba Server Reference Guide"
 .\" -----------------------------------------------------------------
 .\" * set default formatting
 .\" -----------------------------------------------------------------
@@ -44,6 +44,7 @@ The following option summary is the output of Aldaba Server when run with no arg
      \-P, \-\-passphrase <pass>  : Passphrase used to generate the crypto keys\&.
   Options:
      \-\-pk, \-\-spa              : Technique ["PK", "SPA"(default)]\&.
+     \-o, \-\-open\-time <secs>   : Seconds while the port remains open accepting new connections\&.
      \-t, \-\-target\-ports <seq> : Sequence of dest ports [comma separated list]\&.
      \-f, \-\-field <field>      : Covert channel protocol header field\&.
      \-c  \-\-cipher <algorithm> : Encryption algorithm ["Twofish", "AES", \&.\&.\&.]
@@ -79,7 +80,7 @@ This option tells Aldaba Server to run in SPA mode\&. Single Packet Authorizatio
 .PP
 \fB\-\-pk\fR (Port Knocking Mode)
 .RS 4
-This option tells Aldaba Server to run in PK mode\&. Like SPA, Port Knocking lets users request access to a given port\&. However, the authentication message is transmitted stealthily, dividing it, and encoding each part in the headers of a TCP SYN packet\&. Port Knocking authentications are more difficult to detect from an attacker\'s point of view\&. However, the security provided by this technique is often weaker than in SPA\&.
+This option tells Aldaba Server to run in PaldabadK mode\&. Like SPA, Port Knocking lets users request access to a given port\&. However, the authentication message is transmitted stealthily, dividing it, and encoding each part in the headers of a TCP SYN packet\&. Port Knocking authentications are more difficult to detect from an attacker\'s point of view\&. However, the security provided by this technique is often weaker than in SPA\&.
 .RE
 .SH "SINGLE PACKET AUTHORIZATION"
 .PP
@@ -344,6 +345,11 @@ Tells Aldaba server to read configuration from a specific configuration file\&. 
 \fB\-I \fR, \fB\-\-interactive \fR (Interactive mode)
 .RS 4
 Forces Aldaba Server to run interactively instead of in daemon mode\&. By default it runs as a system daemon\&.
+.RE
+.PP
+\fB\-o \fR\fB\fIinterval\fR\fR, \fB\-\-open\-time \fR\fB\fIinterval\fR\fR (Set allowed connection window)
+.RS 4
+Tells Aldaba server for how long a port should be opened after a successful authentication before the firewall stops accepting new connections\&.
 .RE
 .PP
 \fB\-V\fR, \fB\-\-version\fR (Display Version)

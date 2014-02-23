@@ -59,6 +59,7 @@ class ArgParser {
 
     static int parse_portlist(const char *portlist, GeneralOps *opt );
     static int process_arg_passphrase(GeneralOps *opt, const char * arg);
+    static int process_arg_open_time(GeneralOps *opt, const char * arg);
     static int process_arg_port_sequence(GeneralOps *opt, const char * arg);
     static int process_arg_interface(GeneralOps *opt, const char * arg);
     static int process_arg_verbosity(GeneralOps *opt, const char * arg);

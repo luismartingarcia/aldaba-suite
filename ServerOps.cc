@@ -74,6 +74,9 @@ void ServerOps::reset(){
     data_link_header_len=14;
     data_link_header_len_set=false;
 
+    open_time=60;
+    open_time_set=false;
+
     memset(bpf_filter, 0, sizeof(bpf_filter));
     bpf_filter_set=false;
 
@@ -99,6 +102,26 @@ bool ServerOps::getPromiscuous(){
 bool ServerOps::issetPromiscuous(){
   return this->promiscuous_set;
 } /* End of issetPromiscuous() */
+
+
+/** Sets open time in seconds.
+ *  @return OP_SUCCESS on success and OP_FAILURE in case of error.           */
+int ServerOps::setOpenTime(int val){
+  printf("ServerOPs time set: %i \n", val);
+  this->open_time=val;
+  this->open_time_set=true;
+  return OP_SUCCESS;
+} /* End of setOpenTime() */
+
+/** Returns value of attribute open_time */
+int ServerOps::getOpenTime(){
+  return this->open_time;
+} /* End of getLoggingLevel() */
+
+/* Returns true if option has been set */
+bool ServerOps::issetOpenTime(){
+  return this->open_time_set;
+} 
 
 
 /** Sets Daemonize.

@@ -17,5 +17,12 @@
 # The script is called everytime the Aldaba Server is turned off. 
 
 # It should return 0 on success and -1 in case of error.
-echo "This script should cleanup the local firewall policy"
-exit 0;
+#echo "This script should cleanup the local firewall policy"
+BACKUPDIR=$1
+
+if [[ -f ${BACKUPDIR}/iptables-backup.fw ]]; then
+	/sbin/iptables-restore < ${BACKUPDIR}/iptables-backup.fw
+	rm ${BACKUPDIR}/iptables-backup.fw
+fi
+
+exit 0
