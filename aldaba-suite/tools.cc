@@ -126,7 +126,7 @@ return(answer);
   * use the code.                                                             */
 int daemonize(void){
   pid_t pid, sid;
-  FILE *dummy;
+  FILE *dummy=NULL;
 
   /* already a daemon */
   if ( getppid() == 1 )
@@ -160,9 +160,12 @@ int daemonize(void){
   }
 
   /* Redirect standard files to /dev/null */
-  dummy=freopen( "/dev/null", "r", stdin);
-  dummy=freopen( "/dev/null", "w", stdout);
-  dummy=freopen( "/dev/null", "w", stderr);
+  if((dummy=freopen( "/dev/null", "r", stdin))==NULL)
+    output(OUT_7,"Failed to redirect stdin");
+  if((dummy=freopen( "/dev/null", "w", stdout))==NULL)
+    output(OUT_7,"Failed to redirect stdout");
+  if((dummy=freopen( "/dev/null", "w", stderr))==NULL)
+    output(OUT_7,"Failed to redirect stderr");
   return OP_SUCCESS;
 } /* End of daemonize() */
 
@@ -173,7 +176,7 @@ int daemonize(void){
 int gets_noecho(char *buffer, int buflen){
  int i=0;
  struct termio tty, oldtty;
- char *dummy;
+ char *dummy=NULL;
  memset(buffer, 0, buflen);
 
   /* Save the old tty settings, and get rid of echo for the new tty settings */
@@ -185,7 +188,8 @@ int gets_noecho(char *buffer, int buflen){
   ioctl(0, TCSETA, &tty); /* TODO: Error checking here? */
 
   fflush(stdin);
-  dummy=fgets(buffer, buflen, stdin);
+  if((dummy=fgets(buffer, buflen, stdin))==NULL)
+    output(OUT_7,"fgets() failed");
   fflush(stdin);
 
   /* fgets() stores the newline character so we have to get rid of it */
